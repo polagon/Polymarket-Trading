@@ -1,0 +1,733 @@
+2026-02-12 07:57:53,064 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 07:57:53,607 INFO astra.sports: Odds API quota reset for new month: 2026-02
+2026-02-12 07:57:54,014 WARNING astra.sports: Odds API: Rate limited (429) for sport baseball_mlb
+2026-02-12 07:57:54,030 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_epl
+2026-02-12 07:57:54,031 WARNING astra.sports: Odds API: Rate limited (429) for sport americanfootball_ncaaf
+2026-02-12 07:57:54,047 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 07:58:31,621 WARNING astra.estimator: Adversarial pipeline failed (JSONDecodeError: Expecting value: line 179 column 33 (char 9039)) — falling back to single-pass
+2026-02-12 07:59:13,726 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 07:59:14,888 WARNING astra.sports: Odds API: Rate limited (429) for sport baseball_mlb
+2026-02-12 07:59:14,889 WARNING astra.sports: Odds API: Rate limited (429) for sport icehockey_nhl
+2026-02-12 07:59:15,007 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_uefa_champs_league
+2026-02-12 07:59:15,009 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_epl
+2026-02-12 07:59:15,133 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_spain_la_liga
+2026-02-12 07:59:15,134 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_germany_bundesliga
+2026-02-12 07:59:15,265 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 07:59:15,267 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 07:59:15,291 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_atp_us_open
+2026-02-12 07:59:15,381 WARNING astra.sports: Odds API: Rate limited (429) for sport mma_mixed_martial_arts
+2026-02-12 07:59:15,382 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_wta_us_open
+2026-02-12 07:59:54,662 WARNING astra.estimator: Adversarial pipeline failed (JSONDecodeError: Unterminated string starting at: line 219 column 11 (char 13830)) — falling back to single-pass
+2026-02-12 08:00:03,752 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 08:00:05,010 WARNING astra.sports: Odds API: Rate limited (429) for sport icehockey_nhl
+2026-02-12 08:00:05,088 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_epl
+2026-02-12 08:00:05,214 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_usa_mls
+2026-02-12 08:00:05,342 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_spain_la_liga
+2026-02-12 08:00:05,451 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_germany_bundesliga
+2026-02-12 08:00:05,470 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 08:00:05,471 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 08:00:05,577 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_atp_us_open
+2026-02-12 08:00:05,587 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_wta_us_open
+2026-02-12 08:00:05,597 WARNING astra.sports: Odds API: Rate limited (429) for sport mma_mixed_martial_arts
+2026-02-12 08:00:54,226 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 08:00:55,358 WARNING astra.sports: Odds API: Rate limited (429) for sport baseball_mlb
+2026-02-12 08:00:55,487 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_epl
+2026-02-12 08:00:55,609 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_usa_mls
+2026-02-12 08:00:55,775 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 08:00:55,898 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 08:00:56,025 WARNING astra.sports: Odds API: Rate limited (429) for sport mma_mixed_martial_arts
+2026-02-12 08:00:56,026 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_wta_us_open
+2026-02-12 08:01:31,634 DEBUG astra.estimator: Recovered truncated JSON array at position 12843
+2026-02-12 08:02:29,801 DEBUG astra.estimator: Recovered truncated JSON array at position 17047
+2026-02-12 08:03:05,759 DEBUG astra.estimator: Recovered truncated JSON array at position 13105
+2026-02-12 08:03:05,762 DEBUG astra.estimator: Recovered truncated JSON array at position 14007
+2026-02-12 08:18:20,174 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 08:18:22,656 WARNING astra.sports: Odds API: Rate limited (429) for sport baseball_mlb
+2026-02-12 08:18:22,656 WARNING astra.sports: Odds API: Rate limited (429) for sport icehockey_nhl
+2026-02-12 08:18:22,868 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_usa_mls
+2026-02-12 08:18:23,042 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_spain_la_liga
+2026-02-12 08:18:23,102 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_germany_bundesliga
+2026-02-12 08:18:23,135 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 08:18:23,202 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 08:18:23,282 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_wta_us_open
+2026-02-12 08:18:23,376 WARNING astra.sports: Odds API: Rate limited (429) for sport mma_mixed_martial_arts
+2026-02-12 08:19:01,345 DEBUG astra.estimator: Recovered truncated JSON array at position 12509
+2026-02-12 08:20:08,831 DEBUG astra.estimator: Recovered truncated JSON array at position 18604
+2026-02-12 08:20:42,859 DEBUG astra.estimator: Recovered truncated JSON array at position 11799
+2026-02-12 08:21:46,283 DEBUG astra.estimator: Recovered truncated JSON array at position 18939
+2026-02-12 08:22:25,134 DEBUG astra.estimator: Recovered truncated JSON array at position 13255
+2026-02-12 08:22:25,137 DEBUG astra.estimator: Recovered truncated JSON array at position 13574
+2026-02-12 08:23:46,192 DEBUG astra.estimator: Recovered truncated JSON array at position 24197
+2026-02-12 08:25:49,994 DEBUG astra.estimator: Recovered truncated JSON array at position 13657
+2026-02-12 08:25:50,000 DEBUG astra.estimator: Recovered truncated JSON array at position 12917
+2026-02-12 08:26:49,463 DEBUG astra.estimator: Recovered truncated JSON array at position 17585
+2026-02-12 08:27:23,896 DEBUG astra.estimator: Recovered truncated JSON array at position 13025
+2026-02-12 08:28:45,892 DEBUG astra.estimator: Recovered truncated JSON array at position 4973
+2026-02-12 08:28:45,916 INFO astra.paper_trader: Scan 1: 84 estimates produced (0 AI adversarial, 84 algo). Markets: 474
+2026-02-12 08:39:51,786 WARNING astra.sports: Odds API: Rate limited (429) for sport icehockey_nhl
+2026-02-12 08:39:51,788 WARNING astra.sports: Odds API: Rate limited (429) for sport baseball_mlb
+2026-02-12 08:39:51,933 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_epl
+2026-02-12 08:39:51,944 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_uefa_champs_league
+2026-02-12 08:39:52,005 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_usa_mls
+2026-02-12 08:39:52,074 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_spain_la_liga
+2026-02-12 08:39:52,079 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_germany_bundesliga
+2026-02-12 08:39:52,148 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_italy_serie_a
+2026-02-12 08:39:52,215 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_atp_us_open
+2026-02-12 08:39:52,215 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 08:41:22,738 DEBUG astra.estimator: Recovered truncated JSON array at position 16533
+2026-02-12 08:41:59,249 DEBUG astra.estimator: Recovered truncated JSON array at position 13758
+2026-02-12 08:42:53,105 DEBUG astra.estimator: Recovered truncated JSON array at position 15027
+2026-02-12 08:43:26,729 DEBUG astra.estimator: Recovered truncated JSON array at position 11853
+2026-02-12 08:44:28,730 DEBUG astra.estimator: Recovered truncated JSON array at position 17813
+2026-02-12 08:45:05,329 DEBUG astra.estimator: Recovered truncated JSON array at position 13114
+2026-02-12 08:45:05,333 DEBUG astra.estimator: Recovered truncated JSON array at position 12928
+2026-02-12 08:45:58,940 DEBUG astra.estimator: Recovered truncated JSON array at position 16393
+2026-02-12 08:46:34,801 DEBUG astra.estimator: Recovered truncated JSON array at position 10975
+2026-02-12 08:46:34,804 DEBUG astra.estimator: Recovered truncated JSON array at position 13765
+2026-02-12 08:47:28,010 DEBUG astra.estimator: Recovered truncated JSON array at position 15940
+2026-02-12 08:48:02,821 DEBUG astra.estimator: Recovered truncated JSON array at position 12583
+2026-02-12 08:48:02,826 DEBUG astra.estimator: Recovered truncated JSON array at position 12882
+2026-02-12 08:49:13,144 DEBUG astra.estimator: Recovered truncated JSON array at position 19915
+2026-02-12 08:49:13,145 WARNING astra.estimator: Synthesizer JSON parse failed (Expecting ',' delimiter: line 185 column 684 (char 14203)) — response was 22293 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 08:49:49,968 DEBUG astra.estimator: Recovered truncated JSON array at position 4991
+2026-02-12 08:50:13,466 DEBUG astra.estimator: Recovered truncated JSON array at position 5532
+2026-02-12 08:50:13,467 INFO astra.paper_trader: Scan 2: 134 estimates produced (8 AI adversarial, 126 algo). Markets: 474
+2026-02-12 09:36:21,381 WARNING astra.sports: Odds API quota: 463/500 used this month (37 remaining)
+2026-02-12 09:36:22,414 WARNING astra.sports: Odds API quota critically low: 49 requests remaining
+2026-02-12 09:36:22,586 WARNING astra.sports: Odds API quota critically low: 46 requests remaining
+2026-02-12 09:36:22,611 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_uefa_champs_league
+2026-02-12 09:36:22,672 WARNING astra.sports: Odds API quota critically low: 43 requests remaining
+2026-02-12 09:36:22,791 WARNING astra.sports: Odds API quota critically low: 40 requests remaining
+2026-02-12 09:36:22,819 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_germany_bundesliga
+2026-02-12 09:36:22,940 WARNING astra.sports: Odds API: Rate limited (429) for sport soccer_france_ligue_one
+2026-02-12 09:36:22,955 WARNING astra.sports: Odds API quota critically low: 37 requests remaining
+2026-02-12 09:36:23,022 WARNING astra.sports: Odds API: Rate limited (429) for sport tennis_atp_us_open
+2026-02-12 09:36:23,067 WARNING astra.sports: Odds API quota critically low: 37 requests remaining
+2026-02-12 09:36:23,155 WARNING astra.sports: Odds API: Rate limited (429) for sport mma_mixed_martial_arts
+2026-02-12 09:37:01,579 DEBUG astra.estimator: Recovered truncated JSON array at position 12159
+2026-02-12 09:38:00,775 DEBUG astra.estimator: Recovered truncated JSON array at position 17613
+2026-02-12 09:38:35,914 DEBUG astra.estimator: Recovered truncated JSON array at position 11808
+2026-02-12 09:38:35,921 DEBUG astra.estimator: Recovered truncated JSON array at position 11887
+2026-02-12 09:40:03,669 DEBUG astra.estimator: Recovered truncated JSON array at position 13115
+2026-02-12 09:40:03,675 DEBUG astra.estimator: Recovered truncated JSON array at position 12046
+2026-02-12 09:41:06,419 DEBUG astra.estimator: Recovered truncated JSON array at position 18169
+2026-02-12 09:41:43,099 DEBUG astra.estimator: Recovered truncated JSON array at position 12952
+2026-02-12 09:42:41,052 DEBUG astra.estimator: Recovered truncated JSON array at position 17460
+2026-02-12 09:43:19,814 DEBUG astra.estimator: Recovered truncated JSON array at position 13972
+2026-02-12 09:43:19,825 DEBUG astra.estimator: Recovered truncated JSON array at position 12669
+2026-02-12 09:44:24,422 DEBUG astra.estimator: Recovered truncated JSON array at position 18165
+2026-02-12 09:44:58,815 DEBUG astra.estimator: Recovered truncated JSON array at position 12363
+2026-02-12 09:45:52,337 DEBUG astra.estimator: Recovered truncated JSON array at position 16287
+2026-02-12 09:46:09,124 DEBUG astra.estimator: Recovered truncated JSON array at position 3908
+2026-02-12 09:46:37,760 DEBUG astra.estimator: Recovered truncated JSON array at position 5237
+2026-02-12 09:46:37,764 INFO astra.paper_trader: Scan 3: 75 estimates produced (0 AI adversarial, 75 algo). Markets: 474
+2026-02-12 09:56:38,552 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 09:57:13,568 DEBUG astra.estimator: Recovered truncated JSON array at position 12074
+2026-02-12 09:58:28,039 DEBUG astra.estimator: Recovered truncated JSON array at position 22571
+2026-02-12 09:59:03,484 DEBUG astra.estimator: Recovered truncated JSON array at position 12194
+2026-02-12 09:59:03,487 DEBUG astra.estimator: Recovered truncated JSON array at position 11347
+2026-02-12 10:00:04,115 DEBUG astra.estimator: Recovered truncated JSON array at position 18801
+2026-02-12 10:00:39,257 DEBUG astra.estimator: Recovered truncated JSON array at position 14019
+2026-02-12 10:00:39,260 DEBUG astra.estimator: Recovered truncated JSON array at position 12427
+2026-02-12 10:01:41,208 DEBUG astra.estimator: Recovered truncated JSON array at position 17562
+2026-02-12 10:02:15,381 DEBUG astra.estimator: Recovered truncated JSON array at position 13129
+2026-02-12 10:02:15,394 DEBUG astra.estimator: Recovered truncated JSON array at position 11230
+2026-02-12 10:03:16,671 DEBUG astra.estimator: Recovered truncated JSON array at position 16997
+2026-02-12 10:03:16,672 WARNING astra.estimator: Synthesizer JSON parse failed (Expecting ',' delimiter: line 245 column 305 (char 16076)) — response was 19488 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 10:04:13,221 DEBUG astra.estimator: Recovered truncated JSON array at position 12547
+2026-02-12 10:05:13,654 DEBUG astra.estimator: Recovered truncated JSON array at position 17441
+2026-02-12 10:05:53,179 DEBUG astra.estimator: Recovered truncated JSON array at position 12109
+2026-02-12 10:05:53,183 DEBUG astra.estimator: Recovered truncated JSON array at position 12803
+2026-02-12 10:06:52,676 DEBUG astra.estimator: Recovered truncated JSON array at position 17613
+2026-02-12 10:07:37,629 DEBUG astra.estimator: Recovered truncated JSON array at position 5977
+2026-02-12 10:07:37,631 INFO astra.paper_trader: Scan 4: 125 estimates produced (8 AI adversarial, 117 algo). Markets: 474
+2026-02-12 10:17:38,560 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 10:19:20,080 DEBUG astra.estimator: Recovered truncated JSON array at position 18055
+2026-02-12 10:19:56,736 DEBUG astra.estimator: Recovered truncated JSON array at position 12328
+2026-02-12 10:19:56,739 DEBUG astra.estimator: Recovered truncated JSON array at position 12149
+2026-02-12 10:20:57,347 DEBUG astra.estimator: Recovered truncated JSON array at position 17426
+2026-02-12 10:21:35,692 DEBUG astra.estimator: Recovered truncated JSON array at position 13056
+2026-02-12 10:21:35,701 DEBUG astra.estimator: Recovered truncated JSON array at position 13265
+2026-02-12 10:22:31,379 DEBUG astra.estimator: Recovered truncated JSON array at position 14907
+2026-02-12 10:23:03,907 DEBUG astra.estimator: Recovered truncated JSON array at position 13637
+2026-02-12 10:24:05,080 DEBUG astra.estimator: Recovered truncated JSON array at position 17549
+2026-02-12 10:24:43,116 DEBUG astra.estimator: Recovered truncated JSON array at position 13194
+2026-02-12 10:24:43,120 DEBUG astra.estimator: Recovered truncated JSON array at position 11941
+2026-02-12 10:25:49,296 DEBUG astra.estimator: Recovered truncated JSON array at position 18616
+2026-02-12 10:26:26,117 DEBUG astra.estimator: Recovered truncated JSON array at position 13753
+2026-02-12 10:27:24,604 DEBUG astra.estimator: Recovered truncated JSON array at position 16967
+2026-02-12 10:28:02,076 DEBUG astra.estimator: Recovered truncated JSON array at position 5498
+2026-02-12 10:28:02,080 INFO astra.paper_trader: Scan 5: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 10:39:32,299 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 10:40:59,017 DEBUG astra.estimator: Recovered truncated JSON array at position 15740
+2026-02-12 10:41:34,659 DEBUG astra.estimator: Recovered truncated JSON array at position 12500
+2026-02-12 10:41:34,664 DEBUG astra.estimator: Recovered truncated JSON array at position 12809
+2026-02-12 10:42:39,001 DEBUG astra.estimator: Recovered truncated JSON array at position 18643
+2026-02-12 10:43:14,851 DEBUG astra.estimator: Recovered truncated JSON array at position 12816
+2026-02-12 10:44:18,229 DEBUG astra.estimator: Recovered truncated JSON array at position 18644
+2026-02-12 10:44:54,469 DEBUG astra.estimator: Recovered truncated JSON array at position 13337
+2026-02-12 10:44:54,475 DEBUG astra.estimator: Recovered truncated JSON array at position 12747
+2026-02-12 10:45:53,598 DEBUG astra.estimator: Recovered truncated JSON array at position 16983
+2026-02-12 10:46:31,099 DEBUG astra.estimator: Recovered truncated JSON array at position 11981
+2026-02-12 10:46:31,108 DEBUG astra.estimator: Recovered truncated JSON array at position 13009
+2026-02-12 10:47:29,060 DEBUG astra.estimator: Recovered truncated JSON array at position 15490
+2026-02-12 10:48:07,991 DEBUG astra.estimator: Recovered truncated JSON array at position 13100
+2026-02-12 10:48:07,996 DEBUG astra.estimator: Recovered truncated JSON array at position 12892
+2026-02-12 10:49:09,159 DEBUG astra.estimator: Recovered truncated JSON array at position 16691
+2026-02-12 10:49:48,661 DEBUG astra.estimator: Recovered truncated JSON array at position 5798
+2026-02-12 10:49:48,663 INFO astra.paper_trader: Scan 6: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 10:59:49,540 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 11:01:22,737 DEBUG astra.estimator: Recovered truncated JSON array at position 15647
+2026-02-12 11:02:02,902 DEBUG astra.estimator: Recovered truncated JSON array at position 11583
+2026-02-12 11:03:30,386 DEBUG astra.estimator: Recovered truncated JSON array at position 12555
+2026-02-12 11:03:30,404 DEBUG astra.estimator: Recovered truncated JSON array at position 13691
+2026-02-12 11:04:55,601 DEBUG astra.estimator: Recovered truncated JSON array at position 12349
+2026-02-12 11:05:47,356 DEBUG astra.estimator: Recovered truncated JSON array at position 16364
+2026-02-12 11:06:25,215 DEBUG astra.estimator: Recovered truncated JSON array at position 11662
+2026-02-12 11:06:25,220 DEBUG astra.estimator: Recovered truncated JSON array at position 13127
+2026-02-12 11:08:13,280 DEBUG astra.estimator: Recovered truncated JSON array at position 13096
+2026-02-12 11:09:09,695 DEBUG astra.estimator: Recovered truncated JSON array at position 16100
+2026-02-12 11:09:50,264 DEBUG astra.estimator: Recovered truncated JSON array at position 5447
+2026-02-12 11:09:50,265 INFO astra.paper_trader: Scan 7: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 11:19:51,013 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 11:20:23,408 DEBUG astra.estimator: Recovered truncated JSON array at position 12724
+2026-02-12 11:21:17,596 DEBUG astra.estimator: Recovered truncated JSON array at position 16538
+2026-02-12 11:21:51,869 DEBUG astra.estimator: Recovered truncated JSON array at position 12321
+2026-02-12 11:22:45,995 DEBUG astra.estimator: Recovered truncated JSON array at position 15707
+2026-02-12 11:23:21,803 DEBUG astra.estimator: Recovered truncated JSON array at position 12374
+2026-02-12 11:23:21,809 DEBUG astra.estimator: Recovered truncated JSON array at position 12557
+2026-02-12 11:24:19,079 DEBUG astra.estimator: Recovered truncated JSON array at position 15880
+2026-02-12 11:24:54,466 DEBUG astra.estimator: Recovered truncated JSON array at position 11967
+2026-02-12 11:24:54,470 DEBUG astra.estimator: Recovered truncated JSON array at position 11627
+2026-02-12 11:26:02,617 DEBUG astra.estimator: Recovered truncated JSON array at position 18685
+2026-02-12 11:26:37,499 DEBUG astra.estimator: Recovered truncated JSON array at position 12991
+2026-02-12 11:27:39,529 DEBUG astra.estimator: Recovered truncated JSON array at position 18033
+2026-02-12 11:29:12,970 DEBUG astra.estimator: Recovered truncated JSON array at position 14552
+2026-02-12 11:29:32,155 DEBUG astra.estimator: Recovered truncated JSON array at position 5834
+2026-02-12 11:30:07,679 DEBUG astra.estimator: Recovered truncated JSON array at position 5348
+2026-02-12 11:30:07,684 INFO astra.paper_trader: Scan 8: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 11:40:08,436 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 11:40:46,672 DEBUG astra.estimator: Recovered truncated JSON array at position 12540
+2026-02-12 11:40:46,675 DEBUG astra.estimator: Recovered truncated JSON array at position 12887
+2026-02-12 11:41:41,068 DEBUG astra.estimator: Recovered truncated JSON array at position 15742
+2026-02-12 11:42:25,335 DEBUG astra.estimator: Recovered truncated JSON array at position 13698
+2026-02-12 11:42:25,345 DEBUG astra.estimator: Recovered truncated JSON array at position 12075
+2026-02-12 11:43:25,276 DEBUG astra.estimator: Recovered truncated JSON array at position 17449
+2026-02-12 11:44:08,770 DEBUG astra.estimator: Recovered truncated JSON array at position 11899
+2026-02-12 11:45:05,335 DEBUG astra.estimator: Recovered truncated JSON array at position 16884
+2026-02-12 11:45:45,510 DEBUG astra.estimator: Recovered truncated JSON array at position 13634
+2026-02-12 11:46:46,401 DEBUG astra.estimator: Recovered truncated JSON array at position 17717
+2026-02-12 11:47:26,968 DEBUG astra.estimator: Recovered truncated JSON array at position 14304
+2026-02-12 11:47:26,973 DEBUG astra.estimator: Recovered truncated JSON array at position 14065
+2026-02-12 11:49:09,312 DEBUG astra.estimator: Recovered truncated JSON array at position 11831
+2026-02-12 11:49:09,317 DEBUG astra.estimator: Recovered truncated JSON array at position 12353
+2026-02-12 11:50:16,410 DEBUG astra.estimator: Recovered truncated JSON array at position 19005
+2026-02-12 11:50:48,458 DEBUG astra.estimator: Recovered truncated JSON array at position 5039
+2026-02-12 11:50:48,459 INFO astra.paper_trader: Scan 9: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 12:03:13,128 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 12:04:44,954 DEBUG astra.estimator: Recovered truncated JSON array at position 16963
+2026-02-12 12:05:21,175 DEBUG astra.estimator: Recovered truncated JSON array at position 12204
+2026-02-12 12:05:21,179 DEBUG astra.estimator: Recovered truncated JSON array at position 11862
+2026-02-12 12:06:17,222 DEBUG astra.estimator: Recovered truncated JSON array at position 16264
+2026-02-12 12:06:53,188 DEBUG astra.estimator: Recovered truncated JSON array at position 11469
+2026-02-12 12:06:53,201 DEBUG astra.estimator: Recovered truncated JSON array at position 11786
+2026-02-12 12:07:49,509 DEBUG astra.estimator: Recovered truncated JSON array at position 17274
+2026-02-12 12:08:30,854 DEBUG astra.estimator: Recovered truncated JSON array at position 13556
+2026-02-12 12:09:33,871 DEBUG astra.estimator: Recovered truncated JSON array at position 17443
+2026-02-12 12:10:06,632 DEBUG astra.estimator: Recovered truncated JSON array at position 13365
+2026-02-12 12:10:06,638 DEBUG astra.estimator: Recovered truncated JSON array at position 13069
+2026-02-12 12:11:04,172 DEBUG astra.estimator: Recovered truncated JSON array at position 16723
+2026-02-12 12:11:39,182 DEBUG astra.estimator: Recovered truncated JSON array at position 11707
+2026-02-12 12:11:39,189 DEBUG astra.estimator: Recovered truncated JSON array at position 12177
+2026-02-12 12:12:29,037 DEBUG astra.estimator: Recovered truncated JSON array at position 15039
+2026-02-12 12:13:13,146 DEBUG astra.estimator: Recovered truncated JSON array at position 6718
+2026-02-12 12:13:13,147 INFO astra.paper_trader: Scan 10: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 12:23:13,869 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 12:23:51,052 DEBUG astra.estimator: Recovered truncated JSON array at position 12730
+2026-02-12 12:24:52,276 DEBUG astra.estimator: Recovered truncated JSON array at position 18265
+2026-02-12 12:25:32,727 DEBUG astra.estimator: Recovered truncated JSON array at position 12421
+2026-02-12 12:25:32,731 DEBUG astra.estimator: Recovered truncated JSON array at position 11565
+2026-02-12 12:26:46,422 DEBUG astra.estimator: Recovered truncated JSON array at position 22576
+2026-02-12 12:27:23,486 DEBUG astra.estimator: Recovered truncated JSON array at position 13520
+2026-02-12 12:27:23,495 DEBUG astra.estimator: Recovered truncated JSON array at position 14007
+2026-02-12 12:28:49,749 DEBUG astra.estimator: Recovered truncated JSON array at position 11900
+2026-02-12 12:29:47,312 DEBUG astra.estimator: Recovered truncated JSON array at position 16901
+2026-02-12 12:30:24,038 DEBUG astra.estimator: Recovered truncated JSON array at position 11458
+2026-02-12 12:30:24,039 DEBUG astra.estimator: Recovered truncated JSON array at position 12918
+2026-02-12 12:31:20,908 DEBUG astra.estimator: Recovered truncated JSON array at position 17804
+2026-02-12 12:31:57,620 DEBUG astra.estimator: Recovered truncated JSON array at position 12420
+2026-02-12 12:32:55,760 DEBUG astra.estimator: Recovered truncated JSON array at position 16814
+2026-02-12 12:33:14,887 DEBUG astra.estimator: Recovered truncated JSON array at position 5076
+2026-02-12 12:33:39,798 DEBUG astra.estimator: Recovered truncated JSON array at position 5178
+2026-02-12 12:33:39,808 INFO astra.paper_trader: Scan 11: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 12:43:40,623 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 12:44:18,543 DEBUG astra.estimator: Recovered truncated JSON array at position 13111
+2026-02-12 12:45:21,733 DEBUG astra.estimator: Recovered truncated JSON array at position 18106
+2026-02-12 12:45:55,647 DEBUG astra.estimator: Recovered truncated JSON array at position 12508
+2026-02-12 12:46:54,088 DEBUG astra.estimator: Recovered truncated JSON array at position 17711
+2026-02-12 12:47:29,885 DEBUG astra.estimator: Recovered truncated JSON array at position 12536
+2026-02-12 12:48:25,660 DEBUG astra.estimator: Recovered truncated JSON array at position 17295
+2026-02-12 12:49:01,636 DEBUG astra.estimator: Recovered truncated JSON array at position 13951
+2026-02-12 12:49:01,653 DEBUG astra.estimator: Recovered truncated JSON array at position 12984
+2026-02-12 12:49:52,824 DEBUG astra.estimator: Recovered truncated JSON array at position 15622
+2026-02-12 12:50:27,383 DEBUG astra.estimator: Recovered truncated JSON array at position 12475
+2026-02-12 12:51:19,454 DEBUG astra.estimator: Recovered truncated JSON array at position 16308
+2026-02-12 12:51:54,940 DEBUG astra.estimator: Recovered truncated JSON array at position 11200
+2026-02-12 12:52:52,028 DEBUG astra.estimator: Recovered truncated JSON array at position 17246
+2026-02-12 12:53:37,952 DEBUG astra.estimator: Recovered truncated JSON array at position 5441
+2026-02-12 12:53:37,959 INFO astra.paper_trader: Scan 12: 100 estimates produced (0 AI adversarial, 100 algo). Markets: 474
+2026-02-12 13:03:38,704 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 13:04:15,683 DEBUG astra.estimator: Recovered truncated JSON array at position 12701
+2026-02-12 13:05:18,834 DEBUG astra.estimator: Recovered truncated JSON array at position 17106
+2026-02-12 13:06:00,608 DEBUG astra.estimator: Recovered truncated JSON array at position 12306
+2026-02-12 13:06:00,615 DEBUG astra.estimator: Recovered truncated JSON array at position 11547
+2026-02-12 13:06:59,353 DEBUG astra.estimator: Recovered truncated JSON array at position 17386
+2026-02-12 13:07:36,320 DEBUG astra.estimator: Recovered truncated JSON array at position 11724
+2026-02-12 13:08:41,738 DEBUG astra.estimator: Recovered truncated JSON array at position 19851
+2026-02-12 13:09:21,379 DEBUG astra.estimator: Recovered truncated JSON array at position 13054
+2026-02-12 13:10:24,655 DEBUG astra.estimator: Recovered truncated JSON array at position 18166
+2026-02-12 13:11:01,169 DEBUG astra.estimator: Recovered truncated JSON array at position 13448
+2026-02-12 13:11:01,176 DEBUG astra.estimator: Recovered truncated JSON array at position 11565
+2026-02-12 13:12:18,329 DEBUG astra.estimator: Recovered truncated JSON array at position 19769
+2026-02-12 13:12:53,361 DEBUG astra.estimator: Recovered truncated JSON array at position 11537
+2026-02-12 13:13:50,661 DEBUG astra.estimator: Recovered truncated JSON array at position 17449
+2026-02-12 13:14:24,406 INFO astra.paper_trader: Scan 13: 100 estimates produced (0 AI adversarial, 100 algo). Markets: 474
+2026-02-12 13:24:25,395 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 13:25:02,667 DEBUG astra.estimator: Recovered truncated JSON array at position 12660
+2026-02-12 13:25:54,828 DEBUG astra.estimator: Recovered truncated JSON array at position 16700
+2026-02-12 13:26:32,609 DEBUG astra.estimator: Recovered truncated JSON array at position 11964
+2026-02-12 13:27:30,049 DEBUG astra.estimator: Recovered truncated JSON array at position 19048
+2026-02-12 13:27:30,049 WARNING astra.estimator: Synthesizer JSON parse failed (Extra data: line 259 column 1 (char 17874)) — response was 19719 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 13:28:28,479 DEBUG astra.estimator: Recovered truncated JSON array at position 12755
+2026-02-12 13:29:26,514 DEBUG astra.estimator: Recovered truncated JSON array at position 16597
+2026-02-12 13:30:03,555 DEBUG astra.estimator: Recovered truncated JSON array at position 12129
+2026-02-12 13:30:03,559 DEBUG astra.estimator: Recovered truncated JSON array at position 11740
+2026-02-12 13:30:56,781 DEBUG astra.estimator: Recovered truncated JSON array at position 15886
+2026-02-12 13:31:31,000 DEBUG astra.estimator: Recovered truncated JSON array at position 12005
+2026-02-12 13:31:31,005 DEBUG astra.estimator: Recovered truncated JSON array at position 11426
+2026-02-12 13:32:25,197 DEBUG astra.estimator: Recovered truncated JSON array at position 16628
+2026-02-12 13:32:57,966 DEBUG astra.estimator: Recovered truncated JSON array at position 12531
+2026-02-12 13:33:52,472 DEBUG astra.estimator: Recovered truncated JSON array at position 17180
+2026-02-12 13:34:35,029 DEBUG astra.estimator: Recovered truncated JSON array at position 5769
+2026-02-12 13:34:35,032 INFO astra.paper_trader: Scan 14: 100 estimates produced (8 AI adversarial, 92 algo). Markets: 474
+2026-02-12 13:44:36,038 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 13:45:11,775 DEBUG astra.estimator: Recovered truncated JSON array at position 12139
+2026-02-12 13:46:16,153 DEBUG astra.estimator: Recovered truncated JSON array at position 18941
+2026-02-12 13:46:53,155 DEBUG astra.estimator: Recovered truncated JSON array at position 11224
+2026-02-12 13:46:53,158 DEBUG astra.estimator: Recovered truncated JSON array at position 12849
+2026-02-12 13:47:59,816 DEBUG astra.estimator: Recovered truncated JSON array at position 18696
+2026-02-12 13:48:38,840 DEBUG astra.estimator: Recovered truncated JSON array at position 13709
+2026-02-12 13:49:44,459 DEBUG astra.estimator: Recovered truncated JSON array at position 17954
+2026-02-12 13:49:44,465 WARNING astra.estimator: Synthesizer JSON parse failed (Invalid \uXXXX escape: line 116 column 24 (char 7778)) — response was 21598 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 13:50:41,836 DEBUG astra.estimator: Recovered truncated JSON array at position 13272
+2026-02-12 13:51:32,628 DEBUG astra.estimator: Recovered truncated JSON array at position 15407
+2026-02-12 13:52:10,000 DEBUG astra.estimator: Recovered truncated JSON array at position 13608
+2026-02-12 13:52:10,008 DEBUG astra.estimator: Recovered truncated JSON array at position 11734
+2026-02-12 13:53:41,736 DEBUG astra.estimator: Recovered truncated JSON array at position 12206
+2026-02-12 13:54:43,596 DEBUG astra.estimator: Recovered truncated JSON array at position 17211
+2026-02-12 13:55:25,016 DEBUG astra.estimator: Recovered truncated JSON array at position 5109
+2026-02-12 13:55:25,025 INFO astra.paper_trader: Scan 15: 101 estimates produced (16 AI adversarial, 85 algo). Markets: 474
+2026-02-12 14:12:26,250 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 14:13:04,174 DEBUG astra.estimator: Recovered truncated JSON array at position 12929
+2026-02-12 14:15:28,273 DEBUG astra.estimator: Recovered truncated JSON array at position 18492
+2026-02-12 14:16:02,810 DEBUG astra.estimator: Recovered truncated JSON array at position 13562
+2026-02-12 14:16:59,157 DEBUG astra.estimator: Recovered truncated JSON array at position 15108
+2026-02-12 14:17:36,737 DEBUG astra.estimator: Recovered truncated JSON array at position 11600
+2026-02-12 14:17:36,741 DEBUG astra.estimator: Recovered truncated JSON array at position 11320
+2026-02-12 14:18:36,373 DEBUG astra.estimator: Recovered truncated JSON array at position 15509
+2026-02-12 14:19:13,184 DEBUG astra.estimator: Recovered truncated JSON array at position 13300
+2026-02-12 14:20:24,365 DEBUG astra.estimator: Recovered truncated JSON array at position 19618
+2026-02-12 14:20:58,505 DEBUG astra.estimator: Recovered truncated JSON array at position 12127
+2026-02-12 14:20:58,513 DEBUG astra.estimator: Recovered truncated JSON array at position 14164
+2026-02-12 14:21:42,381 DEBUG astra.estimator: Recovered truncated JSON array at position 14933
+2026-02-12 14:22:22,405 DEBUG astra.estimator: Recovered truncated JSON array at position 4869
+2026-02-12 14:22:22,436 INFO astra.paper_trader: Scan 16: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 14:32:23,255 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 14:33:00,906 DEBUG astra.estimator: Recovered truncated JSON array at position 12815
+2026-02-12 14:33:00,920 DEBUG astra.estimator: Recovered truncated JSON array at position 11525
+2026-02-12 14:33:57,202 DEBUG astra.estimator: Recovered truncated JSON array at position 15762
+2026-02-12 14:34:36,074 DEBUG astra.estimator: Recovered truncated JSON array at position 11695
+2026-02-12 14:34:36,080 DEBUG astra.estimator: Recovered truncated JSON array at position 11048
+2026-02-12 14:35:33,729 DEBUG astra.estimator: Recovered truncated JSON array at position 16332
+2026-02-12 14:36:16,787 DEBUG astra.estimator: Recovered truncated JSON array at position 12721
+2026-02-12 14:36:16,792 DEBUG astra.estimator: Recovered truncated JSON array at position 12505
+2026-02-12 14:37:09,270 DEBUG astra.estimator: Recovered truncated JSON array at position 15297
+2026-02-12 14:37:51,812 DEBUG astra.estimator: Recovered truncated JSON array at position 13065
+2026-02-12 14:39:17,520 DEBUG astra.estimator: Recovered truncated JSON array at position 12378
+2026-02-12 14:39:17,524 DEBUG astra.estimator: Recovered truncated JSON array at position 13470
+2026-02-12 14:40:18,862 DEBUG astra.estimator: Recovered truncated JSON array at position 17981
+2026-02-12 14:41:01,294 DEBUG astra.estimator: Recovered truncated JSON array at position 13943
+2026-02-12 14:42:03,200 DEBUG astra.estimator: Recovered truncated JSON array at position 16687
+2026-02-12 14:42:43,620 DEBUG astra.estimator: Recovered truncated JSON array at position 4409
+2026-02-12 14:42:43,621 INFO astra.paper_trader: Scan 17: 100 estimates produced (0 AI adversarial, 100 algo). Markets: 474
+2026-02-12 14:52:44,328 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 14:53:17,543 DEBUG astra.estimator: Recovered truncated JSON array at position 11597
+2026-02-12 14:53:17,550 DEBUG astra.estimator: Recovered truncated JSON array at position 13965
+2026-02-12 14:54:13,345 DEBUG astra.estimator: Recovered truncated JSON array at position 17313
+2026-02-12 14:54:49,310 DEBUG astra.estimator: Recovered truncated JSON array at position 12977
+2026-02-12 14:55:45,153 DEBUG astra.estimator: Recovered truncated JSON array at position 15443
+2026-02-12 14:56:22,408 DEBUG astra.estimator: Recovered truncated JSON array at position 12244
+2026-02-12 17:01:33,466 DEBUG astra.estimator: Recovered truncated JSON array at position 13699
+2026-02-12 17:01:33,493 DEBUG astra.estimator: Recovered truncated JSON array at position 11922
+2026-02-12 17:02:32,957 DEBUG astra.estimator: Recovered truncated JSON array at position 17528
+2026-02-12 17:03:11,423 DEBUG astra.estimator: Recovered truncated JSON array at position 11904
+2026-02-12 17:03:11,427 DEBUG astra.estimator: Recovered truncated JSON array at position 12607
+2026-02-12 17:04:19,452 DEBUG astra.estimator: Recovered truncated JSON array at position 21542
+2026-02-12 17:04:55,369 DEBUG astra.estimator: Recovered truncated JSON array at position 11636
+2026-02-12 17:04:55,372 DEBUG astra.estimator: Recovered truncated JSON array at position 13428
+2026-02-12 17:05:47,863 DEBUG astra.estimator: Recovered truncated JSON array at position 15432
+2026-02-12 17:06:32,529 DEBUG astra.estimator: Recovered truncated JSON array at position 5327
+2026-02-12 17:06:32,531 INFO astra.paper_trader: Scan 18: 100 estimates produced (0 AI adversarial, 100 algo). Markets: 474
+2026-02-12 17:16:33,259 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 17:17:13,102 DEBUG astra.estimator: Recovered truncated JSON array at position 13395
+2026-02-12 17:18:12,919 DEBUG astra.estimator: Recovered truncated JSON array at position 17026
+2026-02-12 17:18:49,606 DEBUG astra.estimator: Recovered truncated JSON array at position 13032
+2026-02-12 17:18:49,611 DEBUG astra.estimator: Recovered truncated JSON array at position 12625
+2026-02-12 17:19:58,831 DEBUG astra.estimator: Recovered truncated JSON array at position 19362
+2026-02-12 17:20:38,790 DEBUG astra.estimator: Recovered truncated JSON array at position 13327
+2026-02-12 17:20:38,796 DEBUG astra.estimator: Recovered truncated JSON array at position 12975
+2026-02-12 17:21:33,384 WARNING astra.estimator: Synthesizer JSON parse failed (Invalid \uXXXX escape: line 157 column 117 (char 11326)) — response was 18072 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 17:22:40,988 DEBUG astra.estimator: Recovered truncated JSON array at position 12857
+2026-02-12 17:23:40,717 DEBUG astra.estimator: Recovered truncated JSON array at position 18102
+2026-02-12 17:24:17,232 DEBUG astra.estimator: Recovered truncated JSON array at position 13071
+2026-02-12 17:24:17,235 DEBUG astra.estimator: Recovered truncated JSON array at position 12948
+2026-02-12 17:25:47,581 DEBUG astra.estimator: Recovered truncated JSON array at position 11403
+2026-02-12 17:26:53,319 DEBUG astra.estimator: Recovered truncated JSON array at position 18258
+2026-02-12 17:27:39,933 DEBUG astra.estimator: Recovered truncated JSON array at position 5676
+2026-02-12 17:27:39,935 INFO astra.paper_trader: Scan 19: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 17:53:12,666 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 17:53:51,722 DEBUG astra.estimator: Recovered truncated JSON array at position 12059
+2026-02-12 17:53:51,754 DEBUG astra.estimator: Recovered truncated JSON array at position 12652
+2026-02-12 17:54:58,077 DEBUG astra.estimator: Recovered truncated JSON array at position 17712
+2026-02-12 17:55:35,642 DEBUG astra.estimator: Recovered truncated JSON array at position 11172
+2026-02-12 17:55:35,647 DEBUG astra.estimator: Recovered truncated JSON array at position 12719
+2026-02-12 17:56:29,972 DEBUG astra.estimator: Recovered truncated JSON array at position 16335
+2026-02-12 17:57:10,019 DEBUG astra.estimator: Recovered truncated JSON array at position 12129
+2026-02-12 17:58:01,497 DEBUG astra.estimator: Recovered truncated JSON array at position 15503
+2026-02-12 17:58:40,379 DEBUG astra.estimator: Recovered truncated JSON array at position 12463
+2026-02-12 17:58:40,382 DEBUG astra.estimator: Recovered truncated JSON array at position 13408
+2026-02-12 17:59:34,603 DEBUG astra.estimator: Recovered truncated JSON array at position 15740
+2026-02-12 18:00:11,770 DEBUG astra.estimator: Recovered truncated JSON array at position 12617
+2026-02-12 18:01:17,817 DEBUG astra.estimator: Recovered truncated JSON array at position 19475
+2026-02-12 18:02:40,667 DEBUG astra.estimator: Recovered truncated JSON array at position 16319
+2026-02-12 18:03:22,502 DEBUG astra.estimator: Recovered truncated JSON array at position 4881
+2026-02-12 18:03:22,503 INFO astra.paper_trader: Scan 20: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 18:13:23,561 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 18:14:00,261 DEBUG astra.estimator: Recovered truncated JSON array at position 13304
+2026-02-12 18:14:00,263 DEBUG astra.estimator: Recovered truncated JSON array at position 12326
+2026-02-12 18:15:03,708 DEBUG astra.estimator: Recovered truncated JSON array at position 18315
+2026-02-12 18:15:40,273 DEBUG astra.estimator: Recovered truncated JSON array at position 12626
+2026-02-12 18:15:40,276 DEBUG astra.estimator: Recovered truncated JSON array at position 11286
+2026-02-12 18:16:31,577 DEBUG astra.estimator: Recovered truncated JSON array at position 16104
+2026-02-12 18:17:12,510 DEBUG astra.estimator: Recovered truncated JSON array at position 13511
+2026-02-12 18:17:12,513 DEBUG astra.estimator: Recovered truncated JSON array at position 12747
+2026-02-12 18:18:43,370 DEBUG astra.estimator: Recovered truncated JSON array at position 12383
+2026-02-12 18:19:51,970 DEBUG astra.estimator: Recovered truncated JSON array at position 19156
+2026-02-12 18:20:28,750 DEBUG astra.estimator: Recovered truncated JSON array at position 12201
+2026-02-12 18:20:28,754 DEBUG astra.estimator: Recovered truncated JSON array at position 11931
+2026-02-12 18:22:01,041 DEBUG astra.estimator: Recovered truncated JSON array at position 12218
+2026-02-12 18:23:07,464 DEBUG astra.estimator: Recovered truncated JSON array at position 18510
+2026-02-12 18:23:47,202 DEBUG astra.estimator: Recovered truncated JSON array at position 5960
+2026-02-12 18:23:47,204 INFO astra.paper_trader: Scan 21: 100 estimates produced (0 AI adversarial, 100 algo). Markets: 474
+2026-02-12 18:46:00,551 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 18:46:46,560 DEBUG astra.estimator: Recovered truncated JSON array at position 12920
+2026-02-12 18:47:45,282 DEBUG astra.estimator: Recovered truncated JSON array at position 17774
+2026-02-12 18:48:21,188 DEBUG astra.estimator: Recovered truncated JSON array at position 12421
+2026-02-12 18:48:21,191 DEBUG astra.estimator: Recovered truncated JSON array at position 12746
+2026-02-12 18:49:08,910 DEBUG astra.estimator: Recovered truncated JSON array at position 15264
+2026-02-12 18:49:46,702 DEBUG astra.estimator: Recovered truncated JSON array at position 12335
+2026-02-12 18:49:46,706 DEBUG astra.estimator: Recovered truncated JSON array at position 13858
+2026-02-12 18:50:36,164 DEBUG astra.estimator: Recovered truncated JSON array at position 14498
+2026-02-12 18:51:11,653 DEBUG astra.estimator: Recovered truncated JSON array at position 11525
+2026-02-12 18:51:11,654 DEBUG astra.estimator: Recovered truncated JSON array at position 11691
+2026-02-12 18:52:04,753 DEBUG astra.estimator: Recovered truncated JSON array at position 15432
+2026-02-12 18:52:04,755 WARNING astra.estimator: Adversarial pipeline failed (TypeError: float() argument must be a string or a real number, not 'NoneType') — falling back to single-pass
+2026-02-12 18:53:02,261 DEBUG astra.estimator: Recovered truncated JSON array at position 12882
+2026-02-12 18:53:53,468 DEBUG astra.estimator: Recovered truncated JSON array at position 16082
+2026-02-12 18:54:28,762 DEBUG astra.estimator: Recovered truncated JSON array at position 12493
+2026-02-12 18:54:28,767 DEBUG astra.estimator: Recovered truncated JSON array at position 12105
+2026-02-12 18:55:26,808 DEBUG astra.estimator: Recovered truncated JSON array at position 17761
+2026-02-12 18:56:04,454 DEBUG astra.estimator: Recovered truncated JSON array at position 4497
+2026-02-12 18:56:04,457 INFO astra.paper_trader: Scan 22: 100 estimates produced (8 AI adversarial, 92 algo). Markets: 474
+2026-02-12 19:06:05,124 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 19:06:42,956 DEBUG astra.estimator: Recovered truncated JSON array at position 12662
+2026-02-12 19:07:53,104 DEBUG astra.estimator: Recovered truncated JSON array at position 20562
+2026-02-12 19:08:29,947 DEBUG astra.estimator: Recovered truncated JSON array at position 12715
+2026-02-12 19:08:29,948 DEBUG astra.estimator: Recovered truncated JSON array at position 11999
+2026-02-12 19:09:22,188 DEBUG astra.estimator: Recovered truncated JSON array at position 16001
+2026-02-12 19:09:59,616 DEBUG astra.estimator: Recovered truncated JSON array at position 13400
+2026-02-12 19:09:59,617 DEBUG astra.estimator: Recovered truncated JSON array at position 13484
+2026-02-12 19:11:15,368 DEBUG astra.estimator: Recovered truncated JSON array at position 21960
+2026-02-12 19:11:15,368 WARNING astra.estimator: Synthesizer JSON parse failed (Invalid \uXXXX escape: line 156 column 24 (char 11602)) — response was 23823 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 19:12:16,204 DEBUG astra.estimator: Recovered truncated JSON array at position 12671
+2026-02-12 19:13:46,938 DEBUG astra.estimator: Recovered truncated JSON array at position 13293
+2026-02-12 19:13:46,945 DEBUG astra.estimator: Recovered truncated JSON array at position 13845
+2026-02-12 19:14:53,326 DEBUG astra.estimator: Recovered truncated JSON array at position 19111
+2026-02-12 19:15:29,997 DEBUG astra.estimator: Recovered truncated JSON array at position 12746
+2026-02-12 19:16:35,074 DEBUG astra.estimator: Recovered truncated JSON array at position 19327
+2026-02-12 19:17:18,095 DEBUG astra.estimator: Recovered truncated JSON array at position 4992
+2026-02-12 19:17:18,147 INFO astra.paper_trader: Scan 23: 101 estimates produced (16 AI adversarial, 85 algo). Markets: 474
+2026-02-12 19:27:18,706 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 19:28:01,016 DEBUG astra.estimator: Recovered truncated JSON array at position 12306
+2026-02-12 19:28:01,019 DEBUG astra.estimator: Recovered truncated JSON array at position 13324
+2026-02-12 19:28:54,562 DEBUG astra.estimator: Recovered truncated JSON array at position 16004
+2026-02-12 19:29:29,566 DEBUG astra.estimator: Recovered truncated JSON array at position 13120
+2026-02-12 19:29:29,569 DEBUG astra.estimator: Recovered truncated JSON array at position 12049
+2026-02-12 19:30:32,478 DEBUG astra.estimator: Recovered truncated JSON array at position 19524
+2026-02-12 19:31:07,580 DEBUG astra.estimator: Recovered truncated JSON array at position 13533
+2026-02-12 19:32:05,408 DEBUG astra.estimator: Recovered truncated JSON array at position 17289
+2026-02-12 19:32:40,830 DEBUG astra.estimator: Recovered truncated JSON array at position 11834
+2026-02-12 19:33:46,100 DEBUG astra.estimator: Recovered truncated JSON array at position 18091
+2026-02-12 19:34:21,635 DEBUG astra.estimator: Recovered truncated JSON array at position 12837
+2026-02-12 19:34:21,640 DEBUG astra.estimator: Recovered truncated JSON array at position 12030
+2026-02-12 19:35:16,989 DEBUG astra.estimator: Recovered truncated JSON array at position 18261
+2026-02-12 19:35:51,459 DEBUG astra.estimator: Recovered truncated JSON array at position 13051
+2026-02-12 19:36:51,257 DEBUG astra.estimator: Recovered truncated JSON array at position 15831
+2026-02-12 19:37:31,950 DEBUG astra.estimator: Recovered truncated JSON array at position 5505
+2026-02-12 19:37:31,951 INFO astra.paper_trader: Scan 24: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 19:47:32,564 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 19:48:10,457 DEBUG astra.estimator: Recovered truncated JSON array at position 13053
+2026-02-12 19:48:10,461 DEBUG astra.estimator: Recovered truncated JSON array at position 11841
+2026-02-12 19:49:15,678 DEBUG astra.estimator: Recovered truncated JSON array at position 19496
+2026-02-12 19:49:56,346 DEBUG astra.estimator: Recovered truncated JSON array at position 13024
+2026-02-12 19:49:56,351 DEBUG astra.estimator: Recovered truncated JSON array at position 13289
+2026-02-12 19:50:59,227 DEBUG astra.estimator: Recovered truncated JSON array at position 18362
+2026-02-12 19:51:36,075 DEBUG astra.estimator: Recovered truncated JSON array at position 12626
+2026-02-12 19:51:36,081 DEBUG astra.estimator: Recovered truncated JSON array at position 12656
+2026-02-12 19:53:16,734 DEBUG astra.estimator: Recovered truncated JSON array at position 13338
+2026-02-12 19:53:16,744 DEBUG astra.estimator: Recovered truncated JSON array at position 12271
+2026-02-12 19:54:07,691 DEBUG astra.estimator: Recovered truncated JSON array at position 16059
+2026-02-12 19:54:44,189 DEBUG astra.estimator: Recovered truncated JSON array at position 12786
+2026-02-12 19:54:44,196 DEBUG astra.estimator: Recovered truncated JSON array at position 12140
+2026-02-12 19:55:46,849 DEBUG astra.estimator: Recovered truncated JSON array at position 18200
+2026-02-12 19:56:22,593 DEBUG astra.estimator: Recovered truncated JSON array at position 13892
+2026-02-12 19:56:22,596 DEBUG astra.estimator: Recovered truncated JSON array at position 11888
+2026-02-12 19:57:53,292 DEBUG astra.estimator: Recovered truncated JSON array at position 5569
+2026-02-12 19:57:53,293 INFO astra.paper_trader: Scan 25: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 20:07:53,910 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 20:08:32,140 DEBUG astra.estimator: Recovered truncated JSON array at position 12184
+2026-02-12 20:09:25,198 DEBUG astra.estimator: Recovered truncated JSON array at position 14511
+2026-02-12 20:10:53,317 DEBUG astra.estimator: Recovered truncated JSON array at position 17797
+2026-02-12 20:11:33,431 DEBUG astra.estimator: Recovered truncated JSON array at position 12466
+2026-02-12 20:11:33,436 DEBUG astra.estimator: Recovered truncated JSON array at position 12323
+2026-02-12 20:12:56,545 DEBUG astra.estimator: Recovered truncated JSON array at position 13749
+2026-02-12 20:13:51,377 DEBUG astra.estimator: Recovered truncated JSON array at position 16434
+2026-02-12 20:14:27,221 DEBUG astra.estimator: Recovered truncated JSON array at position 12746
+2026-02-12 20:15:35,953 DEBUG astra.estimator: Recovered truncated JSON array at position 19864
+2026-02-12 20:16:09,090 DEBUG astra.estimator: Recovered truncated JSON array at position 11911
+2026-02-12 20:17:12,197 DEBUG astra.estimator: Recovered truncated JSON array at position 19501
+2026-02-12 20:17:29,716 DEBUG astra.estimator: Recovered truncated JSON array at position 4387
+2026-02-12 20:17:56,060 DEBUG astra.estimator: Recovered truncated JSON array at position 4930
+2026-02-12 20:17:56,061 INFO astra.paper_trader: Scan 26: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 20:27:56,752 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 20:28:32,410 DEBUG astra.estimator: Recovered truncated JSON array at position 12185
+2026-02-12 20:29:30,695 DEBUG astra.estimator: Recovered truncated JSON array at position 17012
+2026-02-12 20:30:05,427 DEBUG astra.estimator: Recovered truncated JSON array at position 11827
+2026-02-12 20:30:05,431 DEBUG astra.estimator: Recovered truncated JSON array at position 11980
+2026-02-12 20:31:32,015 DEBUG astra.estimator: Recovered truncated JSON array at position 12804
+2026-02-12 20:31:32,021 DEBUG astra.estimator: Recovered truncated JSON array at position 13393
+2026-02-12 20:32:43,316 DEBUG astra.estimator: Recovered truncated JSON array at position 21780
+2026-02-12 20:33:17,969 DEBUG astra.estimator: Recovered truncated JSON array at position 13566
+2026-02-12 20:34:09,259 DEBUG astra.estimator: Recovered truncated JSON array at position 16232
+2026-02-12 20:34:48,773 DEBUG astra.estimator: Recovered truncated JSON array at position 12956
+2026-02-12 20:35:49,510 DEBUG astra.estimator: Recovered truncated JSON array at position 18479
+2026-02-12 20:36:26,168 DEBUG astra.estimator: Recovered truncated JSON array at position 13275
+2026-02-12 20:37:24,074 DEBUG astra.estimator: Recovered truncated JSON array at position 17051
+2026-02-12 20:38:05,856 DEBUG astra.estimator: Recovered truncated JSON array at position 5600
+2026-02-12 20:38:05,860 INFO astra.paper_trader: Scan 27: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 20:48:06,427 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 20:48:44,500 DEBUG astra.estimator: Recovered truncated JSON array at position 12778
+2026-02-12 20:49:48,610 DEBUG astra.estimator: Recovered truncated JSON array at position 18375
+2026-02-12 20:51:18,082 DEBUG astra.estimator: Recovered truncated JSON array at position 16962
+2026-02-12 20:51:55,215 DEBUG astra.estimator: Recovered truncated JSON array at position 11825
+2026-02-12 20:51:55,218 DEBUG astra.estimator: Recovered truncated JSON array at position 12913
+2026-02-12 20:53:25,924 DEBUG astra.estimator: Recovered truncated JSON array at position 11688
+2026-02-12 20:53:25,926 DEBUG astra.estimator: Recovered truncated JSON array at position 12480
+2026-02-12 20:54:24,700 DEBUG astra.estimator: Recovered truncated JSON array at position 18193
+2026-02-12 20:55:01,840 DEBUG astra.estimator: Recovered truncated JSON array at position 12332
+2026-02-12 20:55:01,843 DEBUG astra.estimator: Recovered truncated JSON array at position 13002
+2026-02-12 20:55:58,110 DEBUG astra.estimator: Recovered truncated JSON array at position 15575
+2026-02-12 20:56:32,619 DEBUG astra.estimator: Recovered truncated JSON array at position 12887
+2026-02-12 20:57:28,294 DEBUG astra.estimator: Recovered truncated JSON array at position 17539
+2026-02-12 20:58:08,377 DEBUG astra.estimator: Recovered truncated JSON array at position 5048
+2026-02-12 20:58:08,380 INFO astra.paper_trader: Scan 28: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 21:08:08,965 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 21:08:46,382 DEBUG astra.estimator: Recovered truncated JSON array at position 12968
+2026-02-12 21:08:46,386 DEBUG astra.estimator: Recovered truncated JSON array at position 11726
+2026-02-12 21:09:37,737 DEBUG astra.estimator: Recovered truncated JSON array at position 15264
+2026-02-12 21:10:12,775 DEBUG astra.estimator: Recovered truncated JSON array at position 12994
+2026-02-12 21:10:12,784 DEBUG astra.estimator: Recovered truncated JSON array at position 13481
+2026-02-12 21:11:40,670 DEBUG astra.estimator: Recovered truncated JSON array at position 12528
+2026-02-12 21:11:40,676 DEBUG astra.estimator: Recovered truncated JSON array at position 12298
+2026-02-12 21:12:49,341 DEBUG astra.estimator: Recovered truncated JSON array at position 20980
+2026-02-12 21:12:49,342 WARNING astra.estimator: Synthesizer JSON parse failed (Invalid \uXXXX escape: line 150 column 120 (char 11483)) — response was 23761 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 21:13:49,412 DEBUG astra.estimator: Recovered truncated JSON array at position 13439
+2026-02-12 21:15:31,370 DEBUG astra.estimator: Recovered truncated JSON array at position 13229
+2026-02-12 21:16:39,917 DEBUG astra.estimator: Recovered truncated JSON array at position 20548
+2026-02-12 21:17:17,963 DEBUG astra.estimator: Recovered truncated JSON array at position 12266
+2026-02-12 21:17:17,967 DEBUG astra.estimator: Recovered truncated JSON array at position 12902
+2026-02-12 21:18:18,526 DEBUG astra.estimator: Recovered truncated JSON array at position 16809
+2026-02-12 21:19:06,014 DEBUG astra.estimator: Recovered truncated JSON array at position 6239
+2026-02-12 21:19:06,018 INFO astra.paper_trader: Scan 29: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 21:29:06,567 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 21:29:45,604 DEBUG astra.estimator: Recovered truncated JSON array at position 11924
+2026-02-12 21:29:45,610 DEBUG astra.estimator: Recovered truncated JSON array at position 13629
+2026-02-12 21:30:39,178 DEBUG astra.estimator: Recovered truncated JSON array at position 16966
+2026-02-12 21:31:12,983 DEBUG astra.estimator: Recovered truncated JSON array at position 12629
+2026-02-12 21:32:14,945 DEBUG astra.estimator: Recovered truncated JSON array at position 20978
+2026-02-12 21:32:49,462 DEBUG astra.estimator: Recovered truncated JSON array at position 11728
+2026-02-12 21:32:49,466 DEBUG astra.estimator: Recovered truncated JSON array at position 13159
+2026-02-12 21:34:14,538 DEBUG astra.estimator: Recovered truncated JSON array at position 13683
+2026-02-12 21:34:14,544 DEBUG astra.estimator: Recovered truncated JSON array at position 12560
+2026-02-12 21:35:10,516 DEBUG astra.estimator: Recovered truncated JSON array at position 15933
+2026-02-12 21:35:45,388 DEBUG astra.estimator: Recovered truncated JSON array at position 11756
+2026-02-12 21:35:45,391 DEBUG astra.estimator: Recovered truncated JSON array at position 12140
+2026-02-12 21:36:39,556 DEBUG astra.estimator: Recovered truncated JSON array at position 15591
+2026-02-12 21:37:13,284 DEBUG astra.estimator: Recovered truncated JSON array at position 12934
+2026-02-12 21:38:11,495 DEBUG astra.estimator: Recovered truncated JSON array at position 17338
+2026-02-12 21:38:26,959 DEBUG astra.estimator: Recovered truncated JSON array at position 3712
+2026-02-12 21:38:54,127 DEBUG astra.estimator: Recovered truncated JSON array at position 4977
+2026-02-12 21:38:54,128 INFO astra.paper_trader: Scan 30: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 21:48:54,797 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 21:49:32,977 DEBUG astra.estimator: Recovered truncated JSON array at position 13375
+2026-02-12 21:49:32,982 DEBUG astra.estimator: Recovered truncated JSON array at position 11736
+2026-02-12 21:50:42,589 DEBUG astra.estimator: Recovered truncated JSON array at position 19298
+2026-02-12 21:51:16,872 DEBUG astra.estimator: Recovered truncated JSON array at position 12082
+2026-02-12 21:52:06,455 DEBUG astra.estimator: Recovered truncated JSON array at position 14897
+2026-02-12 21:52:39,408 DEBUG astra.estimator: Recovered truncated JSON array at position 13987
+2026-02-12 21:53:28,910 DEBUG astra.estimator: Recovered truncated JSON array at position 15709
+2026-02-12 21:54:01,405 DEBUG astra.estimator: Recovered truncated JSON array at position 13834
+2026-02-12 21:54:01,412 DEBUG astra.estimator: Recovered truncated JSON array at position 13934
+2026-02-12 21:55:00,058 DEBUG astra.estimator: Recovered truncated JSON array at position 16697
+2026-02-12 21:55:35,146 DEBUG astra.estimator: Recovered truncated JSON array at position 14484
+2026-02-12 21:55:35,150 DEBUG astra.estimator: Recovered truncated JSON array at position 13349
+2026-02-12 21:56:28,736 DEBUG astra.estimator: Recovered truncated JSON array at position 16675
+2026-02-12 21:57:08,913 DEBUG astra.estimator: Recovered truncated JSON array at position 12750
+2026-02-12 21:57:08,917 DEBUG astra.estimator: Recovered truncated JSON array at position 12663
+2026-02-12 21:58:13,111 DEBUG astra.estimator: Recovered truncated JSON array at position 20295
+2026-02-12 21:58:50,528 DEBUG astra.estimator: Recovered truncated JSON array at position 5549
+2026-02-12 21:58:50,530 INFO astra.paper_trader: Scan 31: 151 estimates produced (8 AI adversarial, 143 algo). Markets: 474
+2026-02-12 22:08:51,234 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 22:09:27,840 DEBUG astra.estimator: Recovered truncated JSON array at position 13003
+2026-02-12 22:10:24,444 DEBUG astra.estimator: Recovered truncated JSON array at position 17567
+2026-02-12 22:11:01,057 DEBUG astra.estimator: Recovered truncated JSON array at position 12609
+2026-02-12 22:11:01,060 DEBUG astra.estimator: Recovered truncated JSON array at position 12416
+2026-02-12 22:12:04,589 DEBUG astra.estimator: Recovered truncated JSON array at position 18247
+2026-02-12 22:12:45,643 DEBUG astra.estimator: Recovered truncated JSON array at position 14426
+2026-02-12 22:12:45,651 DEBUG astra.estimator: Recovered truncated JSON array at position 13519
+2026-02-12 22:13:38,469 WARNING astra.estimator: Synthesizer JSON parse failed (Invalid \uXXXX escape: line 159 column 77 (char 11381)) — response was 18029 chars (max_tokens=6144). Batch of 8 markets may be too large. Falling back to single-pass.
+2026-02-12 22:14:37,451 DEBUG astra.estimator: Recovered truncated JSON array at position 11234
+2026-02-12 22:16:03,309 DEBUG astra.estimator: Recovered truncated JSON array at position 12759
+2026-02-12 22:16:03,314 DEBUG astra.estimator: Recovered truncated JSON array at position 11899
+2026-02-12 22:17:00,879 DEBUG astra.estimator: Recovered truncated JSON array at position 17018
+2026-02-12 22:18:41,707 DEBUG astra.estimator: Recovered truncated JSON array at position 18618
+2026-02-12 22:19:22,586 DEBUG astra.estimator: Recovered truncated JSON array at position 5395
+2026-02-12 22:19:22,588 INFO astra.paper_trader: Scan 32: 151 estimates produced (8 AI adversarial, 143 algo). Markets: 474
+2026-02-12 22:29:23,293 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 22:29:55,969 DEBUG astra.estimator: Recovered truncated JSON array at position 13481
+2026-02-12 22:30:48,708 DEBUG astra.estimator: Recovered truncated JSON array at position 16019
+2026-02-12 22:31:23,758 DEBUG astra.estimator: Recovered truncated JSON array at position 11828
+2026-02-12 22:32:18,518 DEBUG astra.estimator: Recovered truncated JSON array at position 16008
+2026-02-12 22:32:59,748 DEBUG astra.estimator: Recovered truncated JSON array at position 13296
+2026-02-12 22:32:59,752 DEBUG astra.estimator: Recovered truncated JSON array at position 13262
+2026-02-12 22:34:24,559 DEBUG astra.estimator: Recovered truncated JSON array at position 13183
+2026-02-12 22:34:24,566 DEBUG astra.estimator: Recovered truncated JSON array at position 12522
+2026-02-12 22:35:25,800 DEBUG astra.estimator: Recovered truncated JSON array at position 18850
+2026-02-12 22:36:06,790 DEBUG astra.estimator: Recovered truncated JSON array at position 13209
+2026-02-12 22:36:06,793 DEBUG astra.estimator: Recovered truncated JSON array at position 12649
+2026-02-12 22:37:07,831 DEBUG astra.estimator: Recovered truncated JSON array at position 18138
+2026-02-12 22:37:42,964 DEBUG astra.estimator: Recovered truncated JSON array at position 13015
+2026-02-12 22:38:43,450 DEBUG astra.estimator: Recovered truncated JSON array at position 18798
+2026-02-12 22:39:00,032 DEBUG astra.estimator: Recovered truncated JSON array at position 5130
+2026-02-12 22:39:24,713 DEBUG astra.estimator: Recovered truncated JSON array at position 5711
+2026-02-12 22:39:24,714 INFO astra.paper_trader: Scan 33: 101 estimates produced (8 AI adversarial, 93 algo). Markets: 474
+2026-02-12 22:40:42,315 INFO astra: Astra logging initialized — log file: memory/astra.log
+2026-02-12 22:40:42,433 WARNING astra.paper_trader: STARTUP: FRED_API_KEY not set — macro economic signals will be None
+2026-02-12 22:40:43,181 INFO astra.sports: Precision sport fetch: 8 leagues for 214 questions (saved 8 API calls)
+2026-02-12 22:40:43,217 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 22:41:40,490 DEBUG astra.estimator: Recovered truncated JSON array at position 9323
+2026-02-12 22:42:30,830 DEBUG astra.estimator: Recovered truncated JSON array at position 9152
+2026-02-12 22:43:00,155 DEBUG astra.estimator: Recovered truncated JSON array at position 8822
+2026-02-12 22:43:41,692 DEBUG astra.estimator: Recovered truncated JSON array at position 10238
+2026-02-12 22:44:39,912 DEBUG astra.estimator: Recovered truncated JSON array at position 9839
+2026-02-12 22:45:46,970 DEBUG astra.estimator: Recovered truncated JSON array at position 10102
+2026-02-12 22:46:48,172 DEBUG astra.estimator: Recovered truncated JSON array at position 9932
+2026-02-12 22:47:47,134 DEBUG astra.estimator: Recovered truncated JSON array at position 11243
+2026-02-12 22:48:15,834 DEBUG astra.estimator: Recovered truncated JSON array at position 9112
+2026-02-12 22:48:51,864 DEBUG astra.estimator: Recovered truncated JSON array at position 9654
+2026-02-12 22:49:58,076 DEBUG astra.estimator: Recovered truncated JSON array at position 10084
+2026-02-12 22:50:51,367 DEBUG astra.estimator: Recovered truncated JSON array at position 9498
+2026-02-12 22:51:44,110 DEBUG astra.estimator: Recovered truncated JSON array at position 8670
+2026-02-12 22:52:43,353 DEBUG astra.estimator: Recovered truncated JSON array at position 9781
+2026-02-12 22:53:21,077 DEBUG astra.estimator: Recovered truncated JSON array at position 4544
+2026-02-12 22:53:21,077 INFO astra.estimator: AI estimates: 50 produced for 50 markets (13 batches, model=claude-haiku-4-5-20251001)
+2026-02-12 22:53:21,078 INFO astra.paper_trader: Scan 1: 51 estimates produced (0 AI adversarial, 51 algo). Markets: 474
+2026-02-12 22:59:25,949 INFO astra.sports: Precision sport fetch: 8 leagues for 214 questions (saved 8 API calls)
+2026-02-12 22:59:25,952 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 23:00:29,575 DEBUG astra.estimator: Recovered truncated JSON array at position 10512
+2026-02-12 23:01:29,387 DEBUG astra.estimator: Recovered truncated JSON array at position 11014
+2026-02-12 23:01:54,495 DEBUG astra.estimator: Recovered truncated JSON array at position 7065
+2026-02-12 23:02:29,134 DEBUG astra.estimator: Recovered truncated JSON array at position 8848
+2026-02-12 23:03:36,480 DEBUG astra.estimator: Recovered truncated JSON array at position 9727
+2026-02-12 23:04:40,375 DEBUG astra.estimator: Recovered truncated JSON array at position 9942
+2026-02-12 23:05:38,921 DEBUG astra.estimator: Recovered truncated JSON array at position 7282
+2026-02-12 23:06:39,228 DEBUG astra.estimator: Recovered truncated JSON array at position 9635
+2026-02-12 23:07:38,457 DEBUG astra.estimator: Recovered truncated JSON array at position 9553
+2026-02-12 23:08:47,716 DEBUG astra.estimator: Recovered truncated JSON array at position 10745
+2026-02-12 23:09:53,619 DEBUG astra.estimator: Recovered truncated JSON array at position 11071
+2026-02-12 23:10:17,549 DEBUG astra.estimator: Recovered truncated JSON array at position 6462
+2026-02-12 23:10:48,502 DEBUG astra.estimator: Recovered truncated JSON array at position 8939
+2026-02-12 23:11:52,866 DEBUG astra.estimator: Recovered truncated JSON array at position 10120
+2026-02-12 23:12:39,838 DEBUG astra.estimator: Recovered truncated JSON array at position 5724
+2026-02-12 23:12:39,839 INFO astra.estimator: AI estimates: 50 produced for 50 markets (13 batches, model=claude-haiku-4-5-20251001)
+2026-02-12 23:12:39,839 INFO astra.paper_trader: Scan 2: 101 estimates produced (0 AI adversarial, 101 algo). Markets: 474
+2026-02-12 23:17:40,716 INFO astra.sports: Precision sport fetch: 8 leagues for 214 questions (saved 8 API calls)
+2026-02-12 23:17:40,725 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 23:18:44,390 DEBUG astra.estimator: Recovered truncated JSON array at position 10342
+2026-02-12 23:20:24,384 DEBUG astra.estimator: Recovered truncated JSON array at position 12442
+2026-02-12 23:21:01,511 DEBUG astra.estimator: Recovered truncated JSON array at position 9389
+2026-02-12 23:21:53,254 DEBUG astra.estimator: Recovered truncated JSON array at position 9563
+2026-02-12 23:22:47,011 DEBUG astra.estimator: Recovered truncated JSON array at position 9017
+2026-02-12 23:23:50,739 DEBUG astra.estimator: Recovered truncated JSON array at position 9413
+2026-02-12 23:24:56,542 DEBUG astra.estimator: Recovered truncated JSON array at position 9171
+2026-02-12 23:25:56,923 DEBUG astra.estimator: Recovered truncated JSON array at position 10488
+2026-02-12 23:26:50,326 DEBUG astra.estimator: Recovered truncated JSON array at position 8168
+2026-02-12 23:27:53,624 DEBUG astra.estimator: Recovered truncated JSON array at position 9296
+2026-02-12 23:30:02,177 DEBUG astra.estimator: Recovered truncated JSON array at position 10460
+2026-02-12 23:30:38,106 DEBUG astra.estimator: Recovered truncated JSON array at position 5586
+2026-02-12 23:30:38,107 INFO astra.estimator: AI estimates: 50 produced for 50 markets (13 batches, model=claude-haiku-4-5-20251001)
+2026-02-12 23:30:38,112 INFO astra.paper_trader: Scan 3: 151 estimates produced (0 AI adversarial, 151 algo). Markets: 474
+2026-02-12 23:35:38,658 INFO astra.sports: Precision sport fetch: 8 leagues for 214 questions (saved 8 API calls)
+2026-02-12 23:35:38,661 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 23:36:32,850 DEBUG astra.estimator: Recovered truncated JSON array at position 9122
+2026-02-12 23:37:26,284 DEBUG astra.estimator: Recovered truncated JSON array at position 7859
+2026-02-12 23:37:48,101 DEBUG astra.estimator: Recovered truncated JSON array at position 7736
+2026-02-12 23:38:17,447 DEBUG astra.estimator: Recovered truncated JSON array at position 7214
+2026-02-12 23:39:22,137 DEBUG astra.estimator: Recovered truncated JSON array at position 12061
+2026-02-12 23:40:29,698 DEBUG astra.estimator: Recovered truncated JSON array at position 10092
+2026-02-12 23:41:33,980 DEBUG astra.estimator: Recovered truncated JSON array at position 9558
+2026-02-12 23:42:27,813 DEBUG astra.estimator: Recovered truncated JSON array at position 9071
+2026-02-12 23:43:35,813 DEBUG astra.estimator: Recovered truncated JSON array at position 9294
+2026-02-12 23:45:46,967 DEBUG astra.estimator: Recovered truncated JSON array at position 9265
+2026-02-12 23:46:45,097 DEBUG astra.estimator: Recovered truncated JSON array at position 7922
+2026-02-12 23:47:44,049 DEBUG astra.estimator: Recovered truncated JSON array at position 9816
+2026-02-12 23:48:22,858 DEBUG astra.estimator: Recovered truncated JSON array at position 5562
+2026-02-12 23:48:22,858 INFO astra.estimator: AI estimates: 50 produced for 50 markets (13 batches, model=claude-haiku-4-5-20251001)
+2026-02-12 23:48:22,860 INFO astra.paper_trader: Scan 4: 151 estimates produced (0 AI adversarial, 151 algo). Markets: 474
+2026-02-12 23:53:23,445 INFO astra.sports: Precision sport fetch: 8 leagues for 214 questions (saved 8 API calls)
+2026-02-12 23:53:23,452 WARNING astra.sports: Odds API quota nearly exhausted (37 remaining) — skipping sports fetch
+2026-02-12 23:54:20,367 DEBUG astra.estimator: Recovered truncated JSON array at position 8614
+2026-02-12 23:55:12,813 DEBUG astra.estimator: Recovered truncated JSON array at position 9256
+2026-02-12 23:56:06,106 DEBUG astra.estimator: Recovered truncated JSON array at position 7915
+2026-02-12 23:57:08,473 DEBUG astra.estimator: Recovered truncated JSON array at position 10677
+2026-02-12 23:58:13,025 DEBUG astra.estimator: Recovered truncated JSON array at position 8720
+2026-02-12 23:59:11,798 DEBUG astra.estimator: Recovered truncated JSON array at position 8298
+2026-02-13 00:00:55,052 DEBUG astra.estimator: Recovered truncated JSON array at position 8013
+2026-02-13 00:00:55,053 WARNING astra.estimator: Synthesizer JSON parse failed (Expecting value: line 117 column 23 (char 6337)) — response was 10320 chars (max_tokens=12288). Batch of 4 markets may be too large. Falling back to single-pass.
+2026-02-13 00:02:03,556 DEBUG astra.estimator: Recovered truncated JSON array at position 9973
+2026-02-13 00:02:59,299 DEBUG astra.estimator: Recovered truncated JSON array at position 8330
+2026-02-13 00:03:57,350 DEBUG astra.estimator: Recovered truncated JSON array at position 9207
+2026-02-13 00:04:54,412 DEBUG astra.estimator: Recovered truncated JSON array at position 9397
+2026-02-13 00:05:30,368 DEBUG astra.estimator: Recovered truncated JSON array at position 5085
+2026-02-13 00:05:30,369 INFO astra.estimator: AI estimates: 50 produced for 50 markets (13 batches, model=claude-haiku-4-5-20251001)
+2026-02-13 00:05:30,371 INFO astra.paper_trader: Scan 5: 151 estimates produced (4 AI adversarial, 147 algo). Markets: 474

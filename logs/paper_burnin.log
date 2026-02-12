@@ -1,0 +1,948 @@
+2026-02-13 00:06:00,130 [INFO] execution.order_state_store: Order State Store: Loaded 13 orders from disk
+2026-02-13 00:06:00,130 [INFO] __main__: ================================================================================
+2026-02-13 00:06:00,130 [INFO] __main__: MARKET-MAKER STARTUP
+2026-02-13 00:06:00,130 [INFO] __main__: ================================================================================
+2026-02-13 00:06:00,130 [INFO] __main__: PAPER_MODE: Skipping wallet checks and reconciliation
+2026-02-13 00:06:00,130 [INFO] __main__: Connecting WebSocket feeds...
+2026-02-13 00:06:00,289 [INFO] feeds.market_ws: Connected to market WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-02-13 00:06:00,289 [INFO] feeds.market_ws: Starting market WebSocket listener...
+2026-02-13 00:06:00,790 [INFO] __main__: PAPER_MODE: Skipping user feed connection
+2026-02-13 00:06:00,790 [INFO] __main__: Loading Astra V2 predictions...
+2026-02-13 00:06:00,794 [INFO] strategy.satellite_filter: Loaded 13 Astra predictions from /Users/pads/Claude/Polymarket/memory/predictions.json
+2026-02-13 00:06:00,794 [INFO] __main__: Startup complete. Beginning main loop...
+2026-02-13 00:06:00,794 [INFO] __main__: --- Cycle 1 ---
+2026-02-13 00:06:00,852 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:06:00,889 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:06:00,926 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:06:01,014 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:06:01,049 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:06:01,190 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:06:01,191 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:06:01,191 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:06:01,191 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x6acea3596be0a8126e8658d39ecc1ac44bee1246c162e51a8062b380bcf147c2: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0xfd94efe3bbd624fb6577ad51cf5639dcbbcd0eb5a6f03543d98a8e4fe58af27a: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x7130b8d9bb59393ede189911ba57783debc1900dffb8143c3cb0027952e2f7df: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x07c96dbd0f70e5a27a0e15c22042abcc57bc6acc7f740f7935e0a08cde5e5138: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0xdc0a4c64465923ef51a0609b706ac5f23a56b590b7e660ba5303bded0d7a90b7: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0xe8cf98d6f3d813c0b6e00f702c1dfb074304357cbea07e9277949a39bd1cfa09: negRisk event → cluster negRisk_event_22862
+2026-02-13 00:06:01,191 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x873de31db355aa49fd2d6073d8ec4eb333bddc9bca5547afa7c891fd24b8f611: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0xff7290e188ccbc8fe771b65215237d4c33ced5a9ef819f3d574abe069ba84648: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x914477a1f73a2dfb37122e5fbb2117db8d9656af85f4941e036e2fc3def9ede3: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x674073445ab7fe8eb5a97f3624bfedc62a0482fa1fbd6e4bdfcf26060c7a23d6: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0x320e3f08cbe47ef77c0897876a10270a472df0bcf1a32b40fd6f532cd007d2eb: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,191 [INFO] risk.portfolio_engine: Market 0xb6bd48fa92be4a8bc52b307d9aa34b1fc79adbf58bc3ab1599a9aef0b4344495: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xaf8805982bfa850ee297c49d93f8168d1a273ca73b252f3c588ac2fba6f0ae08: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x830eb792fa2f2a591b5a0610a76400f80228629105f4f5896434be777665265c: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xc11dd6459a3a82ab0563a8fd7b76a5f2249c2607a9430ed66f8f2194c70a5982: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xa1e8bdd6dda71e93086ae109d8fde6fe2a44add64a30adc331f55a23f5da6942: negRisk event → cluster negRisk_event_26004
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xf7b5491e70b477d451afe7d9c1fde4bf1a927e69ff289d294b96df164f6c10f0: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xd01354f96db7fc2184cc34ac463a80cc65e7ff5de64c8a2f3e07e8433317d75f: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x4a67e1270a2ed86be8fc524b6114640e41b0c56303ecaa9584deacd62402650a: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x44887f53abbfe7531b1384420b185a5f10ee42a4e6c9441d5883abd4f3c1e5ef: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xf8f63bb47b2a7c2e0c1be3cedf4075079b11c07476d76a9469065b0c4791961a: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x89389a6b1439856a8d366234c795d72865c927a1aa3cf9d4cc04a3a400defde1: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xbdd688664b4f3cf7ec4ec011607934fe8ae720c08353fc14a6e9dfbf6bbcf11a: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x3b6cdd4f72cef7f29ff7e054444095564dc582266b7230be3c2b5f194d89f37d: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x1e03cd6255e4dec87c7c85d2267b7b4104beba48abf50e2fc15acabbf233b308: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xa8b42e207814d2844997523ba83e708b5bfe19cf5d2203325e4eb3ed459a9ded: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xc61a442adb770e35e193973c4fc1e16b219490028b792257aa5cb46619d5d977: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x08fa7d350c801391e7ec81d0da90f1fb05ec365f98d16d27e6d64a18d7118973: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xa0c492acb221e77adbe84953fec4fc917e45e8b67121c1852d20e2fb9a29064f: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x139b893a7ae21eaec72e887ba88910831944b4662512428c122c4ad0a5c125ac: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x0d082a85f48a5226b1205acdb6e95ead2fe373acabcf6c471f5895f86f42a276: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xfdc1041ba84bfd8f741eee0bdafce8b1887626c83afd017d18ee9b1f77008b9f: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x1c36595d8a1726549acca61c5eb8c9173de87c780ee1cee660ceb5b517530ab7: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x94123b93487bc2aa3b1b247dfd629364ff1c209bce78a5f64fbf8c1d87297c33: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x99d0ce2ab858154ba1ec511863dae5a9fe41731457022cf2ef8b1024cf97405a: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xd66cbb60c333c2eed61717370755c18bc7e494fed90cb507cd9b49c77100951d: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x4c317ee82d81e0a49aa9862a8c2d876fee322064acf02cd8e1346fbed36083e8: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x41d6f86edc88c14aa83373e72b4c26a403b159208f8973c093b928fe16d72930: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x54cb2293de4ce01c85b62b0c43911a36614c8558b02b70703326ca4b938a83d4: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7014b40f62a559be0a0abd2bf1ca1ef16e44674b2c505bb5243c752f2e0d351f: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xceb5e0c99a9195da148d79693f3c6819d44d4d3d7e5be77931e174a3eebe4a85: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x52847ca1413b76a5570b97c0c432e38dbe61b0140f9d45e912604591b08f6fca: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x82d8c535c037a779ffbd2eb94704b093a5341350b49ca68128fc1c16a0901e4a: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xbefea6668e49e328db4d5c792bc15cea309bbc06101dfd6ced1e0556ad3ea301: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9e54856d758cd7de25b75c97273a38d711642f16eacad57e61982028f2791206: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x48dd35aba75f4ffb52d3d19e6665925512e6462ba25232536aa1e7c5ad3dad7b: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x3cec1aa0f2496c59cfcd2fd1270ce798e2d7de14ea55d6fdc747cc814a4b9262: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9a3436e94742acc7049aa0ff10992dc1c6a574535c3150ea157b7631cad83e2c: negRisk event → cluster negRisk_event_27829
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x22e7b5e35423e76842dd3a5e1a21d13793811080d5e7b2896d0c001bd5e97d54: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x6b44bd667fad6cb5b3b68d8bd1055a038c77d9176dbd51f123879797cc3368a7: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x713641f745d71f6ec61f906237ffca3c8583f251e49384429a63ceb0ccdb2d37: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x649ad05a2868343271fe82ea692031d567ca1af652e3529788933157e94aa088: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9b56568af78dd036b03c641e0673729d72cd7d63578eb0119cd23eb1f94f1b56: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xe492ad958b21201e928b6666570820a184b8f71e834910945efcfb86eecd02cd: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x13e1cc703a120883a709d3bb29707097952845d61ca6793ea2b4328bae2a7451: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x796e791e7058571e460278814fc7a3183752285338f1400087b98bef3c447908: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7338d9dea0de820ed621abdff3de2d4b07a573bc0c1a6f7128941f4d0c5606e3: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x4e65282819c98c6aed529f357fbf5983b1ae9407a3c25bd50fe97b2906df68f9: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xb6b3d7a2037b3faa7e1306d741840d453432902d73cc9a146a035e40271eae73: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xfbf7ab9e6b6d324ffe436bab8c7a1e10aeb8200e10c1e1dbb35d2959becebc1e: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x543da007c2f149346cf9f9f21021f1b2e10c46c78fcd0c9297c0c21f10c94626: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x567f1ff714731fafa702d454a105b064a7ec4d10f6fb71ad3221f4918681c709: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xf523e45d6bfe49d30e45e4e7794fd6e5f621b0304e07044fef156e6dd4d4b249: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xe202539dfbeced92dc4112f134a205c80ca6cf4db32bd82f05b291c297219fd8: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7a18c03e9dd79943a25c65a5b696378e54b5b7d236140edb5d157685ce96476a: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xb76183fb9e7e80c5a8f983a87ceefd35c9c177f684dd001d7387dc7b70d596d6: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xc094fd60c0a09ba0df48a086ef91e12390fa8777fcd9cb63c154e9622cb1d497: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xe709dcb12986139fa5b4cc793069d0c64bde1bfb351914c95bdd6149ec91a3ee: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x4405c62496c4fdd275d17ec31567a01534013c518c314ce61bb633b5e7cb6426: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xa49fc89bfb87bb302bfc43567709850565161bdaed5bc506bff4b85fd3c5c2ee: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xf374fb58698bccedf29399f9f5548a70370a11c0fece34f2570fb9b3885e8e5a: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x6331a779482df72d904c3c1e12b6409ff836bc06f8c97945cba9b25ada2c605c: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x314ec5fd53735e23cadc475161e37b1529984d97097c0fdf417941c44b6b274e: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xfda648d24cdad32dfe959195bd75ef4c81fbea5130eb6c7a4a0c18607a11ce63: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xc58cfb7397c4f3f803f5c20135cafa7f6d2c87cf3bb1e6138042b95d828e1866: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x298157e618b5729dafd742eec9b21e040a13da0bb09ff1fa4492360c347e3824: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xbc2d59e8ea0378f0851c86e84d250e80a5698874db52c13798053841f291dc28: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x30a8ed0d01b7e8b25334358f71d9ec71c147783c0f908c2e7c7a527905007bf8: negRisk event → cluster negRisk_event_27830
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7976b8dbacf9077eb1453a62bcefd6ab2df199acd28aad276ff0d920d6992892: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x375409bc5eeeff961e82b479caeccc20f33d15738e5bce1186d628aa3d9dfb1f: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9b6fef249040fd17e9c107955b37ac2c3e923509b6b0ff01cc463a331ddeb894: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x30d55d8124ee1e12dabe89201badc45669b81dff69e4ce44d961f32878ec178a: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x0c4cd2055d6ea89354ffddc55d6dbcef9355748112ea952fc925f3db6a5c457f: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x1595b4818eeb1ea1e0bec5de6f057218e557feee9b405a0e930d290384fa1d16: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x4f3421fb2daf5cca7430ed8d8132463963081572d75434393a1808fdb8829fe8: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9be56371f6a29d12769b2f196847ee825b9585ebb8bfa042136be031b081eba1: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xc7c21c8972c773b34f36f67f15dada2584474d959f7e338aca5994727d37ae39: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xcdb1f0400949238a63d3e88243d2ada08cd9c2a71985ced9f0cfd5e66354cf90: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7876851632c295043c66536150a304cb785abdf712ba8489d298c6e6926be106: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x5ccfe1b69a582d2985db08a8481a0d74c314b1fce9b4711ae2efb2c6467fe6aa: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x32cfa52198e85e070d1b17d1b53c5c3a6aaae7736cdc33fa6aa04d353f0c2811: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xe99cc59f32b10d23acf196d1a0e8264ea30fca198428acadd3464b06ff60e771: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x0189df05ed7bf84d799213b01a79571e305c03b2ac5359cfbb3a323448ba20fa: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x7b52405ad0e0d31bfe970940b67d77f24ecedeab8a2361c11148c02a006e325c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x67443cb1ffb2bf180f7df5b6ca7adff63f7e8e933c7e41405ba118f3e9f8befb: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xff0cfa9506cfa95759e4c7591654195bd26e3011f9882b51439135e04f2b69f1: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0xbaf7780f9059e34b84301fd411f8dc573b4d56adfe6e0cda33daf304b1438da4: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x675bba4df50fd123f7fbfbafa67e9b75f4092d85ce0f9148ce78fc945964c856: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x9e5f9d8c384f8fe368b195fa9a780be58643dff7360588a4e577012df8af00a7: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x098e2be3df8ab529940c567819f8ef007cf007820e9d627642a5bbfaa42af372: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,192 [INFO] risk.portfolio_engine: Market 0x84edef36bded182da6a395ac6c785dba8f3e09b6c5ad041385b2042536cbef25: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x965ebc5d79eb1ec02cad67245a44b9e45b33359018f013fb6cf81d5bbf7bcc8d: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x65307f30dce84ac35e41813035d3c04933da830dc4efbbb2fcdc4b282700ef3b: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x33a87d02fa01e958929385c74b8627d32cc4474e9ebd312d268865c5207147fa: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x37a6de1b21803e5f3fb1965116218215d79963af4f7e51659696366267a63a03: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x233ce0c3969a5cd5079287f16fcd283be7c1db82263e08697f85dbe1b4d2113c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x6972edb1b3f8cd8192651a665fc424dff846efe1c4a2376f628d4b20c704144c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x289568d555ec620ed6fa33c936c5f42649d3a2e30748a1daf7079f42453fbea4: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x881a3ffa618b6ae0ab95a5637e310afb1afc2d99c921bfe3235b15eccfce0344: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x7412d284c8f63791fec807f9b1f61c6fe61163621775a3dc8686cd2575272abe: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x5a59d269c2b5108cd2f64c624e46ee2c8b5cfd88b882582565f927918315b6aa: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3bc69cb672591e4fcd2ef856b64b219a906e15d4601b50066ac81a446574dfaf: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x4fe305a2ae995a52ff278895344895fe587b4fec3d5f04347b4dbf5e99bce99c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3fb8a8de2ac275882d72b2c4f22d41776fcf033f9e413a77a84dd395c0d5257c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xf950740bc71136155d6525cc0528a582c81f88812bff227803190c32ca25f54d: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3a26ca6425e2d98f14935670bc22cdb0744defc6f6d83c65f8c413a921c5c70c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xfe230d510eaf545198c0d62bb17871e5fe8989f1b19aa54c0c062b858360987c: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe5bd80313b8859e3f5761568ac9498866ea9d4419e4d1b6a877a9a9bd2754cb4: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x506f80bcf76bc75e6b31a250e2d754f347c4c231665326931d58bdb339ba1913: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xdb4b2f370c3d0e996fbb32213c87aa5402936e3d4882432b6738e2f5661b79a6: negRisk event → cluster negRisk_event_30615
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x0f49db97f71c68b1e42a6d16e3de93d85dbf7d4148e3f018eb79e88554be9f75: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe6bcc2f1dd025ce5e1833190f7c60a71171c94f805df55b9ab0ded695ec93565: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x4c325469d9b516ef4e6b8f73a81a12607dec075e3c2fd454f91765aaeafc4760: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xd65891729ce093cc12236856837eba1a0872fc7998fd4294c21346f7db68079c: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x61d9486c0f7e14ed98f3b177b6adcb3cd45646c92e8bbfbf209789b86472d4b6: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xc8f1cf5d4f26e0fd9c8fe89f2a7b3263b902cf14fde7bfccef525753bb492e47: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x909659c9436228e2be56d5582ba6188166f2f8bf3c596335512c8f2e380d01ec: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe39adea057926dc197fe30a441f57a340b2a232d5a687010f78bba9b6e02620f: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x1d519b87999e3d4e90e1e8f57b5eee73a0ba488ff3fdb70867f294733aba84a9: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x74dba1ce1ae9dd535414e85f2d9ab5ea32c0fb1acc9b7130b67e6d91217e24e1: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x9d4f94f82de9d13ff1d3318639ab9000ee2533949e525343156f374fb00bd9b1: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe883f2fda25a605a184bb5fe583afce6cc21ea0b348b6a3728ec3067553c548d: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xdce84960dce38aa4a5800a5eba7c9ac34d2ce49ba9d44c42572c472d468af264: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x1970bcce75e3674660917ae4685b433a9b1e0152d810a8d7c346dfd5e00694c2: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3265b10daeb30dbcc3214bd02e488551d0a5d3028392f4152e4750b943fbfc91: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3e218c99a1335641b3a5ee6c887521d19b0c28fddd6b99c254a07968e35c0b1b: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x36db77c539bcc8c7bf0686c1b99f30c5a5eed1f53d3b3a27a071550c81f83701: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3dc47a72ac6bb265e9cefebd2a2eeed00966394cb2d07245b5c94138b60e82a3: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xcb239105ed21a2420ba4d85090b9bc32755c56601ffdc528afd17fd6282fe930: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3535fb2f4aef6619dde8b367cb5e5d209526bb496d5d9778428c58a0252435e3: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x939eeb2dea216749bd409bedde483c3f2bfb0e24d4f2d34461c0b21c6e91f010: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xca1d1139b0c3a29983407f499476ae642482788e841a277eb86faeeb9fa4a85c: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x8fbcb151e2c988df5a43abb02298014b7daf34c008f3eed9188dd16a2a19bec1: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xfee07be730188c94cd3644ed6f107fa3ea2dfab9989ce8d39aeeae064766abe3: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x88d67705780a3d922317ecb0c78a947a306174d0510df2ae89394d5abfb28206: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x663b88d3a8f2341bb8d878709dc78632bcaf7512e577bd15521e5d8ed933efbc: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x46dbd48d6bde5b81edb480e0f676a2cdda6c6b592c4d86a9367c7ad5a9870195: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x30cfb887558b20373a984da60c372fe5a90c0296aa6d8bb413a8aa7543846da2: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x29283b56d3eec6d1d89fff51793d9d2e01579d2379b1d3e9ebda175d3561e809: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x8b203037c7c0e21b500314f8398d2a8ea294b7ce1f4f9185f426425a3505bc45: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x1945a8b23e313ed7423b6b6fd556f9ab5578900376b565a61dc480a5f4f35d21: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x822e61527476cabf98927e3aad385c5ecdae7086f945535f2c1fd9ae8dbfa46e: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xf2e51acfbb6d0414dc2ace81b7dc2af7c165e443dcb91f6caa7aab6d6ab4f06d: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xc44edcfdedb422bae8ff1803e2178d1ee025fc41efd81400ccbede709e018841: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x8dbf6b51f302fd401065706245c144e93fe209abce183199433d4484b3ed8aff: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe06a7e94cf2fa8dc2085b7610fe16e9be1cde6654f34d365c13da1149b276c61: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x450810ae738a0ff820d3248f2b24937f63fb8c8cf422ed2a915125adb4d9d3c8: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x8ecd1d15e521b7d1020ad5596cc981c8764e9dcfbc3648f582e1a5138aee7185: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x0f8ef3cc906ba7ba94a44724738df44bdd5f73e59e40c9c8b4ff8569e349643c: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xc720fcfa9e29346a976902f87e0f0f3bdc31d43af501b4fdef4f1780a30dd359: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x3cd6e52603d80ddbbdac9b1a4d43f9b7faa6aae4fae4d0fdfad3bd58454da7d3: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x98933c78b5e277b62d91a6c174b412218de000b54c4c67ec8673bf561cec6e81: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x20d0bc282552ac5ec6f61cd7101cb42a5948cae07e7651bdf40ede1a8b2c5eac: negRisk event → cluster negRisk_event_30829
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x7ad403c3508f8e3912940fd1a913f227591145ca0614074208e0b962d5fcc422: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x4567b275e6b667a6217f5cb4f06a797d3a1eaf1d0281fb5bc8c75e2046ae7e57: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xf232b565995e4b3a3e7fa6cef775eeff1cecd20ad7c013cb9fc8dadabfe279a9: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x2c03c41e5032364cb7166e842bdd22913f28aa2c837d8432704aa89c338875c8: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x5969cbb46aca5319b19e19a3c6f63de098950b675bf268f30f4d035508da1957: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x2053d8515f1b8cbeea4ccdb56e60e89c2617e43a8660d95166b8e71d27865277: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xe29b33ef5bf351c8a22bfd79f8b58e62649d54ceee6f9735387cef79f52fecae: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xfd6176f8c9a59105f80e060a77c4099881c5f2d9e0ceab88e55cf978462fab7f: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0x09ad4955c170d46c6d80b5f554435b19e229ff7dbe55370892b64782336cc3b9: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,193 [INFO] risk.portfolio_engine: Market 0xc4435df23facee8c4cd86090310c7835c2a0425646b2588b0a02e67fa42f444e: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xb3298af85e00aafad937c119444a5f2800a55343b7482eb75581f6e454432501: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x66b906b8205f48a26beb8e553bbb1e7954e87e4f6e1d539823441221d1806e8f: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xefe6300fd8a053cca53df8f1bd536c5f571a136392c0516e7b16e39f1addecb0: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x8fc141205ebce5adf437bfdf4d0c5ff58ff24293b79c9431991346c208bb48ed: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xce9a5fa30fe74e323b4a8f15afbb0b7a41a537aa880779ddf7dee22223b2f34a: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x23481b811978194fa175143ed7cd8d0000878ca59c408fd552e33535f7aa771e: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xe0173375b7eaccb836f7b92d28a9a2d1cc69e54e5a65fae89a5d7e49aadd332e: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x3367d22cd2a673014f1960742afdf8601040a8ad856dc0a98bd1a44ee99504e2: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xae70ab9bf1c3726fe430a2ba8b517697ae24e0f0ab554b876a5b521153068882: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x64396449b471b10b006285fa49dd9a5df535694de7b4c703fdeb0d88d5c4cd33: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x01dffa7abae7e5d9b7fb44b06d537c5ac932e2ca422ab4b53366672f5e2dc7d6: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x68e3c4e0dd8f82d010060032006fd157401b0bd8e04bd2953ae293e31eb99bf6: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x836b850fc838195374862551a36f1c8691d96ff01e58b0a071f0fc1a0e357fb1: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xe2bdf6c18c8ab5ad5d3be5f95dd749e88d1dee7ac7c4dbf5101013a5c055e3df: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd94b47bdeba16ae948bfb147bda059f3543d6fca73291644dfff5268bba7a797: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x7f695758278e6d4d9e63df862afa88d664d3402a3d26e4d32ae05121cdbddba6: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xc586d15be76278848a26c761c2fcf70f8cebca71815cfab83e656ff5c6ec13a9: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xf05b4b55336a4c1c7b44c726911d2b559732cff7bad339084de86ae364dc85f6: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xbbbece074c2d4010e39e39c85ed67b1131180fcea616073c893fb6beaf51d783: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xa9549c44687993a9a154347c6907092341459b927efaa3f2b49009ca2c4e40a1: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xb314f5dbf75919a34d4997e8b22e6793505e3377a690eaa11a75a2547e926bee: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x32903694997a5c09afee30904970f9fab2a5fb4ec45f572f194341185574f1a4: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x61600d487069f99e775307a0655c1a79f26e4fc6d8d1ba66790c64d78d0beba2: negRisk event → cluster negRisk_event_31552
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x2096cd3bedb878cbfb5d30308968616a1dfd80e17b278ca6bdc72f9dde4776a7: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd9b502ee5b8ec6276a4ba48c08698012581f1780cb3dfc3b65d0afdeba712501: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xcd018a674216fb8b534a8a5cd2edd5f8413810dc52901f3d268995ea65cf47c2: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xb1784e3f7c831565155db9811c82b8f91392611424bb0c382373b5fc50a0072b: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x12825eba8d16dbefc612f5c8ad866790c303c6c632c546fa191974c99b9b565a: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x9fe87b4bec41ca0b2e5f09b79e59f9aba6a88feab636db30b70fa103c1b54e5a: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x3ae773d76d652f80ed69c1478ca2349249ea0d2182bca1d6ed66deb23c36c3b7: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x29445a22570a7072c932f09667807d5f875b3fa33e413634a8ba056680c122f1: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x590f66d94c8b88900d59fba5a6f95525530988960be15b003114cbb14a0c5fce: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xeac5b83f5a220a179df631b51cff9d3f0431144c9174a688340f326a1545ad3a: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x49dd88d90ecd4b05eac72f129e56689c1a1bcd670ecce2ac5e1670459cf37f5b: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x14e33853b4c3a94fe457426779177518c9da32cd6466a78d8fd1bb7348d07a5c: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xe9d14cd6648b506c7411a09de22c2581ad681d0a5afd6ed6b2847c5025c1f6bd: negRisk event → cluster negRisk_event_31558
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x895e01dbf3e6a33cd9a44ca0f8cdb5df1bd2b0b6ebed5300d28f8da7145145e4: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x18b1c135d0a40c5894da9412e77311827d9caf16cf4cd6591b247a34730af919: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x21ad31a46bfaa51650766eff6dc69c866959e32d965ffb116020e37694b6317d: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x9cd77217b2ab264fe4f6d302f662c0a91f349fe5798f1f98d70bb2311712791b: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd0c4c60c8e68ee15974df3aa7d217225e98020fab9fcdb32d10f8e3d285e1619: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x4a9d58d4da874e26708f5bdb014eb07a06aeebb927068d169d43831595386557: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x64d31a2af85518c6718a5757a35b840f08eca20c1e22c0eb1e96ec01cc55b8b6: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd7a0d72b19ca48b06b0029684677f581e32f133c367d7a19c2f1e4ad07066af7: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd997dc2a212a7d6673375a3b016db1fb214247142f8cde0cbf07f8e6d789877c: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x00ad3bb5284b0b2314b1a2d42812fe292f606619c6278bd95c9d905816c240f6: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x214093035e429b91df322bd20c55d9f611f741f67472a63f7623a9afc0cffa57: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xc510176cf39d73295354fc797d84b510d050b45d29d6c9735ee18cdbc4fd6463: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x42631e1a8c8e6389422b58b8e15b1b551892b9833651aa3bab25afab124354b5: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd1747284d6048b2a3dcfbee489db405f36de18f9590197dd0e5c9f0c246bf050: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x655b4bfdfa55a95c24d6e9bf7e7cd62f1b57da9a1f4c7f40f090b8ba847dffa2: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x4d4bceee5f59f75230c6438f69fc913a6da7afa4098ce0734655045c02a730fc: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x0ac23db1e56971022bc7e822b907a2466c618b34104ea72bc9fa95e41c86a9c6: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xfbb80ea5f8fc02ee7df8bd4f58790e1d04b874078a49a7b7028a74a2075100c9: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xf2cea45ec282af4f302d2ab85ede73678cd692ebf8c3ab6d52bfa5e19f44c553: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x61a1278884fa70d68d4bcaaf72fad55bbdb063cac28c6947472ca91635fab10f: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x7190eccbd0677d5d0ae8cdf598b37e945a346915c666dda11468dc9970657a56: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x5f1b1caf70eb994bfff2986727a05a3ac9f7ec8b0da4017f7732596d023e5a07: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x41c6341dd79903aca4bb0c29f5a7976946c3774d2fd72f38cbb7de7092144520: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x4273517fc8141d57ad1528ede46efdceebdb6a4da746d5de5bad216564209a1e: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x4f02b9cf70e514964fcb9aa2f7873d2b0d1aa0986da096cce7e6687e78da00f3: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xf8dbde8b6e038775a673947e59da2de15a2127272b50b9877400fdbf7cfc3026: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd10bc768ede58b53ed400594240b0a0603134a32dab89ec823a18759cbc180ca: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd5659eea81cada0bac656f5a9099861786cbae6755e2e1ac2c9e9441908b551f: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x7abed80b88301210ee83b7b14ec41bc9a5161e1af07254fbb26c6e2bf7182766: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x414378275cb214b747245942be889ee1e077c56d1c00eb4d726629c95f22b5a5: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x17902b9490c6a73152772316b4705935c5c6801ba269f2afc81686532e34fb9a: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x24258776d0a926b4550b0f213267b95ba0a7741fc972d0b3c2b5f6bf8ced2c50: negRisk event → cluster negRisk_event_31875
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x99a0fdc1bb6308873bf87eb75a47e21c8340fe20fb6b033444c1d21392da10a9: negRisk event → cluster negRisk_event_31889
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x781a06aa5779f97724b75ed8128aaf72c4a8955c893a6fefdc0efd7cb001c513: negRisk event → cluster negRisk_event_31889
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x8de68dfbcfa9e9b6472bceec9aea2f252038cc12df9838b1f0016c02ec94b6d7: negRisk event → cluster negRisk_event_31889
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x1a22c136f277a62d27c22521a1ec1363d2edb5c657f129e509e77958dc1846d2: negRisk event → cluster negRisk_event_31889
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xb99ef516a29277c886f65d979143c0cad5eb80b937bf6039b9832eff7389a743: negRisk event → cluster negRisk_event_31889
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x307a1ed89d60b61002dd5bbf00e1408c5ed2ab3fcdb056191ca7ef9bc34d38f3: negRisk event → cluster negRisk_event_32224
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x86bfb53af7250a40928975c551d12c185b762fa4ce0b40c6a64a50c946d72587: negRisk event → cluster negRisk_event_32224
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xd5d9fc47718bd553592d126b1fa5e87183d27f3936975b0c04cc0f2dec1f1bb4: negRisk event → cluster negRisk_event_32225
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x4e4f77e7dbf4cab666e9a1943674d7ae66348e862df03ea6f44b11eb95731928: negRisk event → cluster negRisk_event_32225
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x16c63b7cc37f012b9f59ee164ec03877914c701d06d48291ae8d6fc08a088b0d: negRisk event → cluster negRisk_event_32228
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x0808de4f0cfd47947f2d1be51f9a9c52ea0fec76f73a75cfbe79ddec98d8a908: negRisk event → cluster negRisk_event_32228
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0x998bc71817b2d76921d1999ce0f3431cfd5945583667a371280ca2b430b0c06e: negRisk event → cluster negRisk_event_32228
+2026-02-13 00:06:01,194 [INFO] risk.portfolio_engine: Market 0xc5eae79d1ffe716572353962eb926b1e3964c500a4880a7a94f58408218ee76b: negRisk event → cluster negRisk_event_32228
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x7987a821b8032824f1805ee39eb5dfb8f64603e4e9e673259eb76f82b439fd3d: negRisk event → cluster negRisk_event_32228
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xf2fb4784ceb4d41ce23703da426700f710320ec5b711b6e3784bdaac24d94c23: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x281565cae359040475640be8bc20f4efe15245fe0251805fd338fb1a3e45ffae: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xb207031da5ef9cbded418e6b5b3c5eee24a3a7b22c6ec10053cbaaa67d793796: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x5c5d898595b3445dd3809896302889cd512411fa8306de609d9d8aa34e257ba8: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x33882fdaa147a31a1231293615b6e249ee8cf790fce9d8dc14f312f7b3cc0e30: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x73f7620da1d4a2ec2283ad55d72f5ff4666e8732ec04458f88dff6773d6be2c6: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x434f5226d48f9b140a0cb8f12d066bc0bf2aabe8ac672bf2c91ec5906e86480e: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xc24a7efb9a05be7e3579112dcc54492dc3af966602088aa93c7f233a190f79d5: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x4018190670d804b326e5950dfba1087458d996c82b69a75832d1936f70b95de9: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xa6050f84ffa7c10ffb852ddf9fbf772da0080d004f029d07f28fc587c9ae8366: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x2e51ed86458e0a53ef3a2e882d2f857683dfe41822c2c26176c971e25a5a8db2: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x3f66a8da2209397d024c9b4748e4d9477f79e640f0e74384d1be1139c86e0297: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xbe1c736f56cade44537b90c07edb9209eba1ab044fa57b6f3900b8fd26570c61: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x1c9539feef274e52bfd0f3fcccfc8bcf8d99360b736d88b86a8e416216d46cbf: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe9215ac1b5d18ecd3bdc4e91942674146385871bdd14ff0578acd126c9b5a083: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x12817d6a15f0fb839157bc5e61f8a3e5b4c1b78da852aceb490a04f70866b2d8: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x8a1b1234126ead9d4a1ac3f8e776c4f11103492fbde6ed962dcf93b9290a4661: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x19bcc01e456986aca8b3997c493970643e151a9d575ed18b809e7a5c67f113ce: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x277a7364c4d2c69d1cbf073440f674efb215471e444b0f52e65a49c5d38e195c: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x074bf4833158a5c77b80bdb914517263395b06a8d03fe8f1ffa8ce27f3dc7eae: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xad7b71c3cd4c95712735a04e28e44276b3fb1f117a5aaf1602a8944ccc813a0f: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xbf5c661a6d8c348adb83d13626a52799ac68e11b8497aa1bf0189d85eeb5099c: negRisk event → cluster negRisk_event_32754
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x85f3e001ffe2a24f985b939460d0cc22041d47107ed8c681f75abb6a5bd1d1d7: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x1c60f9adb1d786b6fe78d63fd9f82dbb293fa06241532fb5ba43f8d8411cde1e: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x2bf6f2697e123f9bfb2c8788ed35741c67159ed19374886e6e7cb3f35e60f855: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x3d2a697437b1093ad06d6a74c6fb5a2a499b15d7e895500b5153f66bfaa0e602: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x14dbdb6274de6bcc65ce2b628c6636ff210fd452d095b0f14fdb1d376b31cecf: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x9954b4eef49a268b810bc260ee9278361e29a8f6f4ad816a804dd613ef73a968: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xa3186ffc28c45f336920279d5085529d530690a1623997819f3a3db05119dbaa: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x00a9dd3c3174468e2cee6ffa418dbf9b7e95c09788c281f608e496b9fef7b895: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x8b89ea6de714f69d3418f77614b1dd5f9204443d8bc8fca1cb3d4b5cb7d0a1f5: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x1672bfe7ef6d85a4ecffa9faf1149ef1a1661dd919598ab46b04a6ae0a4ffab4: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x9e3973197f60e1614567ce57a3e6f8a4805d21f471d67b67a5ed5ecca1b8004b: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xd6203f8805d1812e3b189da3f6036989940a415ae3a0fecf83555b455394fdb8: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x00ca3a4205ea548274f06891fd4b703160675842dd0120279ef5a40f1ddcfdaa: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x32a07fd7094020a30410fce27454c130af242cc6cfefa2f5e90ee41a6589e293: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe6120576744ed4a770a37a962e5e1f13eca78070b05575c9dc118cc64cf000ba: negRisk event → cluster negRisk_event_32755
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x4cf389adc069a4d713e1ddb6348c96afd6df78e6bf676c7dce1780135186d90e: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x5deeed404db866c400ba881b376216c3c2bf0b3a3e9372cc61a1395ac3d83e37: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xc425460121141efda48994bdd8991fddb7c145f31591b1b114cb6a7b029e4404: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x87c696852b80f378ae877a928f2cc62c0ea1a68f0a398ca58d9cdfe853d2d521: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x7f22fff06f0357be1c5641ffb7a7d7214858973da12866f573bee01dd36f351b: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x65ec2361e5dcd25c350d315518830b2315e2229e1bef9992013a9b98931f328d: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xa4f53bf6ef803cb4ffef6a98c14394a2ac05bf514cb6c0f4557bd050f782b38d: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xde25dcc63360f69075a3900fc3b554d8741bcfc8ebc1fc083b1e88a5dacc233a: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe3e8574f967e628750dff67c641944a84da281ced40ffe7c76e42649e89a6887: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x6aff6e0b36e00aef86b91c825b2e67561e172faa4b5ad0db7c91a38c87774826: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x63d95ac6ac993408bb22053d581bfd126f0ccd4270f4059054e77860dc8687fe: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xfd96c4b3a2776ef499ff06ceb78948b62eef81c1d645a4f82aacc0632fbac36d: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xbf55f41d078abb59c72557ed8cfaf16090bbf11422c03af7c42568e95624b23a: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x293ca6031d80a410833bacb197ed6c193e79b0cdaaf6539d8b0f88f245e1ddd8: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x99716e41bd8caea0c1a3a8218b3933da1fb695e78a7234122922ab76537541e3: negRisk event → cluster negRisk_event_32756
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x0a99479228e93524b25676ae69b94bd3f4278a6bca8d8c265c84d24755399cf5: negRisk event → cluster negRisk_event_33228
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xb106a3c9d1c59ed8117493dae6459a3ff79369a8f7cddaf62f4a05828b89195e: negRisk event → cluster negRisk_event_33228
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x6e9f90a6f471b52d03499a81586ca478519474eb152f1327c8c767f020d62529: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x4c7db7768547a220d3e26359952d8b2eb9094f5ad02fcc32e70d9361d8491ab5: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x43268d56a20113679be36c84dd22550174c6d6bc9d0f4376e882ce61dac3c635: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x52a5ce595e0f0816e17e5f40dbd5967c88beb4b9f21000bfdd9a1ff26c281fdd: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x8df5a4256840dee05851250c0490da7593597faff3a7f9a156ccbbda7fec76f8: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x453e4a52fd6e889f4895320475971bc8ed0bc427dba6108341be6abea5660c6e: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x852fcfca1dfa1372b768aa6df2269d20564378bb6fe9c64bba3bc040370c1efd: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xc2ecc146cbbc8f24186766ef0b2cd56a1757227aee4cc9f951920538769a3490: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x19c97446c3950446f29624c1361c8fc3546d4db76e07d00ca631504d45140312: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe4f25e05d842810ff5944ba1e2953c6ced1e869cac3b44d15b32fd404ddb4bf4: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xcb06319aa9e029904c93c1df7d10b7ce7d6aab2b25b8f661e0cf57ea048a1567: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xdd926c00d4bfddfc9051c380151f77509d3eef2e7bef20f8d3aec9cbd50e7586: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x2571face33de8d5c3541fb569c10af59bb80fa909e1469af1c35919803943ea6: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x03ea417a6e1705498427bbe8fd89b922664db3020f196595d5c2a88826c7434c: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x64992dfd0ed5e31eaf3d2ff7f240ba16d67439f8d580d105ca29e11acf4f36d7: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xf9d58b904a94f0431d5bee7070650a305566927b3f7bf00f8529e20c9a99a6d4: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x9552060b91cc7502f17dcfd0dd5dbfc01d7eb5be48a853cde4e2b66227e5e030: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x135e00bfdb16be6111f194cb8365ac5645707c3a43ce3ff298ab4dbf67fcdd09: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x2787c94094285ca0569345219ce0a502d96326767f338a1dec21fb5a296f99ff: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe64a95a022a9012b0e5cba0c4c3c8e81caf10f7dd5a091c24714ed154e02c13c: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x7e6021ad37547bbec1c6193df617be4ecbb0693d48bd8bb2d57bc290708335f8: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xe06c8e9546be61e4ba8b03ad431dfff590fc6b21a5b746e71f62ae85f1dcad6a: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x04b1198c2a888f4d162cc5eea844b2f67a80e684d37d8e75bbcde2fc2d06755b: negRisk event → cluster negRisk_event_33506
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x65a2dd0af5f4155915a701e8fdbcdb2f547fb5925d0bcef0b373a8c39a16613e: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xcba24842ceac7a40d2a8b9adde1f4407999b6505193b9fd68156ae76fbffa706: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xfb1835b887c33862f5749c619e612d1244ab6e66115f0ef43d373485dc3a1573: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xd02f8e3b72040d933427396f9f0a9cb740a0adefcec46e345211fa0fc5b975e9: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xede5bd35327ea3d3c4ec164df7dd85de41a6c7de5419457281b6ad2d98d15086: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x7cab9da787443beec1eb5e399afd46fffdc27b5f00e0293a1d6a9996c948ac52: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x1b681ccb2987c2cd36e86d8182de50043106ba91cf9692506eea9f340d12293f: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x2ca58175aa8080357d9706c535bb0be218ce7bb156dc48753e0d8b8ee6b56635: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x3d7df1bd2cb3e1dbdfa20f368fbdbe3ed55d091174a633fd0bc21b5e3d3732b9: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x0856ff922ee902e07ac1401def92503d797cfa4160942a26ffb9065f1d596d26: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x5974071cfbede55c04c1e44963c872de571a9286904c8edb1ded240e597a8011: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0xcbb6f3d8c0443114ce3c151a1dbcc5b73d34444b0be0e44c42272a1653c3f1f8: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x300603cf45c00af47424fffe1a012708d7c8d5f9830c0365c3bbc2f5924cc67d: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x5203a95598f18205fa5d1fae7afdefedfbb356679f1ae6e3911c54883a462034: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x8c5699dd31e0782b3bff9d3aaf4a0f4077a1449cfa8d2e821c6e881e033c4afb: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,195 [INFO] risk.portfolio_engine: Market 0x29eafc104d7824c838e194766074f50b352f866abd9bc2fe536b1cdf93e3663f: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xa4ff70673e8d6f76261400c0ffd9d7970bf6d8aec5f8f44b20434e59e3e3141e: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x819503ca15508ed1ecee519edba1666e8d789ac989590fbb03eda3abaff43e06: negRisk event → cluster negRisk_event_33507
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xa1f08ec3bcc1434cb0b695bd5ee9f81268ef45fb73f752b3a1c1fb1d35750866: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x069fef06f8b32dee6a22fab6189249dc83582f22cb737a85225b114770d7da05: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xad9cf9a89f41009718b3858c47ea30c88491dbf9f043b8fcd704c4ba65be8edf: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x683b0254bde8d1ef08206953015629f25b9869d9770807baab939f6aaba4ae5c: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x71b8d91bf97c72da36b0383410c70600a6282928a0c9694f047f9a41d73e73a2: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x0a417e314c60d4221af45fad3ca308ebc060532d8f057da93743163388d20c10: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x10bcde172545dce79b25b75cf2e9b7b65d673b872dd9727bc320cbeb408a5ffd: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x3318eb8ca655b3e9be7d3c44b0a0f0533c2c806f33111d8c85c4f5ac73a5d4bf: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x42300049e0d90f49cb2e7504dae57a636750f668d6c2c713004b586327ce8abb: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xc3d9deeb6a32be1d084651a5d55aba34bc54bc18fabf2af8bc94b30849d70033: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xefe3a05506e08fefb8c1998aa607fcce31e32a6852ef60bee4c71d0935c97950: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xa6a324f5aed32ad2b72b68d276ed4c25a6ca628caf70b602bb2dc2f5e4b4be92: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x5e67d2599f32e6cd86a760bf28796da2e796377e5d711b739a1686b0d17dc31c: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xfdc5e6ae42b83659ba19f06ec0051c001ad5f9679f4b0b4e4dbaac5c6e82f4e9: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x2a9458b5d5b7e639ce2ab0c60dfaa986d1a8c3a99174ec41ad9ee762c08494d4: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x3bdd5a6ad40137100671169c1a5602992da863643a6c300bd3b76771d55b70f4: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x3d73153a20c3bbf05c703153aab4c1ca3afdc36abad76943c32861b72013d513: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xdb4541feb3b6226ff37f506f7786407e4190e43c51937cc857e01294f5e48dd2: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xb94c8b77d1e8b93edbdc0fe60f127b96f634aa9c0d9ca1c38cbb82d5dd7bc0b1: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x909bcd8ae00d0cd47b561a40d655ae4b71f24df00e7d82b18874698046f61f0e: negRisk event → cluster negRisk_event_33509
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x9883c17e49888b1e1fc4227d3eca7f4dc7d8394157073714f57965cb31ae5f57: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x43c65b8e05b1c04b83a3022e37c250f10334b4b0cb7a8f1594e2c4990d09de15: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x5fca56b7401a55ea5753bc833cd5bd739580d065539d45ae2da1c287e78f137c: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x65f38688000cc83e0569fa547fe45a2e93a4dfe2a3a40fc28b867eff29227d48: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x79c4a31e70083d1994ce2332db5fcbf0e483a98ea6dffa0505169c02f0d5459c: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x8fcbf8548820c9330d8a7de0c0cf22cda7eb7d24d453b962f3421379392e30b5: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xb783d70aed29268c4cde5102d32780ac263ee70d206aa15e45e58bff2b9b114c: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x9e2b02521ae3622a8d0b373035b7f15479f5e3990f97411c2c1846cf36f93a57: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x7b456055b9c617200dbecc0d3a352a80463bb9d4864efc5a0ad974cffdc0c761: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xe52d409c15bed19d2c26c3677ede8fa49e0fb6f9a977b9ce5875279abc6fba5b: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xd27d2bc6ca1bac1471793031261d703ade4ec9791e8ba20a42a8b6ebde424fd2: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x8ac931ced38ba3dbb440f0e628c2b07b4866d9cc831d05f3b5b67ac3170f5071: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x748fad4fe87feb9735381d4567176d4b23020303e8364f1cae7d60a13e6bf491: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x227b2494d923a4562356b60efeedff219991450e56a39cae19f24be53ff56dd8: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x6956a94cc63efdd5bccae33b4cf8a0880df301116ccf1f329cad25683392044e: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x86036bad235160b43c6a06319dca1a17c8f0f90b0e8cdbcaf161891a2f4031e4: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x4fed9cae604e8284e2cf2b8a01eb639552ef2fa9447db4380505843fc37c8af4: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xea56640c02d8debffe197d516339030c6e9c9403f7b1ec44fd4105ea8af4451c: negRisk event → cluster negRisk_event_33659
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xf2a4a7765e2f05824fce5cd598c6c4a636a5aadc12607c05527b340f161fd2f9: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x15657713874c9bdf98dcf5af97114d56064bcbf7d7ed9e1dbde5065093dfc566: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xb93112768ee56b2b81f49c333407eb2d652976e0d88e63844e80066168b4127a: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xf25d811f1c5445b0ad1a831415925bc7f7ba24050d6083d2131abe2a8e8855eb: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xdd3bf94ea20feca193c461b73ddfd363de1177b6c5466dd1c2d93353a4cc333e: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x671cbc7fe2051d9837717265d91275f176119246628516a216efc2080317a5dd: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x1826ba5977fa99815ce65b8a557e214f0f6fcb61d8b3afa11681f56ba04e1933: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x4296266f53577d634cc08b0a2f6ebfb43377e9c10b19aad4638e10b76c0de498: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x8d7a94f28374f7ca55f47ed0bb4facf46295bd405a8242afc647943bfffbfba6: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x30cc837b42e0ec5f82759ec1889fd7701826072ad05af5a0a99642050afb7477: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x2d20de953734a4052e5c5f4e2fed2f8e0a8a0491460802c751db81670862c7ac: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x1c9b8280966d8a80ed56ba8d4d562086a36ecd1f1a1720443dd792fc919811c2: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x98585da4a06b23fe8778ec6c35b9212691b57f58e3d362472c0a4f108ce4c6f9: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xf228f231d38c8c06e2bfe414d540a7be4d63be112c7a48e0cf634a36ff2ef8ef: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x9f117a915da1833168731e25b08d315965fc8adaa9dbc98f1402d06a6297278c: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x4bcb369877b86051be377a998f5990f1e552ddcb148aacdefdc6fe638bda2e61: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xc970b5a3b89d4c904d0998fb18ad13810e51bea3cb241cd21591b9ce2349da1e: negRisk event → cluster negRisk_event_33660
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x1e722ca9fef1bcde22157eb0be3bfa5e6f5a791c986928a3a38d860e40a31bf7: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x3f61549a496c4c51c9a4661bb73c806848e3f4b4d204e81fbb8691a8c16d80d2: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xad48e5283fae802e72889e08955aadb8c007e4cdd071cba561f674ffbac59671: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xea14d686bbe9abe24557e6ba82db060d41652dda48dd4ce33f8f1647c8835a41: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xf55795b8f77913e98d9ce67940204dd42bc19cacd71a97bcf3f0cd00b1d928ee: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x68c327454a085b95c7ad375ec60a2dbc4163c4d5584963e782c876a131f033d2: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x5eb681cc36248c64a48aa01096f2287834ac836d814541cd96da9924752cae06: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xbe8c46166a76d7ba689efb4d59e8232b4ca6f45454ef7077162bf43dcbd3b7fe: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x6192a2db01b1ffdf10086a029fc80592637dd3c71e97e90bca473251526257cf: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x82e60559f2a74d31f317e8f5f7235c79150369bb19eed306234afdf9a16ea219: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xb84c491015b8b157eee733b0d166b0898919ff0bc3444db049443799483a2e36: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xd40f7840ec446c1c0a1e699e75508e3e1cc7fc040bd9a2dd5ab3f7934cf7c3f7: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x20f4b194823aea4e52316b24e2b84af619f0595cb98b19cff4c42dfd1665d2a5: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x61738c763b980844f2ff15d020edbf2309da86724e21e7f8a82a3339f19f6fd5: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x58d6aefe2c32e491460bd0a115153ebeb67b77c801e092615ffa01f625148aec: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x426550615ada5b56556b0a29cc73d903958816835cd45ff40334928ba897949b: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x0259be13b21d83b36dacf8f40e004a999d2ccdf817f8764943bd07f365af9554: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x8bf0f49f222c7dc95e4c62b78def2e6c0f1fd4eae210e37a5dc6053125e1a4aa: negRisk event → cluster negRisk_event_33699
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x5ec80dc407457301f282a2b44341947afc700dfaa7923d14c8894e04bc63b03f: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x1480b819d03d4b6388d70e848b0384adf38c38d955cb783cdbcf6d4a436dee14: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x5599856587ed77cf40cf20608448180f6abdcc512027016bcdd68ad73fca3e9f: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x73e39c98045179951b7c527b749118771c10a15a32eee5ebc98f9e3650a69fe1: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x068d4f079da544e312b1a7b86e2c5dd39d3fc6a0f5a21b0ec866d1ff34767839: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x0e16a806a7d079ad19a18599e800bae595eb99b640c5922e1398e30244a0ea43: negRisk event → cluster negRisk_event_34038
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xffdbbf2c3b9aa808abbcb35beb2b20a93572570aa5dd1bd1b630cade2f809f26: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x6509c26f04acbe80e73144486933fff507901867925f165421d66155193fce55: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x2b38ba268b5236105755199984f1609572e22c933f514e70ea8350cd0f9c0bc1: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x7876b15fcffcefea261e84f3f4d9e37bef6338edacc3f9cfe8f58b03e8bd7d9d: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x1281b8da70b2571cdd44ee3f7f57240c6ea08d99786e17dddb137403e0027a61: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xac6b6f6da4eb31a28cd22d050038877963a4fe2243174c0e65d20f99ff20f9ce: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x83d434951c9b792f27b0e4861e773c286132ca0803dc7a211c564d2b1e16410d: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xea3f0eb3ec9419be6ae206414ff35a6c69ba88f7e50ff95f7325325784fb9981: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xcdde25ded9c8b683ea96c8877913fa793bceee6214d3bb892b2a070f34294f73: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x3b03119533be8b78d11b5f12699999e5ade5ecb77c60f7ad4679fdaabbbb1ee2: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xe3e113590ff2cccea2db8c9363492856a4c3c9615f54227fc3ab865239eb2c82: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x9d9e22b8b290d01371f2913c288bbf5026d3ebd31bb45a4fc7996eb9a1681440: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xb20bffea1d88c94b36e080c2cb594df7a17b4d643d760d868aa779dc09dad844: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0xfe27bfafe40e48a1fafb6c643a35ec9f45fed29c425e19b9de819313040d515c: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,196 [INFO] risk.portfolio_engine: Market 0x8bf5e1cd80f5dd7e3f1949c69158112202536fcd4f9132a720e78be04384d4c9: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x14bc6d58697a1cde8865d64256ccf975dc5429c6b0bcbbf790ebcacd692c7837: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xbc6471dde0861191075d7919b035ed29e6ba6716fc1bbc9d948d5f13edc36832: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xd3cf027626c098d59d0d2ce30cc647de3e97aafdf77b0b5e429c418fc9ef4cf7: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x862dab74975a135561dd65230a5f84293591d75d2ba2d259af8d6caabbe9206a: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xc444804b9fb75aca09aec0294bf68d47ab71a0ccd9119f514b8ae8c410609016: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x6e7768758734b61a5301e9b8243ed496b888fa0b5d8fd5f24ceb8f5af85c3e3e: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4809ac50539ae95cd2dfa09dc31b9e9070c777c144f1880ec64193a59edd8732: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x356f4c3b270dfc4b3ed4b69bf8001002307c252d279c0c19b42d8bfe231c83d2: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x0214efd795ce4e8a54884faa52bacd4eeea7b4958fcf6f6649843bdc70c8fd0c: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xe7c5657641a38ffa08fb9331b2ae00b5c11cd89b8a48ab102beb157b58176096: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x1cd45b06f4e05b87f31656ae16ee275d9a234deb627fd811c293768f3bc4d8c8: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xb027884e961a6fd1d493689d26f015c25d22322192d9763aa4c176b977702932: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x5ad7c4693753dec8869d0d6795c08804a107bdc5ab0f53fab730c2b3f2c19dd2: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x8fa0fa99fde4aea79a4dafeb5ca23ee59e34917e925aee8b26c0c01d79db51b3: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x3d02881b414843e467317e05cc2a942ebf5f44f5cc149cb5ff367fe8d2d90fb9: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x2b392df5a4b3c49f3c9872e8e4f9077d17cca703b464a2b0ac07c168a3a00a64: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x3ea9c281aaeac2b2a601da8c320f31756a69ba2385a6a4f800cfeff3a49df05d: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xd654ee72c16bd9338a48fc22f49fd7e2bcdb034ea480b4201e26ec85b9c412ff: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xcd46027134973a8aac368aa706ce768929d0ce9d6141d09bc446308f7f3b0ab2: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x698996bc27582c95322e233ce4c115b0b0ad4435c3293cb0cb4097ac90e6aa29: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xd5b82c1fd4e6f82c56a2f659cc717746dd68adb209441281cf2998d2d9ee4973: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4d93be7c257844407fc30d72183f689aa65235ca6060a4bb973137f81ff2fc0f: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x213cf960590ddffa1b607258fd086774a3072e56bde0038cba6ac6dea205166a: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xab5d0d34695ffa7a448cc96bf673f5dbd9aa02c208922710c3e93cdbfd4e2c19: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x7a00c50eb4e76f5bc25b38a83c029dfde5faa9268e4ade490c931a384f8d157a: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x12ca08f950bb13cefe9c9daf2ff8cd406aa322cc1b1711dc9c6108c20f6fa83c: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xda6293438c50b71777cfa237c0e359e0586e9b5255c25dfc4706a952d41aca2f: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x0209880f5a561cc74e29fc5b93b9d334f73dbd884c1c508b02b42355373aa4c9: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x252070a6eb5dcc265558d6b163fdeb867be7117a6d4bbbc095aad55e5085b87f: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x464728fdf919f1b78e734f30aee7642bdebd1ab99ef623b9a90876a7b05721a0: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x039334b65ecb4e1dd6684d2b65147245b2c41cf11c5c822ec66e99f661872034: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x6e4883bc94f6b815d32b735ce21034216e4b3bab2d740c72e2fa15d274431a13: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4afc707b3ab646e9a817bfd69fcbb874792b9540075b67ce657a8f148b9e14db: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x8fe32b21191d66d5ee526af6744276c64be1407e1522e34b6fb9dd8cae09f2af: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x7ec1b3a4fe97efd65e8dbe2bc0024644b38d89967ed3936b8c44d358794a98c8: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xb43b08df66819637e75745e00fbf3b081a1d42f98913d3668980ca6bb1db58de: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x62ebe42711a80c47362d7366f02b1bd225a5ab348e65f0ccbaf48e2dcf3fe703: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x23bab9493f1b7d4aadb7754b91c6677963ca5cb43a2e2c276321ea53279cf8e5: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x333b6e860ab3eaaf663e7a7df9259d849a6ee02445b822f82e737414b78614ee: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x70f6d392da0491e270bb0e4b956df48d692b4e2fd9438241df090f1cbfcd7188: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x03ed790d3eb61fa1ef395298811f13dc6ca3310a81d6d8693c25729485b78719: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xcd1b782d94423552e19db1ca2bec7bcf5a445de8586638e41da75fae3d138ac4: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xb8d1fb44df18d9fd3e7b33b0872fdcaadcd8b733fd6fe82b0f4d262f47320d43: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xc691e5df8f32108ec04e8bd65e28ffc80d0ca8334ee9fcbca547fb217d801b66: negRisk event → cluster negRisk_event_34436
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x45331137178e0a1b0c00d3ed3a07b4e04bed7232855f8c6c5539007f9ebeaecd: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4d52a0024f9ccf09d26adc2b6f186c468e1c01578f069ea02fd8b87c86050c31: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x0a59b7f3007be7e81846bf6a83e9f2adca6c061f086b936ae23f9442319f8c2f: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x83bda9d757ea1b918083066c4e88f20dc722fee92972a60fec0e7dec4fdcbf6f: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x9e88962df1702474855a3085a161465ac5891c2b674717522c63e5f3813ff7ff: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x7e686c4e975ec785c37f24b9f6e189d874148fa19baa3f807960ccae80cc5d85: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x78c2353a86d18b4d60c30a58b9b33c0199ce3ce3e827ff825f2b6c88b6f048c0: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xfd9ea4e48bfa3ea0c4869392b7551d53ada761270b81dde1fa24b74ad00f9ac4: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x2b94e9269790d48290eb880c766c1b0a1fafc0212d175acb6e35fbc14ef7906e: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x50d33e1ba2de305a08d2ec3f36a6af41b0dc4d67a6f3a41953741ed3ded9c034: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xf18253f5c0b0ffc42172a435892bbcbdaab54119e874580148961e298dad6263: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x6ba7f5c095d6d3dd5293e9949bb9dccfefff48dfff1befdd499e334ca6744376: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4f30da0b51569eaec85dd9abc9e8af93bbeba0fd90489450d89034092345d590: negRisk event → cluster negRisk_event_34578
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x71da12db4aea759acbf68b2777c44b21caf6a5ee9ac335106ced647b53fb9a40: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x9873e438b51f8a9586fbc0b629ca92ec74d02ac3ef809ee7842855981c5970fe: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x52a713aa3016b83b376f6c75f09f16780fc9f0948e83ef8d7bfe66f9b96c80ae: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xa89818f5e5173682ba0ed1deb470b2426fc1ba257a5bd188f31aff39f16772c8: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x0a999ae98b3c9e593cbbd33e2f940df1b071ac0ab9ede42ed12eeb8f7eef461e: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x4a48f9a1e2cd2a274ff636ba53326479cafad09e21ce526aa7b07e3add67575a: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x5dbc37250e4e7f0b64d0d68f2f88f039029687c31be1c5ac91a166f9fc27951d: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xf762826151b1754c3e0f78bdd0354ad39a58573661dd60c8f124d0de02b70c61: negRisk event → cluster negRisk_event_34581
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x7c795144bf0351e82c85f844de81f29f482aaefc3b544eddeb8b7932887649e4: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xa5b21a5fba9c9da91f62cedca9d28747816a514050140708a2300cdecef87f78: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x33b9298257eac39553c008b882ac333d2538bd493689d6710d3986d890580033: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x3baca5b0070978e7518ec4fbaf7ac79e30eb8adc48534e0004780fca2a59a2f2: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xa67adf5ccd4fe39cf878102bc8407c77010e2fae22bd05cedf492892a33db656: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xef75ecbf6882759df055672c2a4136d7bdf8c97fe077bc8eae98d6b53af54cd3: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x49ed66968bfb4058a43bcf7bc664cb879e93a3e51bd10d844e3f8662febe9fd4: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x77b1512402d2b2590f65d22f4fb1d2ce29f3fd2d6516429928f430ddfc2215b3: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x6b98b6acf1dbf405c189176529f77ff5356b2dc9c2a5f15012c0e2df3f561d2b: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x2890121a9277d619b936695405544bda9f80d184b05d9503fd8f173c52867365: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0x04e73caf81ef64ce0c612699049d295e18dfe9bdd60d898fd3d8a64cac723661: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,197 [INFO] risk.portfolio_engine: Market 0xc00920db6f5e84821a61bd31578499bbc9bd125949572b589b7a9e4b0f13bad3: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xb611b3a7173f69e412b55561ed265d849e36693c248ff620d0e981c5b3f2e325: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xeae8d09170bc56ee8ba9676b4a2f6d1a45c69084172ee7cc8a022197c2db191a: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x7ce21332ecca3948da5ecf5e626b16938ba1487ce07d1579d869f25045002200: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x56d3614b2a31f92909d6c8d9674b8a4b642ed8a84e54f44023327cb31c30a6fc: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x0d2496544913dd1efdc093d296e366b4de344adeecc45d84cb4ab26433f335d1: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x5037195eafd98f9d50ef8d5700abcaaa7351cc53bfdb1df23fd28fd35eb94e9b: negRisk event → cluster negRisk_event_34582
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x849a3e762977a9ad6b8e5f449ac7c8abb2756409a1b55759e00262e072bd81a7: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xba75e6ba41372e351ed4755f183c1cdb082bd7cf6182a6d80dc445869c09de10: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x9714c7fe6abc381277370c4287f8b2d30dffddd040565266d0274e67028b5197: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xf63b20e72086547c789e93d744f811c20d9c0b14be0501599cd4c1c5853c9bd5: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xe59f59145045f82f8408f1fc5041d33c2c2b1de8ffaf7a4c450c638f5b038079: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x60084cd46b5b91797ad397f4c1ffb5d3fcec7c134b705d2796c0f571eedad3b7: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x358a4c706ce29a1847d26244857c6272e5359a17aad079f5672c8fb40d50d66c: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xb21bc2b511694c76f3ff6664836dd3561a916acf59b405b8f21f2ae8af7016fd: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x202af343a370924358b0397efd5b812affec245fd60a9f7bdcadc914b6179a3d: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xfbe85201ab2b4acff01cd5a3639039fc813d3448c64db081f70926bd9b9e74e9: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x0622b01925e56a091f248c42fb194d3b86d58165f6647d6bcb7afc6fb4638531: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x0fb006e0c06caa4db12f7e30ec8c2483d658f83eb57b2ee8eb478e39beca3dfd: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0x566196aaed496a8454b0dd572e88dbc096f13631589b8401efb942bbd4e07cdf: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xd0282264ee769e9a77dc5e168cfe7966841955a4b3555485cfbddc6961198ae0: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] risk.portfolio_engine: Market 0xd8f77503edba0515f30d6c97da303e6d95f290ba52042d3553da5012df1c9fcb: negRisk event → cluster negRisk_event_34584
+2026-02-13 00:06:01,198 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:06:01,198 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:06:01,198 [INFO] feeds.market_ws: OUTBOUND SUB #1: count=64 payload={"assets_ids": ["24394670903706558879845790079760859552309100903651562795058188175118941818512", "82991837887127223585838300135823820957946688171642633953055760547186260528157", "104071616575689490708756996503755160411785604144351427331378560378097635400347", "279116166481638532310178055961189115262
+2026-02-13 00:06:01,198 [INFO] feeds.market_ws: Subscription batch 1 sent: 64 assets (total subscribed: 64)
+2026-02-13 00:06:01,299 [INFO] __main__: Cycle 1 warmup: waiting up to 10s for min 25 books...
+2026-02-13 00:06:01,358 [INFO] feeds.market_ws: FIRST BOOK BATCH: array length=64 sample_keys=['market', 'asset_id', 'timestamp', 'hash', 'bids', 'asks', 'tick_size', 'event_type', 'last_trade_price']
+2026-02-13 00:06:01,801 [INFO] __main__: Warmup complete: 64 books received in 0.5s
+2026-02-13 00:06:01,801 [INFO] __main__: Warmup finished: warmup_s=0.5 books_received=64 msg_types={'array_of_books': 1}
+2026-02-13 00:06:01,801 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:06:01,801 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=8.2 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:06:01,801 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=12.8 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:06:01,801 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=12.8 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:06:01,801 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=12.8 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:06:01,801 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=28.5 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.694 veto=none
+2026-02-13 00:06:01,802 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:06:01,802 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=16 qs_nonzero=16
+2026-02-13 00:06:01,802 [INFO] __main__: QS veto summary: ok=16 no_book=0 stale=4 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:06:01,802 [INFO] __main__: Top 10 QS: 0x9c1a95=1.000, 0x1fad72=1.000, 0x32b09f=1.000, 0x84f8b7=1.000, 0x7b49b9=1.000, 0xbb57cc=1.000, 0x6bd566=1.000, 0x1d54eb=1.000, 0x139ba0=1.000, 0x51f624=1.000
+2026-02-13 00:06:01,802 [INFO] __main__: FEED_HEALTH ws_msgs=1 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=460.5 msg_types={'array_of_books': 1}
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xaf9d0e448129a9f657f851d49495ba4742055d80e0ef1166ba0ee81d4d594214: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x49686d26fb712515cd5e12c23f0a1c7e10214c7faa3cb0a730aabe0c33694082: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x2393ed0b0fdc450054c7b9071907eca75cf4fc36e385adf4a0a5f99ee62243e8: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x44f08744458b8896620cd3330bc5e1ea69df4199b02d4fc583b3fc96e5d314ce: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x49a20c7523c271099008f3ef9a31521263b24d637959852a391e6b4697b1a437: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x9472be65457510b7fc3477b20ba90910e99d92eac8421a14bf4b7b7a08ef31dc: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xc55db914f0fd1fee18997706712c0dfd8d0369cdbef93a9fef12bd001914ca77: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x50c669f178da4e5bbea7f1be25041fd278914712fa87a6a6f8e57d5923d88dee: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xb9bbdd34304344dcc45803780a34c97d73a00133a5ecf70f63e1008b8abb2fca: negRisk event → cluster negRisk_event_16282
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xc0e6b917320a47228fb96e3b5ae0e5c93773a5ae2662ae4e1f37807cfe47ce98: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x5533fb9ab797777a243c75b1bf3882c54b1ee91f794730c090bf701598993529: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xea644975be7b2ad32b536a94ae21b707ecb2f84290225b24e60ca46dd77903dd: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xe68594f1350f5535532b24979b5b5c1948432cbfc0c363802c32a8f9ab4e6509: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x50e477f0b316a3d97d60486479657c63be0763834d0e2e8a30b1b86dc3c1c001: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x9d24d9f9b5995949cb158d943793dea20bd448e1b3971cb6f7418bb15e719661: negRisk event → cluster negRisk_event_17823
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0xf398b0e5016eeaee9b0885ed84012b6dc91269ac10d3b59d60722859c2e30b2f: negRisk event → cluster negRisk_event_24383
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x3209617364a0d598435806b59d0d056b606022dc9028c466ad7912df94fc170c: negRisk event → cluster negRisk_event_24383
+2026-02-13 00:06:01,802 [INFO] risk.portfolio_engine: Market 0x2499928ffbe6022444543dcd940075259cecb5e41e346284b578cb64e1404d32: negRisk event → cluster negRisk_event_24383
+2026-02-13 00:06:01,803 [INFO] strategy.quoteability_scorer: Active set selected: 10 markets across 3 clusters
+2026-02-13 00:06:01,803 [INFO] __main__: Active set: 10 markets
+2026-02-13 00:06:01,803 [ERROR] execution.mid: Book stale (119700ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,803 [WARNING] strategy.market_maker: Cannot compute FV band for 0x9c1a953fe92c8357f1b646ba25d983aa83e90c525992db14fb726fa895cb5763: no mid price
+2026-02-13 00:06:01,803 [ERROR] strategy.market_maker: Market-maker: 0x9c1a953fe92c8357f1b646ba25d983aa83e90c525992db14fb726fa895cb5763 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x9c1a953fe92c8357f1b646ba25d983aa83e90c525992db14fb726fa895cb5763
+2026-02-13 00:06:01,803 [INFO] strategy.market_maker: Maker orders created: 0x1fad72fae204143ff1c3035e99e7c0f65ea8d5cd9bd1070987bd1a3316f772be bid=0.5000@96.15 ask=0.5400@104.17
+2026-02-13 00:06:01,803 [ERROR] execution.mid: Book stale (19135ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,803 [WARNING] strategy.market_maker: Cannot compute FV band for 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c: no mid price
+2026-02-13 00:06:01,803 [ERROR] strategy.market_maker: Market-maker: 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c
+2026-02-13 00:06:01,803 [INFO] strategy.market_maker: Maker orders created: 0x84f8b70331323c2fba97d7ceaa9a35fb645a0770d0dbff169d07f24f376766e9 bid=0.5100@94.34 ask=0.5500@106.38
+2026-02-13 00:06:01,803 [ERROR] execution.mid: Book stale (44637ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,803 [WARNING] strategy.market_maker: Cannot compute FV band for 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11: no mid price
+2026-02-13 00:06:01,803 [ERROR] strategy.market_maker: Market-maker: 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11
+2026-02-13 00:06:01,803 [INFO] strategy.market_maker: Maker orders created: 0xbb57ccf5853a85487bc3d83d04d669310d28c6c810758953b9d9b91d1aee89d2 bid=0.4600@103.09 ask=0.5000@97.09
+2026-02-13 00:06:01,803 [ERROR] execution.mid: Book stale (47497ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,803 [WARNING] strategy.market_maker: Cannot compute FV band for 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d: no mid price
+2026-02-13 00:06:01,803 [ERROR] strategy.market_maker: Market-maker: 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d
+2026-02-13 00:06:01,803 [ERROR] execution.mid: Book stale (21321ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,803 [WARNING] strategy.market_maker: Cannot compute FV band for 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30: no mid price
+2026-02-13 00:06:01,803 [ERROR] strategy.market_maker: Market-maker: 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30
+2026-02-13 00:06:01,803 [INFO] strategy.market_maker: Maker orders created: 0x51f624dbbf14f9edb575fef1be6f7a303751de70783fa144fce27b957452c803 bid=0.2400@192.31 ask=0.2800@67.57
+2026-02-13 00:06:01,803 [INFO] strategy.market_maker: Maker orders created: 0x448f73e89890ae9d0e42ad0b592f63b53c0ae05d1ca3fa8d80b30027781f1be7 bid=0.0400@769.23 ask=0.0800@53.48
+2026-02-13 00:06:01,803 [INFO] __main__: Generated 10 maker orders
+2026-02-13 00:06:01,803 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:06:01,804 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:06:01,822 [INFO] execution.order_state_store: Order added: order_1770937561804 BUY 96.15384615384615 98022490269692409998126496127597032490334070080325855126491859374983463996227 @ 0.5000 (GTD)
+2026-02-13 00:06:01,822 [INFO] execution.clob_executor: Order submitted: order_1770937561804 BUY 96.15 98022490269692409998126496127597032490334070080325855126491859374983463996227 @ 0.5000
+2026-02-13 00:06:01,824 [INFO] execution.order_state_store: Order added: order_1770937561822 SELL 104.16666666666667 98022490269692409998126496127597032490334070080325855126491859374983463996227 @ 0.5400 (GTD)
+2026-02-13 00:06:01,824 [INFO] execution.clob_executor: Order submitted: order_1770937561822 SELL 104.17 98022490269692409998126496127597032490334070080325855126491859374983463996227 @ 0.5400
+2026-02-13 00:06:01,827 [INFO] execution.order_state_store: Order added: order_1770937561824 BUY 94.33962264150944 108999723207897941876452935557011604067917389120996960199512481363958770540884 @ 0.5100 (GTD)
+2026-02-13 00:06:01,827 [INFO] execution.clob_executor: Order submitted: order_1770937561824 BUY 94.34 108999723207897941876452935557011604067917389120996960199512481363958770540884 @ 0.5100
+2026-02-13 00:06:01,830 [INFO] execution.order_state_store: Order added: order_1770937561827 SELL 106.38297872340426 108999723207897941876452935557011604067917389120996960199512481363958770540884 @ 0.5500 (GTD)
+2026-02-13 00:06:01,830 [INFO] execution.clob_executor: Order submitted: order_1770937561827 SELL 106.38 108999723207897941876452935557011604067917389120996960199512481363958770540884 @ 0.5500
+2026-02-13 00:06:01,832 [INFO] execution.order_state_store: Order added: order_1770937561830 BUY 103.09278350515464 105267568073659068217311993901927962476298440625043565106676088842803600775810 @ 0.4600 (GTD)
+2026-02-13 00:06:01,832 [INFO] execution.clob_executor: Order submitted: order_1770937561830 BUY 103.09 105267568073659068217311993901927962476298440625043565106676088842803600775810 @ 0.4600
+2026-02-13 00:06:01,833 [INFO] execution.order_state_store: Order added: order_1770937561832 SELL 97.08737864077669 105267568073659068217311993901927962476298440625043565106676088842803600775810 @ 0.5000 (GTD)
+2026-02-13 00:06:01,833 [INFO] execution.clob_executor: Order submitted: order_1770937561832 SELL 97.09 105267568073659068217311993901927962476298440625043565106676088842803600775810 @ 0.5000
+2026-02-13 00:06:01,835 [INFO] execution.order_state_store: Order added: order_1770937561833 BUY 192.3076923076923 108187737663325442737199857734058032845728149267925579081973309839049299838520 @ 0.2400 (GTD)
+2026-02-13 00:06:01,835 [INFO] execution.clob_executor: Order submitted: order_1770937561833 BUY 192.31 108187737663325442737199857734058032845728149267925579081973309839049299838520 @ 0.2400
+2026-02-13 00:06:01,836 [INFO] execution.order_state_store: Order added: order_1770937561835 SELL 67.56756756756756 108187737663325442737199857734058032845728149267925579081973309839049299838520 @ 0.2800 (GTD)
+2026-02-13 00:06:01,836 [INFO] execution.clob_executor: Order submitted: order_1770937561835 SELL 67.57 108187737663325442737199857734058032845728149267925579081973309839049299838520 @ 0.2800
+2026-02-13 00:06:01,838 [INFO] execution.order_state_store: Order added: order_1770937561836 BUY 769.2307692307692 82496570332984679554195177789706736795170417640692739176832196524671988217379 @ 0.0400 (GTD)
+2026-02-13 00:06:01,838 [INFO] execution.clob_executor: Order submitted: order_1770937561836 BUY 769.23 82496570332984679554195177789706736795170417640692739176832196524671988217379 @ 0.0400
+2026-02-13 00:06:01,839 [INFO] execution.order_state_store: Order added: order_1770937561838 SELL 53.475935828877 82496570332984679554195177789706736795170417640692739176832196524671988217379 @ 0.0800 (GTD)
+2026-02-13 00:06:01,839 [INFO] execution.clob_executor: Order submitted: order_1770937561838 SELL 53.48 82496570332984679554195177789706736795170417640692739176832196524671988217379 @ 0.0800
+2026-02-13 00:06:01,839 [INFO] __main__: Batch submitted: 10 orders, 0 failed
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (12797ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (12797ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (12796ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (28566ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (12796ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (119736ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (15377ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (19171ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (44673ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (107270ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (26142ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (460556ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (51624ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (166603ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (350790ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (39947ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (40817ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (47533ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,839 [ERROR] execution.mid: Book stale (21357ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,840 [ERROR] execution.mid: Book stale (245001ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,840 [ERROR] execution.mid: Book stale (88872ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,840 [ERROR] execution.mid: Book stale (21437ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:06:01,840 [ERROR] execution.mid: Book stale (20515ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:00,795 [INFO] __main__: --- Cycle 2 ---
+2026-02-13 00:07:00,851 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:07:00,892 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:07:00,935 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:07:00,969 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:07:01,003 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:07:01,042 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:07:01,042 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:07:01,042 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:07:01,044 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:07:01,044 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:07:01,044 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:07:01,044 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:07:01,044 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:07:01,044 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=67.4 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:07:01,044 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=72.0 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:07:01,044 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=72.0 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:07:01,044 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=72.0 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:07:01,044 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=87.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.694 veto=none
+2026-02-13 00:07:01,045 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:07:01,045 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=17 qs_nonzero=15
+2026-02-13 00:07:01,045 [INFO] __main__: QS veto summary: ok=15 no_book=0 stale=5 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:07:01,045 [INFO] __main__: Top 10 QS: 0x1fad72=1.000, 0x32b09f=1.000, 0x84f8b7=1.000, 0x7b49b9=1.000, 0xbb57cc=1.000, 0x6bd566=1.000, 0x1d54eb=1.000, 0x139ba0=1.000, 0x51f624=1.000, 0x14501d=1.000
+2026-02-13 00:07:01,045 [INFO] __main__: FEED_HEALTH ws_msgs=317 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=519.8 msg_types={'array_of_books': 1, 'price_change': 292, 'book': 12, 'last_trade_price': 6}
+2026-02-13 00:07:01,045 [INFO] strategy.quoteability_scorer: Active set selected: 10 markets across 3 clusters
+2026-02-13 00:07:01,045 [INFO] __main__: Active set: 10 markets
+2026-02-13 00:07:01,045 [ERROR] execution.mid: Book stale (62799ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x1fad72fae204143ff1c3035e99e7c0f65ea8d5cd9bd1070987bd1a3316f772be: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x1fad72fae204143ff1c3035e99e7c0f65ea8d5cd9bd1070987bd1a3316f772be quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x1fad72fae204143ff1c3035e99e7c0f65ea8d5cd9bd1070987bd1a3316f772be
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (78378ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x32b09f6390252b37d674501527e709016d55581b2c1e544bd4b8167f5f732f4c
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (66314ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x84f8b70331323c2fba97d7ceaa9a35fb645a0770d0dbff169d07f24f376766e9: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x84f8b70331323c2fba97d7ceaa9a35fb645a0770d0dbff169d07f24f376766e9 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x84f8b70331323c2fba97d7ceaa9a35fb645a0770d0dbff169d07f24f376766e9
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (103880ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x7b49b9bacb5f435bc10f3b100ff59e2fdd346f7f92a9001881bc9825a0af0f11
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (62337ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0xbb57ccf5853a85487bc3d83d04d669310d28c6c810758953b9d9b91d1aee89d2: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0xbb57ccf5853a85487bc3d83d04d669310d28c6c810758953b9d9b91d1aee89d2 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0xbb57ccf5853a85487bc3d83d04d669310d28c6c810758953b9d9b91d1aee89d2
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (106740ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x6bd56627aa21311850825edb27e53434a0e17a4f782be0086bc07f71eee00d0d
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (80564ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x1d54eb5eac2cee8f595f3097c65da7d07f8ab5dee63d7c0c6883eb70e1e9af30
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (59835ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (65643ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x51f624dbbf14f9edb575fef1be6f7a303751de70783fa144fce27b957452c803: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x51f624dbbf14f9edb575fef1be6f7a303751de70783fa144fce27b957452c803 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x51f624dbbf14f9edb575fef1be6f7a303751de70783fa144fce27b957452c803
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (69125ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [WARNING] strategy.market_maker: Cannot compute FV band for 0x448f73e89890ae9d0e42ad0b592f63b53c0ae05d1ca3fa8d80b30027781f1be7: no mid price
+2026-02-13 00:07:01,046 [ERROR] strategy.market_maker: Market-maker: 0x448f73e89890ae9d0e42ad0b592f63b53c0ae05d1ca3fa8d80b30027781f1be7 quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x448f73e89890ae9d0e42ad0b592f63b53c0ae05d1ca3fa8d80b30027781f1be7
+2026-02-13 00:07:01,046 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:07:01,046 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:07:01,046 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (67426ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (72004ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (72004ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (72003ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (87773ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (72003ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (178943ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (62800ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (74584ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (78378ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (66314ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (103880ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (62337ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (166477ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (85349ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (519763ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (110831ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (225810ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (409997ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,046 [ERROR] execution.mid: Book stale (99154ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (100024ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (106741ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (80565ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (59836ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (304208ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (148079ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (64435ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (80644ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (65644ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (59871ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (79722ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:07:01,047 [ERROR] execution.mid: Book stale (69126ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:00,796 [INFO] __main__: --- Cycle 3 ---
+2026-02-13 00:08:00,852 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:08:00,941 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:08:01,031 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:08:01,067 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:08:01,148 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:08:01,187 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:08:01,187 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:08:01,187 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:08:01,189 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:08:01,189 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:08:01,189 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:08:01,189 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:08:01,189 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:08:01,190 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=127.6 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:08:01,190 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=132.1 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:08:01,190 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=132.1 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:08:01,190 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=132.1 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:08:01,190 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=147.9 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:08:01,190 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:08:01,190 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=31 qs_nonzero=1
+2026-02-13 00:08:01,190 [INFO] __main__: QS veto summary: ok=1 no_book=0 stale=19 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:08:01,190 [INFO] __main__: Top 10 QS: 0x139ba0=1.000, 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000
+2026-02-13 00:08:01,190 [INFO] __main__: FEED_HEALTH ws_msgs=558 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=579.9 msg_types={'array_of_books': 1, 'price_change': 521, 'book': 16, 'last_trade_price': 8}
+2026-02-13 00:08:01,191 [INFO] strategy.quoteability_scorer: Active set selected: 1 markets across 1 clusters
+2026-02-13 00:08:01,191 [INFO] __main__: Active set: 1 markets
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (119980ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [WARNING] strategy.market_maker: Cannot compute FV band for 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f: no mid price
+2026-02-13 00:08:01,191 [ERROR] strategy.market_maker: Market-maker: 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f quote computation failed: Cannot place quotes: bid 0.5000 >= ask 0.5000. Spread collapsed for 0x139ba0e7f931f09466c0fb27fc8ddb5e77ce9d1e2bdc953a5f22765bf779452f
+2026-02-13 00:08:01,191 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:08:01,191 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:08:01,191 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (127571ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (132149ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (132149ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (132148ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (147918ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (132148ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (239088ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (122945ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (134729ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (138523ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (126459ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (164025ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (122482ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (226622ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (145494ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (579908ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (170976ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,191 [ERROR] execution.mid: Book stale (285955ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (470143ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (159300ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (160170ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (166886ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (140710ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (119981ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (364353ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (208224ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (124580ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (140789ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (125789ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (120016ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (139867ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:08:01,192 [ERROR] execution.mid: Book stale (129271ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:00,798 [INFO] __main__: --- Cycle 4 ---
+2026-02-13 00:09:00,874 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:09:00,931 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:09:00,977 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:09:01,023 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:09:01,066 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:09:01,109 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:09:01,109 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:09:01,110 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:09:01,111 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:09:01,111 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:09:01,112 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:09:01,112 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:09:01,112 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:09:01,112 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=187.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:09:01,112 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=192.1 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:09:01,112 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=192.1 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:09:01,112 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=192.1 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:09:01,112 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=207.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:09:01,113 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:09:01,113 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:09:01,113 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:09:01,113 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:09:01,113 [INFO] __main__: FEED_HEALTH ws_msgs=802 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=639.8 msg_types={'array_of_books': 1, 'price_change': 753, 'book': 20, 'last_trade_price': 10}
+2026-02-13 00:09:01,113 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:09:01,113 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:09:01,113 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:09:01,113 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:09:01,113 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (187493ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (192071ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (192071ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (192070ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (207840ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (192070ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (299010ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (182867ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (194651ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,113 [ERROR] execution.mid: Book stale (198445ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (186382ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (223948ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (182405ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (286545ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (205417ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (639831ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (230899ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (345878ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (530065ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (219222ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (220092ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (226808ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (200632ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (179903ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (424275ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (268146ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (184502ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (200711ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (185711ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (179938ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (199789ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:09:01,114 [ERROR] execution.mid: Book stale (189193ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:00,799 [INFO] __main__: --- Cycle 5 ---
+2026-02-13 00:10:00,872 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:10:00,914 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:10:00,957 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:10:01,004 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:10:01,039 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:10:01,074 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:10:01,074 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:10:01,074 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:10:01,076 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:10:01,076 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:10:01,076 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:10:01,076 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:10:01,076 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:10:01,076 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=247.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:10:01,076 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=252.0 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:10:01,076 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=252.0 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:10:01,076 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=252.0 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:10:01,077 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=267.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:10:01,077 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:10:01,077 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:10:01,077 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:10:01,077 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:10:01,077 [INFO] __main__: FEED_HEALTH ws_msgs=1066 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=699.8 msg_types={'array_of_books': 1, 'price_change': 1002, 'book': 26, 'last_trade_price': 13}
+2026-02-13 00:10:01,077 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:10:01,077 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:10:01,077 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:10:01,077 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:10:01,078 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (247458ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (252036ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (252036ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (252035ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (267805ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (252035ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (358975ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (242832ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (254616ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (258410ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (246346ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (283912ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (242369ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (346509ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (265381ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (699795ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (290863ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (405842ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (590029ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (279186ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (280056ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (286772ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (260596ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (239867ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (484239ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (328110ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (244466ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (260675ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (245675ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (239902ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (259753ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (249157ms) and no last_mid available. Refusing to compute mid.

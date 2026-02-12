@@ -1,0 +1,87 @@
+import json
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env from the project directory (same dir as this file)
+_env_path = Path(__file__).resolve().parent / ".env"
+load_dotenv(_env_path, override=True)
+
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+BANKROLL = float(os.getenv("BANKROLL", "100"))
+ODDS_API_KEY = os.getenv("ODDS_API_KEY", "")
+FRED_API_KEY = os.getenv("FRED_API_KEY", "")    # Free at fred.stlouisfed.org
+
+# Claude model — change here to upgrade everywhere (haiku=cheap+fast, sonnet=balanced, opus=best)
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-haiku-4-5-20251001")
+
+# API cost management
+DAILY_API_SPEND_CAP_USD = float(os.getenv("DAILY_API_SPEND_CAP_USD", "2.00"))  # halt if exceeded
+HAIKU_COST_PER_1K_INPUT = 0.00025   # $0.25 per 1M input tokens
+HAIKU_COST_PER_1K_OUTPUT = 0.00125  # $1.25 per 1M output tokens
+
+# Scanner settings  (base values — may be overridden by strategy_overrides.json at bottom)
+_BASE_MISPRICING_THRESHOLD = 0.08
+_BASE_MIN_CONFIDENCE = 0.6
+MAX_KELLY_FRACTION = 0.25         # Use quarter Kelly to be conservative
+MAX_POSITION_PCT = 0.06           # Never risk more than 6% of bankroll per trade
+SCAN_INTERVAL_SECONDS = 600       # Scan every 10 minutes
+MAX_CLAUDE_CALLS_PER_SCAN = 50    # Limit Claude API spend per cycle
+MAX_DAILY_LOSS_PCT = 0.05         # Circuit breaker: halt new positions if today's loss > 5% bankroll
+LLM_STAKE_THRESHOLD = 30000      # Minimum LLM stake signal to trade (arXiv:2512.05998)
+MIN_HOURS_TO_RESOLUTION = 48     # Skip markets resolving within 48h (LLM edge priced in)
+
+# Polymarket API
+CLOB_API_URL = "https://clob.polymarket.com"
+GAMMA_API_URL = "https://gamma-api.polymarket.com"
+
+# Rate limiting
+MAX_REQUESTS_PER_MINUTE = 80      # Stay under 100 limit with buffer
+
+# Market filters
+MIN_MARKET_LIQUIDITY = 500        # Skip markets with < $500 total liquidity
+MIN_HOURS_TO_EXPIRY = 2           # Skip markets expiring soon
+
+# Crypto
+COINGECKO_API_URL = "https://api.coingecko.com/api/v3"
+
+# NOAA
+NOAA_API_URL = "https://api.weather.gov"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STRATEGY OVERRIDE LOADER (S6: Learning loop closes the feedback loop)
+# Learning agent writes machine-readable overrides to memory/strategy_overrides.json
+# Config reads them at startup and applies them with an expiry check.
+# ─────────────────────────────────────────────────────────────────────────────
+_STRATEGY_OVERRIDE_FILE = Path(__file__).resolve().parent / "memory" / "strategy_overrides.json"
+
+def _load_strategy_overrides() -> dict:
+    """Load learning-agent-proposed overrides if present and not expired."""
+    if not _STRATEGY_OVERRIDE_FILE.exists():
+        return {}
+    try:
+        data = json.loads(_STRATEGY_OVERRIDE_FILE.read_text())
+        from datetime import date
+        expires = data.get("expires", "2099-01-01")
+        if date.fromisoformat(expires) < date.today():
+            return {}   # Expired — use defaults
+        return data
+    except Exception:
+        return {}
+
+_overrides = _load_strategy_overrides()
+
+# Apply overrides (learning agent can tune these without touching config.py)
+MISPRICING_THRESHOLD = _overrides.get("MISPRICING_THRESHOLD_OVERRIDE", _BASE_MISPRICING_THRESHOLD)
+MIN_CONFIDENCE = _overrides.get("MIN_CONFIDENCE_OVERRIDE", _BASE_MIN_CONFIDENCE)
+ACQUIESCENCE_CORRECTION = _overrides.get("ACQUIESCENCE_CORRECTION_OVERRIDE", 0.04)
+EXTREMIZE_K = _overrides.get("EXTREMIZE_K_OVERRIDE", 1.25)
+
+if _overrides:
+    import logging as _logging
+    _logging.getLogger("astra.config").info(
+        "Strategy overrides active (expires %s): %s",
+        _overrides.get("expires", "?"),
+        {k: v for k, v in _overrides.items() if k != "expires"}
+    )
