@@ -260,6 +260,17 @@ MARKET_FETCH_LIMIT_PAPER = 500  # Paper mode: fetch more for better NORMAL state
 MAX_SUBSCRIBE_MARKETS = 250  # Subscribe to top N markets (500 assets YES+NO)
 PREFILTER_EXCLUDE_CLOSE_WINDOW = True  # Exclude markets with time_to_close < 24h before subscribe
 
+# Activity-aware selection (for burn-in stability)
+ACTIVITY_SCORE_WEIGHTS = {
+    "volume_24h": 0.50,      # 50% weight on recent trading volume
+    "liquidity": 0.30,        # 30% weight on current liquidity
+    "time_recency": 0.20,     # 20% weight on time until close (sooner = more active)
+}
+
+# Reseed when universe goes stale
+RESEED_TRIGGER_ZERO_ACTIVE_CYCLES = 3  # Reseed if Active set = 0 for 3 consecutive cycles
+RESEED_MIN_INTERVAL_SECONDS = 300      # Min 5min between reseeds
+
 # WS warmup (Cycle 1 only)
 WS_WARMUP_TIMEOUT_S = 10  # Max warmup wait time
 WS_WARMUP_MIN_BOOKS = 25  # Minimum books required before first QS computation

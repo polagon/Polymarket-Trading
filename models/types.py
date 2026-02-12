@@ -73,6 +73,7 @@ class Market:
     category: str = "other"
     liquidity: float = 0.0
     volume_24h: float = 0.0
+    activity_score: float = 0.0  # Computed activity likelihood (for universe selection)
     tick_size: float = 0.01  # Usually 0.01
 
     # Fee regime (CRITICAL FIX #2)

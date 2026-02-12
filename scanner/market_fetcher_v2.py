@@ -79,6 +79,51 @@ def compute_time_to_close(end_date_str: Optional[str]) -> Optional[float]:
         return None
 
 
+def compute_activity_score(market: Market) -> float:
+    """
+    Compute activity likelihood score for market selection.
+
+    Markets with higher activity are more likely to emit WS book updates,
+    keeping books fresh and Active Set non-zero during burn-in.
+
+    Components:
+    - volume_24h (50%): Recent trading volume
+    - liquidity (30%): Current liquidity depth
+    - time_recency (20%): Closer to resolution = more activity
+
+    Returns:
+        Activity score (0-1), higher = more likely to have active book updates
+    """
+    from config import ACTIVITY_SCORE_WEIGHTS
+
+    # Normalize volume (assume $10k is "high" volume)
+    volume_score = min(1.0, market.volume_24h / 10000.0)
+
+    # Normalize liquidity (assume $20k is "high" liquidity)
+    liquidity_score = min(1.0, market.liquidity / 20000.0)
+
+    # Time recency: markets closer to resolution tend to be more active
+    # But not TOO close (we exclude close_window separately)
+    if market.time_to_close is None:
+        time_score = 0.0
+    elif market.time_to_close < 24:
+        time_score = 0.0  # Will be filtered by close_window check
+    elif market.time_to_close < 168:  # < 1 week
+        time_score = 0.8
+    elif market.time_to_close < 720:  # < 1 month
+        time_score = 0.5
+    else:
+        time_score = 0.3
+
+    activity_score = (
+        ACTIVITY_SCORE_WEIGHTS["volume_24h"] * volume_score +
+        ACTIVITY_SCORE_WEIGHTS["liquidity"] * liquidity_score +
+        ACTIVITY_SCORE_WEIGHTS["time_recency"] * time_score
+    )
+
+    return activity_score
+
+
 async def fetch_markets_with_metadata(
     limit: int = 500,
     min_liquidity: float = 500.0,

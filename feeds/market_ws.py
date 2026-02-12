@@ -464,25 +464,49 @@ class MarketWebSocketFeed:
         Get feed health metrics for observability.
 
         Returns:
-            Dict with ws_msgs, book_msgs, parse_err, max_age_seconds
+            Dict with ws_msgs, book_msgs, parse_err, max_age_seconds, book_update_cadence
         """
         now_ms = int(time.time() * 1000)
 
         # Find max age across all subscribed books
         max_age_seconds = 0.0
+        books_fresh_10s = 0  # Books updated within last 10s
+        books_fresh_60s = 0  # Books updated within last 60s
+        book_ages = []
+
         for asset_id in self.subscribed_assets:
             if asset_id in self.books:
                 age_ms = now_ms - self.books[asset_id].timestamp_ms
                 age_seconds = age_ms / 1000.0
                 max_age_seconds = max(max_age_seconds, age_seconds)
+                book_ages.append(age_seconds)
+
+                if age_seconds < 10:
+                    books_fresh_10s += 1
+                if age_seconds < 60:
+                    books_fresh_60s += 1
+
+        # Compute median book age
+        median_book_age = sorted(book_ages)[len(book_ages) // 2] if book_ages else 0.0
+
+        # Find stalest books for debugging
+        stalest_books = sorted(
+            [(asset_id, now_ms - self.books[asset_id].timestamp_ms) for asset_id in self.subscribed_assets if asset_id in self.books],
+            key=lambda x: x[1],
+            reverse=True
+        )[:10]  # Top 10 stalest
 
         return {
             "ws_msgs": self.ws_messages_total,
             "book_msgs": self.book_messages_total,
             "parse_err": self.ws_json_parse_errors,
             "max_age_seconds": max_age_seconds,
+            "median_age_seconds": median_book_age,
+            "books_fresh_10s": books_fresh_10s,
+            "books_fresh_60s": books_fresh_60s,
             "subscribed_assets": len(self.subscribed_assets),
             "books_received": len(self.books),
             "unique_assets_with_book": len(self.unique_asset_ids_with_book),
             "msg_type_counts": dict(self.msg_type_counts),
+            "top_10_stalest": [(asset_id[:12], age_ms / 1000) for asset_id, age_ms in stalest_books],
         }

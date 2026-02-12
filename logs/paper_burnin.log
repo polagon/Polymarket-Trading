@@ -946,3 +946,370 @@
 2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (239902ms) and no last_mid available. Refusing to compute mid.
 2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (259753ms) and no last_mid available. Refusing to compute mid.
 2026-02-13 00:10:01,078 [ERROR] execution.mid: Book stale (249157ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:00,802 [INFO] __main__: --- Cycle 6 ---
+2026-02-13 00:11:00,879 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:11:00,931 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:11:00,970 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:11:01,006 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:11:01,049 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:11:01,087 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:11:01,088 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:11:01,088 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:11:01,090 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:11:01,090 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:11:01,090 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:11:01,090 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:11:01,090 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:11:01,090 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=307.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:11:01,090 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=312.0 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:11:01,090 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=312.0 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:11:01,090 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=312.0 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:11:01,090 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=327.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:11:01,091 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:11:01,091 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:11:01,091 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:11:01,091 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:11:01,091 [INFO] __main__: FEED_HEALTH ws_msgs=1329 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=759.8 msg_types={'array_of_books': 1, 'price_change': 1250, 'book': 32, 'last_trade_price': 16}
+2026-02-13 00:11:01,091 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:11:01,091 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:11:01,091 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:11:01,091 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:11:01,092 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (307472ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (312050ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (312050ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (312049ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (327819ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (312049ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (418989ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (302846ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (314630ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (318424ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (306360ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (343926ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (302383ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (406523ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (325395ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (759809ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (350877ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (465856ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (650043ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (339200ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (340070ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (346786ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (320610ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (299881ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (544253ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (388124ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (304480ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (320689ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (305689ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (299916ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (319767ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:11:01,092 [ERROR] execution.mid: Book stale (309171ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:00,803 [INFO] __main__: --- Cycle 7 ---
+2026-02-13 00:12:00,933 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:12:00,969 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:12:01,014 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:12:01,059 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:12:01,093 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:12:01,138 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:12:01,138 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:12:01,138 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:12:01,140 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:12:01,140 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:12:01,140 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:12:01,140 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:12:01,140 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:12:01,140 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=367.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:12:01,140 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=372.1 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:12:01,140 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=372.1 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:12:01,141 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=372.1 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:12:01,141 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=387.9 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:12:01,141 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:12:01,141 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:12:01,141 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:12:01,141 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:12:01,141 [INFO] __main__: FEED_HEALTH ws_msgs=1571 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=819.9 msg_types={'array_of_books': 1, 'price_change': 1474, 'book': 40, 'last_trade_price': 20}
+2026-02-13 00:12:01,141 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:12:01,141 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:12:01,141 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:12:01,141 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:12:01,142 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (367522ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (372100ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (372100ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (372099ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (387869ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (372099ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (479039ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (362896ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (374680ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (378474ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (366410ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (403976ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (362433ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (466573ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (385445ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (819859ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (410927ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (525906ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (710093ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (399250ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (400120ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (406836ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (380660ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (359931ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (604303ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (448174ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (364530ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (380739ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (365739ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (359966ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (379817ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:12:01,142 [ERROR] execution.mid: Book stale (369221ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:00,805 [INFO] __main__: --- Cycle 8 ---
+2026-02-13 00:13:00,880 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:13:00,921 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:13:00,959 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:13:00,993 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:13:01,046 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:13:01,082 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:13:01,082 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:13:01,082 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:13:01,084 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:13:01,084 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:13:01,084 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:13:01,084 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:13:01,084 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:13:01,084 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=427.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:13:01,084 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=432.0 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:13:01,084 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=432.0 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:13:01,084 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=432.0 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:13:01,085 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=447.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:13:01,085 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:13:01,085 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:13:01,085 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:13:01,085 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:13:01,085 [INFO] __main__: FEED_HEALTH ws_msgs=1906 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=879.8 msg_types={'array_of_books': 1, 'price_change': 1782, 'book': 54, 'last_trade_price': 27}
+2026-02-13 00:13:01,085 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:13:01,085 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:13:01,085 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:13:01,086 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:13:01,086 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (427466ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (432044ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (432044ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (432043ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (447813ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (432043ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (538983ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (422840ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (434624ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (438418ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (426354ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (463920ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (422377ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (526517ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (445389ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (879803ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (470871ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (585850ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (770037ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (459194ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (460064ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (466780ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (440604ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (419875ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (664247ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (508118ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (424474ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (440683ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (425683ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (419910ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (439761ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:13:01,086 [ERROR] execution.mid: Book stale (429165ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:00,806 [INFO] __main__: --- Cycle 9 ---
+2026-02-13 00:14:00,872 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:14:00,910 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:14:00,947 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:14:00,989 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:14:01,028 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:14:01,065 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:14:01,065 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:14:01,065 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:14:01,067 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:14:01,067 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:14:01,067 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:14:01,067 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:14:01,067 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:14:01,068 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=487.4 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:14:01,068 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=492.0 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:14:01,068 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=492.0 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:14:01,068 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=492.0 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:14:01,068 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=507.8 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:14:01,068 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:14:01,068 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:14:01,068 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:14:01,068 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:14:01,068 [INFO] __main__: FEED_HEALTH ws_msgs=2230 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=939.8 msg_types={'array_of_books': 1, 'price_change': 2091, 'book': 60, 'last_trade_price': 30}
+2026-02-13 00:14:01,069 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:14:01,069 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:14:01,069 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:14:01,069 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:14:01,069 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (487449ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (492027ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (492027ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (492026ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (507796ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (492026ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (598966ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,069 [ERROR] execution.mid: Book stale (482823ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (494607ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (498402ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (486338ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (523904ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (482361ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (586501ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (505373ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (939787ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (530855ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (645834ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (830021ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (519178ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (520048ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (526764ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (500588ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (479859ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (724231ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (568102ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (484458ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (500667ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (485667ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (479894ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (499745ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:14:01,070 [ERROR] execution.mid: Book stale (489149ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:00,804 [INFO] __main__: --- Cycle 10 ---
+2026-02-13 00:15:00,881 [INFO] scanner.market_fetcher_v2: Fetched 97 markets (offset=0)
+2026-02-13 00:15:00,972 [INFO] scanner.market_fetcher_v2: Fetched 197 markets (offset=100)
+2026-02-13 00:15:01,133 [INFO] scanner.market_fetcher_v2: Fetched 297 markets (offset=200)
+2026-02-13 00:15:01,172 [INFO] scanner.market_fetcher_v2: Fetched 397 markets (offset=300)
+2026-02-13 00:15:01,204 [INFO] scanner.market_fetcher_v2: Fetched 497 markets (offset=400)
+2026-02-13 00:15:01,246 [INFO] scanner.market_fetcher_v2: Fetched 597 markets (offset=500)
+2026-02-13 00:15:01,247 [INFO] scanner.market_fetcher_v2: Total markets fetched: 597
+2026-02-13 00:15:01,247 [INFO] __main__: Fetched 597 markets (mode=PAPER, limit=500)
+2026-02-13 00:15:01,249 [INFO] __main__: Fetched 597 markets
+2026-02-13 00:15:01,249 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:15:01,249 [INFO] __main__: Prefilter: 32/597 markets (excluded: close_window=23, negRisk=542)
+2026-02-13 00:15:01,249 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:15:01,249 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:15:01,250 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=547.6 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:15:01,250 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=552.2 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:15:01,250 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=552.2 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:15:01,250 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=552.2 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:15:01,250 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=568.0 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:15:01,250 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:15:01,250 [INFO] __main__: Filter summary: total=597 no_book=565 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:15:01,250 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:15:01,250 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:15:01,250 [INFO] __main__: FEED_HEALTH ws_msgs=2554 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=1000.0 msg_types={'array_of_books': 1, 'price_change': 2376, 'book': 82, 'last_trade_price': 41}
+2026-02-13 00:15:01,250 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:15:01,250 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:15:01,250 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:15:01,251 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:15:01,251 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (547631ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (552209ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (552209ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (552208ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (567978ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (552208ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (659148ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (543005ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (554789ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (558583ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (546519ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (584085ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (542542ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (646682ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (565554ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (999968ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (591036ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (706015ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (890202ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (579359ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (580229ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (586945ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (560769ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (540040ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (784412ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (628283ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (544639ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (560848ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (545848ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (540075ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (559926ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:15:01,251 [ERROR] execution.mid: Book stale (549330ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:00,804 [INFO] __main__: --- Cycle 11 ---
+2026-02-13 00:16:00,861 [INFO] scanner.market_fetcher_v2: Fetched 98 markets (offset=0)
+2026-02-13 00:16:00,895 [INFO] scanner.market_fetcher_v2: Fetched 198 markets (offset=100)
+2026-02-13 00:16:00,932 [INFO] scanner.market_fetcher_v2: Fetched 298 markets (offset=200)
+2026-02-13 00:16:01,009 [INFO] scanner.market_fetcher_v2: Fetched 398 markets (offset=300)
+2026-02-13 00:16:01,043 [INFO] scanner.market_fetcher_v2: Fetched 498 markets (offset=400)
+2026-02-13 00:16:01,123 [INFO] scanner.market_fetcher_v2: Fetched 598 markets (offset=500)
+2026-02-13 00:16:01,123 [INFO] scanner.market_fetcher_v2: Total markets fetched: 598
+2026-02-13 00:16:01,123 [INFO] __main__: Fetched 598 markets (mode=PAPER, limit=500)
+2026-02-13 00:16:01,125 [INFO] __main__: Fetched 598 markets
+2026-02-13 00:16:01,125 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:16:01,125 [INFO] __main__: Prefilter: 32/598 markets (excluded: close_window=24, negRisk=542)
+2026-02-13 00:16:01,125 [INFO] __main__: Subscribing to top 32 markets by liquidity
+2026-02-13 00:16:01,125 [WARNING] risk.market_state: Market 0xe9674aadfabfa7171bcee4e38b66f1a7d7e0af538d3718301e7b3cf111e9b5dd: No time_to_close → RESOLVED
+2026-02-13 00:16:01,125 [INFO] __main__: QS_SAMPLE cond=0xe9c127a8c3 yes_asset=802302360184 has_book=True book_age_s=607.5 bid=0.011 ask=0.016 spread=0.0050 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:16:01,126 [INFO] __main__: QS_SAMPLE cond=0xcab7ba4a91 yes_asset=963619257769 has_book=True book_age_s=612.1 bid=0.009 ask=0.012 spread=0.0030 tick=0.01 rrs=0.14 state=normal qs=0.000 veto=crossed
+2026-02-13 00:16:01,126 [INFO] __main__: QS_SAMPLE cond=0xae5584fbb5 yes_asset=289465958412 has_book=True book_age_s=612.1 bid=0.007 ask=0.009 spread=0.0020 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=crossed
+2026-02-13 00:16:01,126 [INFO] __main__: QS_SAMPLE cond=0x3061dcc859 yes_asset=705842221056 has_book=True book_age_s=612.1 bid=0.040 ask=0.043 spread=0.0030 tick=0.01 rrs=0.22 state=normal qs=0.000 veto=crossed
+2026-02-13 00:16:01,126 [INFO] __main__: QS_SAMPLE cond=0xb48621f7eb yes_asset=754671296159 has_book=True book_age_s=627.9 bid=0.130 ask=0.150 spread=0.0200 tick=0.01 rrs=0.30 state=normal qs=0.000 veto=stale
+2026-02-13 00:16:01,126 [WARNING] strategy.resolution_risk_scorer: High RRS=0.380 for 0xaeea5f917fc5746387b5f9c0a4263dba035dbb3f0ac6ad72bf92183d21e26739: Russia x Ukraine ceasefire by end of 2026?
+2026-02-13 00:16:01,126 [INFO] __main__: Filter summary: total=598 no_book=566 negRisk=0 qs_zero=32 qs_nonzero=0
+2026-02-13 00:16:01,126 [INFO] __main__: QS veto summary: ok=0 no_book=0 stale=20 crossed=11 depth=0 rrs=1 state=0 liquidity=0 stale_threshold_s=120
+2026-02-13 00:16:01,126 [INFO] __main__: Top 10 QS: 0xe9c127=0.000, 0xcab7ba=0.000, 0xae5584=0.000, 0x3061dc=0.000, 0xb48621=0.000, 0x53700c=0.000, 0x9c1a95=0.000, 0x1fad72=0.000, 0x50ddb9=0.000, 0x32b09f=0.000
+2026-02-13 00:16:01,126 [INFO] __main__: FEED_HEALTH ws_msgs=2872 book_msgs=64 unique_assets_with_book=64 parse_err=0 max_age_s=1059.8 msg_types={'array_of_books': 1, 'price_change': 2667, 'book': 96, 'last_trade_price': 48}
+2026-02-13 00:16:01,126 [INFO] risk.portfolio_engine: Market 0xdee5db5410b362783a1405b66b9aa08a7d050ae1f99e8da85b9d1ae7962dad3b: negRisk event → cluster negRisk_event_24383
+2026-02-13 00:16:01,126 [INFO] strategy.quoteability_scorer: Active set selected: 0 markets across 0 clusters
+2026-02-13 00:16:01,126 [INFO] __main__: Active set: 0 markets
+2026-02-13 00:16:01,126 [INFO] __main__: Generated 0 maker orders
+2026-02-13 00:16:01,127 [INFO] __main__: Parity scan: 0 opportunities
+2026-02-13 00:16:01,127 [INFO] __main__: Satellite scan: 0 opportunities
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (607507ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (612085ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (612085ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (612084ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (627854ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (612084ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (719024ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (602881ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (614665ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (618459ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (606395ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (643961ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (602418ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (706558ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (625430ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (1059844ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (650912ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (765891ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (950078ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (639235ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (640105ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (646821ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (620645ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (599916ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (844288ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (688159ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (604515ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (620724ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (605724ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (599951ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (619802ms) and no last_mid available. Refusing to compute mid.
+2026-02-13 00:16:01,127 [ERROR] execution.mid: Book stale (609206ms) and no last_mid available. Refusing to compute mid.

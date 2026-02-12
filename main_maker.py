@@ -103,6 +103,10 @@ class MarketMakerRuntime:
         self.unsafe_mode = False  # Circuit breaker flag
         self.current_date = datetime.now().strftime("%Y-%m-%d")
 
+        # Reseed tracking
+        self.zero_active_cycles = 0  # Consecutive cycles with Active set = 0
+        self.last_reseed_time = 0  # Unix timestamp of last reseed
+
         # Astra V2 integration
         self.astra_predictions = {}
 
@@ -364,6 +368,30 @@ class MarketMakerRuntime:
 
                 logger.info(f"Active set: {len(self.active_set)} markets")
 
+                # Track zero-active cycles for reseed triggering
+                if len(self.active_set) == 0:
+                    self.zero_active_cycles += 1
+                else:
+                    self.zero_active_cycles = 0  # Reset on non-zero active set
+
+                # Reseed check: trigger if persistently zero active
+                from config import RESEED_TRIGGER_ZERO_ACTIVE_CYCLES, RESEED_MIN_INTERVAL_SECONDS
+                now = time.time()
+                time_since_last_reseed = now - self.last_reseed_time
+
+                if (self.zero_active_cycles >= RESEED_TRIGGER_ZERO_ACTIVE_CYCLES and
+                    time_since_last_reseed >= RESEED_MIN_INTERVAL_SECONDS):
+                    logger.warning(
+                        f"RESEED TRIGGER: {self.zero_active_cycles} consecutive zero-active cycles. "
+                        f"Reseeding universe..."
+                    )
+                    await self._reseed_universe()
+                    self.zero_active_cycles = 0
+                    self.last_reseed_time = now
+                    # Skip rest of this cycle to allow new subscriptions to warm up
+                    await asyncio.sleep(10)
+                    continue
+
                 # 6. Generate maker quotes
                 maker_intents = []
                 for market in self.active_set:
@@ -528,11 +556,22 @@ class MarketMakerRuntime:
             f"negRisk={filter_stats['excluded_negRisk']})"
         )
 
-        # Rank by liquidity and limit to MAX_SUBSCRIBE_MARKETS
-        filtered_markets.sort(key=lambda m: m.liquidity, reverse=True)
+        # Rank by activity score and limit to MAX_SUBSCRIBE_MARKETS
+        from scanner.market_fetcher_v2 import compute_activity_score
+
+        for market in filtered_markets:
+            market.activity_score = compute_activity_score(market)
+
+        filtered_markets.sort(key=lambda m: m.activity_score, reverse=True)
         subscribe_markets = filtered_markets[:MAX_SUBSCRIBE_MARKETS]
 
-        logger.info(f"Subscribing to top {len(subscribe_markets)} markets by liquidity")
+        # Log top 5 activity scores for observability
+        if subscribe_markets:
+            top_5_scores = [(m.condition_id[:12], m.activity_score, m.volume_24h, m.liquidity)
+                            for m in subscribe_markets[:5]]
+            logger.info(f"Top 5 activity scores: {top_5_scores}")
+
+        logger.info(f"Subscribing to top {len(subscribe_markets)} markets by activity score")
 
         # Build asset ID list
         asset_ids = []
@@ -548,6 +587,60 @@ class MarketMakerRuntime:
                 batch = new_assets[i:i+batch_size]
                 await self.market_feed.subscribe(batch)
                 await asyncio.sleep(0.1)  # Small delay between batches
+
+    async def _reseed_universe(self):
+        """
+        Reseed market universe when Active set goes persistently zero.
+
+        Triggered when:
+        - Active set = 0 for RESEED_TRIGGER_ZERO_ACTIVE_CYCLES consecutive cycles
+        - Min RESEED_MIN_INTERVAL_SECONDS has passed since last reseed
+
+        Actions:
+        1. Unsubscribe from all current assets
+        2. Fetch fresh market data
+        3. Refilter and resubscribe to new active universe
+        4. Warmup to collect fresh books
+        """
+        logger.info("=== RESEED UNIVERSE ===")
+
+        # 1. Unsubscribe from current assets
+        if self.market_feed.subscribed_assets:
+            current_assets = list(self.market_feed.subscribed_assets)
+            logger.info(f"Unsubscribing from {len(current_assets)} stale assets...")
+            await self.market_feed.unsubscribe(current_assets)
+
+        # 2. Fetch fresh markets
+        markets = await self._fetch_markets()
+        logger.info(f"Reseed: fetched {len(markets)} fresh markets")
+
+        # 3. Resubscribe to new active universe
+        await self._subscribe_books(markets)
+
+        # 4. Warmup to collect fresh books
+        from config import WS_WARMUP_TIMEOUT_S, WS_WARMUP_MIN_BOOKS
+
+        logger.info(f"Reseed warmup: waiting up to {WS_WARMUP_TIMEOUT_S}s for {WS_WARMUP_MIN_BOOKS} books...")
+
+        warmup_start = time.time()
+        warmup_elapsed = 0.0
+
+        while warmup_elapsed < WS_WARMUP_TIMEOUT_S:
+            feed_health = self.market_feed.get_feed_health()
+            books_received = feed_health['unique_assets_with_book']
+
+            if books_received >= WS_WARMUP_MIN_BOOKS:
+                logger.info(f"Reseed warmup complete: {books_received} books in {warmup_elapsed:.1f}s")
+                break
+
+            await asyncio.sleep(0.5)
+            warmup_elapsed = time.time() - warmup_start
+
+        feed_health = self.market_feed.get_feed_health()
+        logger.info(
+            f"Reseed complete: books_received={feed_health['unique_assets_with_book']} "
+            f"warmup_s={warmup_elapsed:.1f}"
+        )
 
     async def _simulate_paper_fills(self, markets: List[Market]):
         """
