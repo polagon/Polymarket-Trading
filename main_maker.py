@@ -106,6 +106,8 @@ class MarketMakerRuntime:
         # Reseed tracking
         self.zero_active_cycles = 0  # Consecutive cycles with Active set = 0
         self.last_reseed_time = 0  # Unix timestamp of last reseed
+        self.skip_fetch_cycles = 0  # Skip fetch for N cycles (after reseed)
+        self.cached_markets: List[Market] = []  # Cached markets from reseed
 
         # Astra V2 integration
         self.astra_predictions = {}
@@ -195,9 +197,14 @@ class MarketMakerRuntime:
                     await asyncio.sleep(5)
                     continue
 
-                # 1. Fetch markets
-                markets = await self._fetch_markets()
-                logger.info(f"Fetched {len(markets)} markets")
+                # 1. Fetch markets (or use cached from reseed)
+                if self.skip_fetch_cycles > 0:
+                    logger.info(f"SKIP_FETCH_AFTER_RESEED: using cached {len(self.cached_markets)} markets")
+                    markets = self.cached_markets
+                    self.skip_fetch_cycles -= 1
+                else:
+                    markets = await self._fetch_markets()
+                    logger.info(f"Fetched {len(markets)} markets")
 
                 # 1b. Refresh event metadata (GAP #7 integration)
                 if cycle_count % 60 == 0:  # Every 60 cycles (~1 hour with 1min cycles)
@@ -613,6 +620,11 @@ class MarketMakerRuntime:
         # 2. Fetch fresh markets
         markets = await self._fetch_markets()
         logger.info(f"Reseed: fetched {len(markets)} fresh markets")
+
+        # Cache markets and skip fetch for next cycle
+        self.cached_markets = markets
+        self.skip_fetch_cycles = 1
+        logger.info("Reseed: cached markets for next cycle (skip_fetch_cycles=1)")
 
         # 3. Resubscribe to new active universe
         await self._subscribe_books(markets)
