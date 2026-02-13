@@ -12,6 +12,49 @@
 
 ---
 
+## Burn-In Success Criteria
+
+**IMPORTANT**: Active set can be 0 for extended periods. This is **EXPECTED** and **CORRECT** behavior.
+
+### Success Criteria ✅
+
+Burn-in validation should verify:
+
+- ✅ **System stability**: No crashes, clean recovery from WS connection death
+- ✅ **Correct veto behavior**: QS properly rejects stale/crossed/state/RRS markets
+- ✅ **WS self-healing**: System reconnects automatically after connection failures (with backoff + jitter)
+- ✅ **Reseed completes**: Unsubscribe (best-effort) → ensure connected → fetch → resubscribe → warmup
+- ✅ **Circuit breakers work**: Reseed failures trigger degraded mode, preventing infinite loops
+- ✅ **Log volume bounded**: No ConnectionClosedError spam, clear recovery signals
+- ✅ **Deterministic behavior**: Skip-fetch works after successful reseed
+
+### NOT Success Criteria ❌
+
+Burn-in should **NOT** expect:
+
+- ❌ **Constant quoting**: WS only sends updates when markets have trading activity
+- ❌ **High Active set 24/7**: Most markets are inactive at night/weekends/off-hours
+- ❌ **Always-on book updates**: Polymarket WS is quiet during inactive periods
+
+### Key Insight: WS Quiet ≠ WS Dead
+
+**Polymarket WebSocket behavior**:
+- Sends initial book snapshots on subscription
+- Sends **incremental updates ONLY when markets have trading activity**
+- Can be silent for hours during inactive periods (nights, weekends)
+
+**System response**:
+- Inactive markets → no WS updates → books stale out → QS correctly vetoes quoting
+- This is **proper risk management**, not a bug
+
+**Reconnection logic**:
+- **WS quiet** (no messages, but connection alive): Do NOT reconnect. Ping succeeds.
+- **WS dead** (socket closed, recv exception, ping timeout): Reconnect with backoff.
+
+We only reconnect on **confirmed failure**, not on inactivity.
+
+---
+
 ## Changes Summary
 
 ### A) Mode-Aware Staleness Threshold

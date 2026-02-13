@@ -105,9 +105,13 @@ class MarketMakerRuntime:
 
         # Reseed tracking
         self.zero_active_cycles = 0  # Consecutive cycles with Active set = 0
-        self.last_reseed_time = 0  # Unix timestamp of last reseed
+        self.last_reseed_time = time.time()  # FIX: Initialize to NOW, not 0 (enforces rate limit from startup)
         self.skip_fetch_cycles = 0  # Skip fetch for N cycles (after reseed)
         self.cached_markets: List[Market] = []  # Cached markets from reseed
+
+        # Reseed circuit breaker
+        self.reseed_consecutive_failures = 0  # Track consecutive reseed failures
+        self.reseed_degraded_until = 0.0  # Unix timestamp when reseed unpaused
 
         # Astra V2 integration
         self.astra_predictions = {}
@@ -191,10 +195,26 @@ class MarketMakerRuntime:
             logger.info(f"--- Cycle {cycle_count} ---")
 
             try:
+                # Ensure WS connection alive at start of each cycle
+                await self.market_feed.ensure_connected()
+
+                # Check WS degraded mode
+                if self.market_feed.degraded_mode:
+                    logger.warning("WS in degraded mode, skipping cycle operations")
+                    await asyncio.sleep(60)
+                    continue
+
                 # Check unsafe mode (staleness detected)
                 if self.unsafe_mode:
                     logger.warning("UNSAFE MODE: Skipping quoting cycle")
                     await asyncio.sleep(5)
+                    continue
+
+                # Check reseed degraded mode
+                if self.reseed_degraded_until > time.time():
+                    logger.debug(f"RESEED circuit breaker active until {self.reseed_degraded_until:.0f}")
+                    # Still allow WS reconnection, just skip reseeding
+                    await asyncio.sleep(60)
                     continue
 
                 # 1. Fetch markets (or use cached from reseed)
@@ -392,12 +412,30 @@ class MarketMakerRuntime:
                         f"RESEED TRIGGER: {self.zero_active_cycles} consecutive zero-active cycles. "
                         f"Reseeding universe..."
                     )
-                    await self._reseed_universe()
-                    self.zero_active_cycles = 0
-                    self.last_reseed_time = now
-                    # Skip rest of this cycle to allow new subscriptions to warm up
-                    await asyncio.sleep(10)
-                    continue
+
+                    # Wrap reseed in try/except with circuit breaker
+                    try:
+                        await self._reseed_universe()
+                        self.zero_active_cycles = 0
+                        self.last_reseed_time = now
+                        self.reseed_consecutive_failures = 0  # Reset on success
+                        # Skip rest of this cycle to allow new subscriptions to warm up
+                        await asyncio.sleep(10)
+                        continue
+                    except Exception as e:
+                        self.reseed_consecutive_failures += 1
+                        logger.error(
+                            f"RESEED failed ({self.reseed_consecutive_failures} consecutive): {e}",
+                            exc_info=True
+                        )
+
+                        if self.reseed_consecutive_failures >= 5:
+                            # Enter degraded mode: pause reseeding for 10 minutes
+                            self.reseed_degraded_until = time.time() + 600
+                            logger.error(
+                                f"RESEED circuit breaker triggered after 5 failures. "
+                                f"Pausing reseeds until {self.reseed_degraded_until:.0f} (10 minutes)"
+                            )
 
                 # 6. Generate maker quotes
                 maker_intents = []
@@ -604,20 +642,34 @@ class MarketMakerRuntime:
         - Min RESEED_MIN_INTERVAL_SECONDS has passed since last reseed
 
         Actions:
-        1. Unsubscribe from all current assets
-        2. Fetch fresh market data
-        3. Refilter and resubscribe to new active universe
-        4. Warmup to collect fresh books
+        1. Unsubscribe from all current assets (best effort, skip if WS dead)
+        2. Ensure WS connection alive
+        3. Fetch fresh market data
+        4. Refilter and resubscribe to new active universe
+        5. Warmup to collect fresh books
         """
         logger.info("=== RESEED UNIVERSE ===")
 
-        # 1. Unsubscribe from current assets
-        if self.market_feed.subscribed_assets:
+        # 1. Unsubscribe from current assets (BEST EFFORT)
+        if self.market_feed.is_connected():
             current_assets = list(self.market_feed.subscribed_assets)
-            logger.info(f"Unsubscribing from {len(current_assets)} stale assets...")
-            await self.market_feed.unsubscribe(current_assets)
+            if current_assets:
+                logger.info(f"Unsubscribing from {len(current_assets)} stale assets...")
+                try:
+                    await self.market_feed.unsubscribe(current_assets)
+                except Exception as e:
+                    logger.warning(f"Unsubscribe failed (non-fatal): {e}")
+        else:
+            logger.warning("WS disconnected, skipping unsubscribe (will reconnect fresh)")
 
-        # 2. Fetch fresh markets
+        # Clear local tracking (in case unsubscribe skipped)
+        self.market_feed.subscribed_assets.clear()
+        self.market_feed.active_asset_ids.clear()
+
+        # 2. Ensure WS connection alive before proceeding
+        await self.market_feed.ensure_connected()
+
+        # 3. Fetch fresh markets
         markets = await self._fetch_markets()
         logger.info(f"Reseed: fetched {len(markets)} fresh markets")
 
@@ -626,10 +678,10 @@ class MarketMakerRuntime:
         self.skip_fetch_cycles = 1
         logger.info("Reseed: cached markets for next cycle (skip_fetch_cycles=1)")
 
-        # 3. Resubscribe to new active universe
+        # 4. Resubscribe to new active universe
         await self._subscribe_books(markets)
 
-        # 4. Warmup to collect fresh books
+        # 5. Warmup to collect fresh books
         from config import WS_WARMUP_TIMEOUT_S, WS_WARMUP_MIN_BOOKS
 
         logger.info(f"Reseed warmup: waiting up to {WS_WARMUP_TIMEOUT_S}s for {WS_WARMUP_MIN_BOOKS} books...")

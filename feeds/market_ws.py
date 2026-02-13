@@ -42,6 +42,7 @@ class MarketWebSocketFeed:
 
         # Order books indexed by token_id
         self.books: Dict[str, OrderBook] = {}
+        self.last_book_ts: Dict[str, float] = {}  # Per-asset last book timestamp
 
         # Churn tracking (updates per second, rolling window)
         self.update_counts: Dict[str, deque] = defaultdict(lambda: deque(maxlen=60))  # 60s window
@@ -51,9 +52,19 @@ class MarketWebSocketFeed:
         self.ws = None
         self.running = False
         self.last_message_time = 0
+        self.last_msg_ts = 0.0  # Last message timestamp (any message)
 
-        # Subscribed assets
-        self.subscribed_assets: set[str] = set()
+        # Subscription state tracking (desired vs active)
+        self.desired_asset_ids: set[str] = set()  # Canonical truth: what we WANT subscribed
+        self.active_asset_ids: set[str] = set()   # Last-known subscribed assets
+        self.subscribed_assets: set[str] = set()  # Backward compat (alias for active_asset_ids)
+
+        # Reconnection state
+        self.reconnect_lock = asyncio.Lock()  # Single-flight reconnection
+        self.reconnect_backoff = 1.0  # Current backoff delay (exponential)
+        self.reconnect_failures = 0  # Consecutive failure count
+        self.degraded_mode = False  # Stop trying after N failures
+        self.degraded_until_ts = 0.0  # Unix timestamp when degraded mode ends
 
         # Feed health metrics (NEW)
         self.ws_messages_total = 0
@@ -67,15 +78,105 @@ class MarketWebSocketFeed:
         self.unique_asset_ids_with_book: set[str] = set()
         self.first_book_batch_logged = False
 
+    def is_connected(self) -> bool:
+        """
+        Check if WS connection is alive (pure read, no side effects).
+
+        Returns:
+            True if connection exists and not closed
+        """
+        return self.ws is not None and not self.ws.closed
+
+    async def ensure_connected(self):
+        """
+        Ensure connection is alive, reconnect if needed (thread-safe).
+
+        This is the public API for callers to ensure connectivity.
+        Uses single-flight lock to prevent concurrent reconnection attempts.
+        """
+        if self.is_connected():
+            return  # Already connected
+
+        # Check degraded mode
+        if self.degraded_mode and time.time() < self.degraded_until_ts:
+            logger.debug(f"In degraded mode until {self.degraded_until_ts:.0f}")
+            return
+
+        async with self.reconnect_lock:  # Single-flight: only one reconnect at a time
+            # Double-check after acquiring lock
+            if self.is_connected():
+                return  # Another task already reconnected
+
+            await self._reconnect_with_backoff()
+
+    async def _reconnect_with_backoff(self):
+        """
+        Reconnect with exponential backoff + jitter (internal, owns backoff logic).
+
+        CRITICAL: Does NOT blindly resubscribe. Send loop will reconcile desired vs active.
+        """
+        import random
+
+        max_backoff = 30.0
+        max_failures = 10
+
+        # Check degraded mode threshold
+        if self.reconnect_failures >= max_failures:
+            self.degraded_mode = True
+            self.degraded_until_ts = time.time() + 600  # 10 minutes
+            logger.error(
+                f"ENTER_DEGRADED_MODE: {self.reconnect_failures} failures, "
+                f"pausing reconnects until {self.degraded_until_ts:.0f}"
+            )
+            return
+
+        # Exponential backoff with jitter
+        jitter = random.uniform(0.8, 1.2)
+        delay = min(self.reconnect_backoff * jitter, max_backoff)
+
+        logger.warning(
+            f"RECONNECT attempt {self.reconnect_failures + 1}/{max_failures} "
+            f"(backoff={delay:.1f}s)"
+        )
+        await asyncio.sleep(delay)
+
+        try:
+            # Close dead connection if needed
+            if self.ws and not self.ws.closed:
+                await self.ws.close()
+
+            # Reconnect
+            await self.connect()
+
+            # Success: reset backoff
+            self.reconnect_backoff = 1.0
+            self.reconnect_failures = 0
+            self.degraded_mode = False
+            self.degraded_until_ts = 0.0
+            logger.info("RECONNECT successful")
+
+        except Exception as e:
+            self.reconnect_failures += 1
+            self.reconnect_backoff *= 2.0  # Exponential backoff
+            logger.error(f"RECONNECT failed: {e}")
+            raise
+
     async def connect(self):
         """Connect to WebSocket."""
         try:
             self.ws = await websockets.connect(self.ws_url)
             self.running = True
+            self.last_msg_ts = time.time()  # Reset message timestamp
             logger.info(f"Connected to market WebSocket: {self.ws_url}")
 
             # Start PING keepalive loop
             asyncio.create_task(self._keepalive_loop())
+
+            # Start send loop for subscription reconciliation
+            asyncio.create_task(self._send_loop())
+
+            # Start ping watchdog
+            asyncio.create_task(self._ping_watchdog())
         except Exception as e:
             logger.error(f"Failed to connect to market WebSocket: {e}")
             raise
@@ -92,24 +193,16 @@ class MarketWebSocketFeed:
                 logger.error(f"Keepalive error: {e}")
                 break
 
-    async def subscribe(self, asset_ids: list[str]):
+    async def _send_subscribe(self, asset_ids: list[str]):
         """
-        Subscribe to L2 order book updates for assets.
-
-        Per Polymarket docs: send one subscription message per asset
-        {"auth": {}, "type": "subscribe", "channel": "market", "asset_id": "..."}
+        Internal: Send subscription message (assumes connected).
 
         Args:
-            asset_ids: List of asset IDs (token_ids) to subscribe to
+            asset_ids: List of asset IDs to subscribe to
         """
-        if not self.ws:
-            raise RuntimeError("WebSocket not connected. Call connect() first.")
-
-        if not asset_ids:
+        if not self.ws or not asset_ids:
             return
 
-        # Try batch subscription per Polymarket docs
-        # Format: {"assets_ids": [...], "type": "market"}
         subscribe_msg = {
             "assets_ids": asset_ids,
             "type": "market"
@@ -128,20 +221,21 @@ class MarketWebSocketFeed:
         await self.ws.send(payload_json)
         self.subscriptions_outbound_total += 1
 
-        for asset_id in asset_ids:
-            self.subscribed_assets.add(asset_id)
+        # Update active state only after successful send
+        self.active_asset_ids.update(asset_ids)
+        self.subscribed_assets = self.active_asset_ids  # Backward compat
 
         logger.info(
             f"Subscription batch {self.subscriptions_outbound_total} sent: "
-            f"{len(asset_ids)} assets (total subscribed: {len(self.subscribed_assets)})"
+            f"{len(asset_ids)} assets (total active: {len(self.active_asset_ids)})"
         )
 
-    async def unsubscribe(self, asset_ids: list[str]):
+    async def _send_unsubscribe(self, asset_ids: list[str]):
         """
-        Unsubscribe from assets.
+        Internal: Send unsubscription message (assumes connected).
 
-        Uses official Polymarket format:
-        {"assets_ids": [...], "operation": "unsubscribe"}
+        Args:
+            asset_ids: List of asset IDs to unsubscribe from
         """
         if not self.ws or not asset_ids:
             return
@@ -154,11 +248,136 @@ class MarketWebSocketFeed:
         await self.ws.send(json.dumps(unsubscribe_msg))
         self.subscriptions_outbound_total += 1
 
+        # Update active state only after successful send
         for asset_id in asset_ids:
-            if asset_id in self.subscribed_assets:
-                self.subscribed_assets.remove(asset_id)
+            self.active_asset_ids.discard(asset_id)
 
-        logger.info(f"Unsubscribed from {len(asset_ids)} assets")
+        self.subscribed_assets = self.active_asset_ids  # Backward compat
+
+        logger.info(f"Unsubscribed from {len(asset_ids)} assets (total active: {len(self.active_asset_ids)})")
+
+    async def _send_loop(self):
+        """
+        Background task: Reconcile desired vs active subscriptions.
+
+        Computes deltas and sends subscribe/unsubscribe in bounded batches.
+        Runs periodically to ensure eventual consistency.
+        """
+        while self.running:
+            try:
+                await asyncio.sleep(15)  # Check every 15s
+
+                if not self.is_connected():
+                    continue  # Skip if disconnected
+
+                # Compute deltas
+                to_subscribe = self.desired_asset_ids - self.active_asset_ids
+                to_unsubscribe = self.active_asset_ids - self.desired_asset_ids
+
+                # Send in bounded batches (max 50 per message)
+                batch_size = 50
+
+                # Subscribe to new assets
+                if to_subscribe:
+                    logger.debug(f"Send loop: subscribing to {len(to_subscribe)} new assets")
+                    batches = [list(to_subscribe)[i:i+batch_size] for i in range(0, len(to_subscribe), batch_size)]
+                    for batch in batches:
+                        await self._send_subscribe(batch)
+                        await asyncio.sleep(0.1)  # Small delay between batches
+
+                # Unsubscribe from removed assets
+                if to_unsubscribe:
+                    logger.debug(f"Send loop: unsubscribing from {len(to_unsubscribe)} removed assets")
+                    batches = [list(to_unsubscribe)[i:i+batch_size] for i in range(0, len(to_unsubscribe), batch_size)]
+                    for batch in batches:
+                        await self._send_unsubscribe(batch)
+                        await asyncio.sleep(0.1)
+
+            except Exception as e:
+                logger.error(f"Send loop error: {e}")
+                await asyncio.sleep(5)
+
+    async def _ping_watchdog(self):
+        """
+        Background task: Monitor connection health via ping/pong.
+
+        Distinguishes WS quiet (no updates, but alive) vs WS dead (ping fails).
+        Only reconnects on confirmed failure.
+        """
+        while self.running:
+            try:
+                await asyncio.sleep(60)  # Check every 60s
+
+                if not self.is_connected():
+                    logger.warning("Ping watchdog: socket closed, reconnecting...")
+                    await self.ensure_connected()
+                    continue
+
+                # Check message timestamp (be generous for inactive markets)
+                time_since_msg = time.time() - self.last_msg_ts
+                if time_since_msg > 300:  # 5 minutes of silence
+                    # Try ping to verify connection
+                    try:
+                        pong_waiter = await self.ws.ping()
+                        await asyncio.wait_for(pong_waiter, timeout=10.0)
+                        logger.debug(f"Ping successful (quiet for {time_since_msg:.0f}s)")
+                    except Exception as e:
+                        logger.error(f"Ping failed after {time_since_msg:.0f}s silence: {e}")
+                        await self.ensure_connected()
+
+            except Exception as e:
+                logger.error(f"Ping watchdog error: {e}")
+                await asyncio.sleep(30)
+
+    async def subscribe(self, asset_ids: list[str]):
+        """
+        Subscribe to L2 order book updates for assets (updates desired state).
+
+        CRITICAL: Does NOT send immediately if disconnected. Send loop will reconcile.
+
+        Args:
+            asset_ids: List of asset IDs (token_ids) to subscribe to
+        """
+        if not asset_ids:
+            return
+
+        # Add to desired state (canonical truth)
+        self.desired_asset_ids.update(asset_ids)
+        self.subscribed_assets = self.active_asset_ids  # Backward compat
+
+        # Only send subscribe if connected
+        if not self.is_connected():
+            logger.warning(f"Cannot subscribe (disconnected), will replay on reconnect")
+            return
+
+        # Send subscription (send loop will handle reconciliation)
+        await self._send_subscribe(asset_ids)
+
+    async def unsubscribe(self, asset_ids: list[str]):
+        """
+        Unsubscribe from assets (updates desired state).
+
+        CRITICAL: Does NOT send if disconnected. Just updates desired state.
+
+        Args:
+            asset_ids: List of asset IDs to unsubscribe from
+        """
+        if not asset_ids:
+            return
+
+        # Remove from desired state
+        for asset_id in asset_ids:
+            self.desired_asset_ids.discard(asset_id)
+
+        self.subscribed_assets = self.active_asset_ids  # Backward compat
+
+        # Only send unsubscribe if connected
+        if not self.is_connected():
+            logger.warning(f"Cannot unsubscribe (disconnected), skipping")
+            return
+
+        # Send unsubscription
+        await self._send_unsubscribe(asset_ids)
 
     async def listen(self):
         """
@@ -174,6 +393,7 @@ class MarketWebSocketFeed:
         try:
             async for message in self.ws:
                 self.last_message_time = int(time.time() * 1000)  # milliseconds
+                self.last_msg_ts = time.time()  # Update watchdog timestamp
                 self.ws_messages_total += 1
 
                 # Handle non-JSON messages (PONG, INVALID OPERATION, etc.)
@@ -339,6 +559,7 @@ class MarketWebSocketFeed:
         )
 
         self.books[asset_id] = book
+        self.last_book_ts[asset_id] = time.time()  # Track per-asset book timestamp
 
         bid_str = f"{best_bid:.4f}" if best_bid else "0.0000"
         ask_str = f"{best_ask:.4f}" if best_ask else "1.0000"
