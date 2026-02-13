@@ -31,6 +31,8 @@ import report
 async def run_scan(learning_agent: LearningAgent, scan_number: int):
     """Run a single scan cycle."""
     # KILL SWITCH: Check for emergency halt file
+    # DESIGN PRINCIPLE: Self-only shutdown. Never use pkill/killall/os.kill.
+    # This process can only stop itself via sys.exit(), never hunt other processes.
     KILL_SWITCH_PATH = Path("/tmp/astra_kill")
     if KILL_SWITCH_PATH.exists():
         report.console.print("[red bold]🛑 KILL SWITCH ACTIVATED[/red bold]")
