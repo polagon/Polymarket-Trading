@@ -380,6 +380,7 @@ async def run_paper_scan(
     cluster_engine: SemanticClusterEngine,
     scan_number: int,
     allow_new_positions: bool = True,
+    crypto_strategy: Optional["CryptoThresholdStrategy"] = None,
 ):
     global _last_successful_fetch
     t_start = time.time()
@@ -519,6 +520,22 @@ async def run_paper_scan(
 
     # Find opportunities (Astra V2 core) — pass whale signals for score boosting
     opportunities = find_opportunities(markets, estimates, whale_signals=whale_signals if whale_signals else [])  # type: ignore[arg-type]
+
+    # ── Loop 4: Evaluate crypto markets through gate chain ──────────────────
+    if crypto_strategy:
+        from scanner.strategies.base import StrategyContext
+
+        crypto_strategy.cycle_id = scan_number
+        ctx = StrategyContext(price_data=price_data)
+        l4_evaluated = 0
+        for m in crypto_markets:
+            try:
+                crypto_strategy.evaluate(m, ctx)
+                l4_evaluated += 1
+            except Exception as e:
+                logger.warning("L4 strategy eval failed for %s: %s", m.condition_id[:16], e)
+        if l4_evaluated > 0:
+            report.console.print(f"[dim]Loop 4: {l4_evaluated} crypto markets evaluated through gate chain[/dim]")
 
     # Longshot bias screener (structural edge, no Astra call needed)
     longshot_signals = screen_longshot_markets(markets)
@@ -1015,6 +1032,7 @@ async def main():
                 cluster_engine,
                 cycle_id,
                 allow_new_positions=not in_monitor_only,
+                crypto_strategy=crypto_strategy,
             )
         except KeyboardInterrupt:
             shutdown_requested = True
