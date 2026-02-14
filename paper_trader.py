@@ -42,12 +42,22 @@ from config import (
     BURN_IN_MAX_FAILED_MONITORS,
     BURN_IN_MONITOR_CYCLES,
     CLAUDE_MODEL,
+    DEPTH_PROXY_FLOOR_USD,
     DISK_FAIL_MB,
     DISK_WARN_MB,
     ERRORS_FAIL,
     ERRORS_WARN,
+    EV_BASE_ADVERSE_BUFFER,
+    EV_BASE_SLIPPAGE,
+    EV_EPS,
+    EV_K_DEPTH,
+    EV_K_SPREAD,
+    EV_MAKER_THRESHOLD,
     FEED_FAIL_AGE_S,
     FEED_WARN_AGE_S,
+    FLOW_TOXICITY_MIN_SAMPLES,
+    FLOW_TOXICITY_THRESHOLD,
+    FLOW_TOXICITY_WINDOW,
     FRED_API_KEY,
     GATE_FEED_MAX_AGE_S,
     GATE_MAX_CUMULATIVE_DD_PCT,
@@ -60,7 +70,15 @@ from config import (
     MEMORY_FAIL_MB,
     MEMORY_WARN_MB,
     ODDS_API_KEY,
+    ORDER_DEFAULT_TTL_S,
+    ORDER_MAX_CHASE_TICKS,
+    ORDER_STALE_THRESHOLD_S,
+    ORDER_TICK_SIZE,
     PAPER_MODE,
+    RISK_CATEGORY_CAPS,
+    RISK_DAILY_LOSS_HALT_PCT,
+    RISK_DRAWDOWN_HALT_PCT,
+    RISK_HALT_COOLDOWN_S,
     SCAN_INTERVAL_SECONDS,
     compute_config_hash,
     get_canonical_config_dict,
@@ -72,6 +90,10 @@ from data_sources.signals import fetch_all_signals
 from data_sources.sports import get_sports_estimates
 from data_sources.weather import fetch_forecast, parse_weather_question
 from data_sources.whale_tracker import format_whale_context, track_volume_and_detect_whales
+
+# ── Loop 4: Allocator-grade modules ──────────────────────────────────────────
+from definitions.registry import DefinitionRegistry
+from execution.order_manager import OrderManager
 from metrics.drawdown import DrawdownTracker
 from metrics.performance import PerformanceEngine, trade_record_from_paper_position
 from ops.alerts import AlertManager
@@ -81,6 +103,7 @@ from ops.health import _get_disk_free_mb, _get_memory_mb, write_heartbeat
 from ops.logging_setup import setup_logging
 from ops.run_context import RunContext, set_cycle_context
 from ops.startup_checklist import all_passed, run_startup_checklist
+from risk.risk_engine import RiskEngine
 from scanner.kelly_sizer import size_position
 from scanner.learning_agent import LearningAgent, Prediction
 from scanner.longshot_screener import scan_for_arbitrage, screen_longshot_markets, summarize_longshot_stats
@@ -89,6 +112,9 @@ from scanner.mispricing_detector import find_opportunities
 from scanner.probability_estimator import PROMPT_BUNDLE_HASH, PROMPT_REGISTRY, estimate_markets
 from scanner.semantic_clusters import SemanticClusterEngine
 from scanner.trade_logger import CURRENT_SCHEMA_VERSION, backup_db, init_db
+from signals.flow_toxicity import FlowToxicityAnalyzer
+from strategies.crypto_threshold import CryptoThresholdStrategy
+from telemetry.trade_telemetry import TradeTelemetry
 
 POSITIONS_FILE = Path("memory/paper_positions.json")
 PNL_FILE = Path("memory/paper_pnl.json")
@@ -847,6 +873,53 @@ async def main():
     portfolio = PaperPortfolio()
     learning_agent_obj = LearningAgent()
     cluster_engine = SemanticClusterEngine()
+
+    # ── Loop 4: Allocator-grade components ─────────────────────────────────────
+    definition_registry = DefinitionRegistry()
+    toxicity_analyzer = FlowToxicityAnalyzer(
+        window_size=FLOW_TOXICITY_WINDOW,
+        threshold=FLOW_TOXICITY_THRESHOLD,
+        min_samples=FLOW_TOXICITY_MIN_SAMPLES,
+    )
+    risk_engine = RiskEngine(
+        daily_loss_halt_pct=RISK_DAILY_LOSS_HALT_PCT,
+        drawdown_halt_pct=RISK_DRAWDOWN_HALT_PCT,
+        category_caps=RISK_CATEGORY_CAPS,
+        cooldown_seconds=RISK_HALT_COOLDOWN_S,
+        initial_equity=BANKROLL,
+    )
+    trade_telemetry = TradeTelemetry(
+        artifacts_dir=Path("artifacts"),
+        run_id=run_ctx.run_id,
+    )
+    order_manager = OrderManager(
+        default_ttl=ORDER_DEFAULT_TTL_S,
+        stale_threshold=ORDER_STALE_THRESHOLD_S,
+        max_chase_ticks=ORDER_MAX_CHASE_TICKS,
+        tick_size=ORDER_TICK_SIZE,
+    )
+    crypto_strategy = CryptoThresholdStrategy(
+        registry=definition_registry,
+        ev_gate_config={
+            "fees_pct": 0.02,
+            "base_slip": EV_BASE_SLIPPAGE,
+            "k_spread": EV_K_SPREAD,
+            "k_depth": EV_K_DEPTH,
+            "base_buffer": EV_BASE_ADVERSE_BUFFER,
+            "maker_threshold": EV_MAKER_THRESHOLD,
+            "eps": EV_EPS,
+            "depth_floor_usd": DEPTH_PROXY_FLOOR_USD,
+        },
+        risk_engine=risk_engine,
+        toxicity_analyzer=toxicity_analyzer,
+        telemetry=trade_telemetry,
+    )
+    logger.info(
+        "Loop 4 components initialized: registry=%s, risk=%s, strategy=%s",
+        type(definition_registry).__name__,
+        type(risk_engine).__name__,
+        crypto_strategy.name,
+    )
 
     report.console.print()
     report.console.print("[bold cyan]Polymarket Paper Trader[/bold cyan]")
