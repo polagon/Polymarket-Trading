@@ -19,21 +19,22 @@ Polyseer Architecture (Priority 2 + 4 from research):
   - pNeutral (ignores market price) vs pAware (incorporates it) — gap = edge signal
   - Bayesian log-likelihood ratio aggregation across evidence items
 """
+
 import asyncio
 import json
 import logging
 import re
 from dataclasses import dataclass
 from typing import Optional
+
 import anthropic
 
 logger = logging.getLogger("astra.estimator")
 
-from config import ANTHROPIC_API_KEY, MAX_CLAUDE_CALLS_PER_SCAN, CLAUDE_MODEL, ACQUIESCENCE_CORRECTION, EXTREMIZE_K
+from config import ACQUIESCENCE_CORRECTION, ANTHROPIC_API_KEY, CLAUDE_MODEL, EXTREMIZE_K, MAX_CLAUDE_CALLS_PER_SCAN
 from data_sources import crypto as crypto_source
 from data_sources import weather as weather_source
 from scanner.market_fetcher import Market
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # EVIDENCE SOURCE WEIGHTING (Polyseer Priority 4)
@@ -43,21 +44,19 @@ from scanner.market_fetcher import Market
 # D = Unverified / social media / single-source claims
 # ─────────────────────────────────────────────────────────────────────────────
 EVIDENCE_TIER_WEIGHTS = {
-    "A": 2.0,   # NOAA, official government, exchange data, sports box scores
-    "B": 1.6,   # Reuters, AP, Bloomberg, ESPN, SEC filings
-    "C": 0.8,   # Substack, blogs, podcasts, Reddit aggregated signal
-    "D": 0.3,   # Tweets, social media, single-source unverified
+    "A": 2.0,  # NOAA, official government, exchange data, sports box scores
+    "B": 1.6,  # Reuters, AP, Bloomberg, ESPN, SEC filings
+    "C": 0.8,  # Substack, blogs, podcasts, Reddit aggregated signal
+    "D": 0.3,  # Tweets, social media, single-source unverified
 }
 
 EVIDENCE_TIER_EXAMPLES = {
     "A": "NOAA, FRED, exchange price feeds, official government statements, "
-         "direct measurement data, sports APIs (official box scores)",
-    "B": "Reuters, AP, Bloomberg, BBC, ESPN, peer-reviewed papers, SEC filings, "
-         "verified sports statistics services",
+    "direct measurement data, sports APIs (official box scores)",
+    "B": "Reuters, AP, Bloomberg, BBC, ESPN, peer-reviewed papers, SEC filings, verified sports statistics services",
     "C": "Substack, analyst blogs, podcasts, Reddit aggregated signals, "
-         "Metaculus forecasts, prediction market consensus",
-    "D": "Tweets, Discord messages, unverified social posts, single unnamed sources, "
-         "forum speculation",
+    "Metaculus forecasts, prediction market consensus",
+    "D": "Tweets, Discord messages, unverified social posts, single unnamed sources, forum speculation",
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -346,41 +345,78 @@ OUTPUT: Strict JSON array. One object per market:
 }"""
 
 
+# ─── Activity 3: Prompt Bundle Hash + Estimator Version ──────────────────────
+import hashlib as _hashlib
+
+ESTIMATOR_VERSION = "astra-v2-adversarial"
+
+
+def _prompt_sha256(text: str) -> str:
+    """Full SHA-256 hex digest of a prompt string."""
+    return _hashlib.sha256(text.encode()).hexdigest()
+
+
+ASTRA_V2_SYSTEM_HASH = _prompt_sha256(ASTRA_V2_SYSTEM)
+ASTRA_PRO_SYSTEM_HASH = _prompt_sha256(ASTRA_PRO_SYSTEM)
+ASTRA_CON_SYSTEM_HASH = _prompt_sha256(ASTRA_CON_SYSTEM)
+ASTRA_SYNTHESIZER_SYSTEM_HASH = _prompt_sha256(ASTRA_SYNTHESIZER_SYSTEM)
+
+# Bundle hash: sha256 of sorted concatenation of all 4 individual hashes
+_sorted_hashes = "".join(
+    sorted(
+        [
+            ASTRA_V2_SYSTEM_HASH,
+            ASTRA_PRO_SYSTEM_HASH,
+            ASTRA_CON_SYSTEM_HASH,
+            ASTRA_SYNTHESIZER_SYSTEM_HASH,
+        ]
+    )
+)
+PROMPT_BUNDLE_HASH = _hashlib.sha256(_sorted_hashes.encode()).hexdigest()
+
+PROMPT_REGISTRY = {
+    ASTRA_V2_SYSTEM_HASH: {"name": "ASTRA_V2_SYSTEM", "intent": "Main estimation system prompt"},
+    ASTRA_PRO_SYSTEM_HASH: {"name": "ASTRA_PRO_SYSTEM", "intent": "Pro-side adversarial analyst"},
+    ASTRA_CON_SYSTEM_HASH: {"name": "ASTRA_CON_SYSTEM", "intent": "Con-side adversarial analyst"},
+    ASTRA_SYNTHESIZER_SYSTEM_HASH: {"name": "ASTRA_SYNTHESIZER_SYSTEM", "intent": "Adversarial synthesizer"},
+}
+
+
 @dataclass
 class Estimate:
     market_condition_id: str
     question: str
     category: str
     # Core probability
-    probability: float           # p_hat
-    probability_low: float       # credible interval low
-    probability_high: float      # credible interval high
-    confidence: float            # 0-1
+    probability: float  # p_hat
+    probability_low: float  # credible interval low
+    probability_high: float  # credible interval high
+    confidence: float  # 0-1
     # Classification
-    market_type: str             # Politics | Sports | Weather | etc.
-    modeling_approach: str       # A | B | C | D
-    trap_flags: list             # list of trap flags fired
+    market_type: str  # Politics | Sports | Weather | etc.
+    modeling_approach: str  # A | B | C | D
+    trap_flags: list  # list of trap flags fired
     # Edge & EV
-    edge: float                  # p_hat - market_implied
-    ev_after_costs: float        # EV after fees/slippage
-    robustness_score: int        # 1-5
-    kelly_position_pct: float    # suggested position % of bankroll
+    edge: float  # p_hat - market_implied
+    ev_after_costs: float  # EV after fees/slippage
+    robustness_score: int  # 1-5
+    kelly_position_pct: float  # suggested position % of bankroll
     # Audit trail
-    source: str                  # "crypto_lognormal" | "noaa_forecast" | "astra_v2" | "astra_v2_adversarial"
-    truth_state: str             # Verified | Supported | Assumed | Speculative
-    reasoning: str               # 1-2 sentence thesis
-    key_evidence_needed: str     # what would improve this estimate
-    no_trade: bool               # True = Astra declines to trade
-    no_trade_reason: str         # explanation if no_trade
-    details: dict                # raw data
+    source: str  # "crypto_lognormal" | "noaa_forecast" | "astra_v2" | "astra_v2_adversarial"
+    truth_state: str  # Verified | Supported | Assumed | Speculative
+    reasoning: str  # 1-2 sentence thesis
+    key_evidence_needed: str  # what would improve this estimate
+    no_trade: bool  # True = Astra declines to trade
+    no_trade_reason: str  # explanation if no_trade
+    details: dict  # raw data
     # Adversarial mode fields (Polyseer Priority 2)
-    p_neutral: float = 0.0       # fundamental estimate ignoring market price
-    p_aware: float = 0.0         # Bayesian estimate incorporating market price
-    pro_summary: str = ""        # strongest YES case
-    con_summary: str = ""        # strongest NO case
-    dominant_evidence_tier: str = ""   # A/B/C/D
-    correlation_collapses: int = 0     # how many duplicate sources were collapsed
-    adversarial_mode: bool = False     # was adversarial pipeline used?
+    p_neutral: float = 0.0  # fundamental estimate ignoring market price
+    p_aware: float = 0.0  # Bayesian estimate incorporating market price
+    pro_summary: str = ""  # strongest YES case
+    con_summary: str = ""  # strongest NO case
+    dominant_evidence_tier: str = ""  # A/B/C/D
+    correlation_collapses: int = 0  # how many duplicate sources were collapsed
+    adversarial_mode: bool = False  # was adversarial pipeline used?
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -392,8 +428,8 @@ from pathlib import Path as _Path
 _ESTIMATE_CACHE: dict[str, tuple[float, float, "Estimate"]] = {}
 # {condition_id: (cached_price, cache_timestamp, estimate)}
 
-_ESTIMATE_CACHE_TTL = 1800      # 30 minutes — re-estimate even if price unchanged
-_ESTIMATE_PRICE_DRIFT = 0.03    # Re-estimate if price moves >3¢
+_ESTIMATE_CACHE_TTL = 1800  # 30 minutes — re-estimate even if price unchanged
+_ESTIMATE_PRICE_DRIFT = 0.03  # Re-estimate if price moves >3¢
 
 
 def _get_cached_estimate(condition_id: str, current_price: float) -> Optional["Estimate"]:
@@ -418,7 +454,7 @@ async def estimate_markets(
     price_data: dict,
     forecasts: dict,
     learning_context: str = "",
-    sports_estimates: dict = None,
+    sports_estimates: dict = None,  # type: ignore[assignment]
     macro_signals=None,
     learning_agent=None,
 ) -> list[Estimate]:
@@ -458,6 +494,7 @@ async def estimate_markets(
 
     if cache_hits > 0:
         import logging
+
         logging.getLogger(__name__).debug(f"Estimate cache: {cache_hits} hits, {len(astra_queue)} to estimate")
 
     if astra_queue and ANTHROPIC_API_KEY:
@@ -488,7 +525,7 @@ def _try_algorithmic(
     market: Market,
     price_data: dict,
     forecasts: dict,
-    sports_estimates: dict = None,
+    sports_estimates: dict = None,  # type: ignore[assignment]
 ) -> Optional[Estimate]:
     """Tier 1: fast algorithmic estimation for structured market types."""
     if sports_estimates is None:
@@ -580,6 +617,7 @@ def _try_algorithmic(
                 break
         if not forecast:
             from data_sources.weather import parse_weather_question
+
             parsed = parse_weather_question(market.question)
             if parsed and parsed.get("location"):
                 forecast = forecasts.get(parsed["location"])
@@ -656,11 +694,10 @@ def _extremize(p: float, mkt_price: float, k: float = 1.3) -> float:
     """
     if p <= 0 or p >= 1:
         return p
-    return p**k / (p**k + (1 - p)**k)
+    return p**k / (p**k + (1 - p) ** k)  # type: ignore[no-any-return]
 
 
-def _kelly_pct(p: float, mkt_price: float, conf: float, rob: int,
-               p_std: float = 0.0) -> float:
+def _kelly_pct(p: float, mkt_price: float, conf: float, rob: int, p_std: float = 0.0) -> float:
     """
     Astra V2 Kelly sizing with confidence-adjusted uncertainty correction.
 
@@ -677,7 +714,9 @@ def _kelly_pct(p: float, mkt_price: float, conf: float, rob: int,
     # p_std defaults to 0 when confidence is high (no adjustment)
     conf_penalty = max(0.0, (1 - conf) * 0.5)  # scale uncertainty by (1 - confidence)
     p_conservative = p - conf_penalty * (abs(p - mkt_price) * 0.5)
-    p_conservative = max(mkt_price, min(1.0, p_conservative)) if p > mkt_price else min(mkt_price, max(0.0, p_conservative))
+    p_conservative = (
+        max(mkt_price, min(1.0, p_conservative)) if p > mkt_price else min(mkt_price, max(0.0, p_conservative))
+    )
 
     odds = (1.0 - mkt_price) / mkt_price
     kelly_raw = p_conservative - (1 - p_conservative) / odds
@@ -710,14 +749,14 @@ async def _estimate_with_astra_v2(
             "All %d markets will be unestimated by AI. "
             "Only Tier 1 algorithmic estimates (crypto/weather/sports) will run. "
             "Set ANTHROPIC_API_KEY in .env to activate full adversarial estimation.",
-            len(markets_and_estimates)
+            len(markets_and_estimates),
         )
         return []
 
     all_results: list[Estimate] = []
     total_batches = (len(markets_and_estimates) + ASTRA_BATCH_SIZE - 1) // ASTRA_BATCH_SIZE
     for i in range(0, len(markets_and_estimates), ASTRA_BATCH_SIZE):
-        batch = markets_and_estimates[i:i + ASTRA_BATCH_SIZE]
+        batch = markets_and_estimates[i : i + ASTRA_BATCH_SIZE]
         # Run adversarial pipeline for this batch
         batch_results = await _astra_batch_adversarial(batch, learning_context, learning_agent, macro_signals)
         all_results.extend(batch_results)
@@ -728,12 +767,16 @@ async def _estimate_with_astra_v2(
             "⚠ ZERO AI ESTIMATES produced for %d markets across %d batches. "
             "Check API key validity, credits, and network. "
             "Astra is running at Tier 1 capacity only.",
-            len(markets_and_estimates), total_batches
+            len(markets_and_estimates),
+            total_batches,
         )
     else:
         logger.info(
             "AI estimates: %d produced for %d markets (%d batches, model=%s)",
-            len(all_results), len(markets_and_estimates), total_batches, CLAUDE_MODEL
+            len(all_results),
+            len(markets_and_estimates),
+            total_batches,
+            CLAUDE_MODEL,
         )
 
     return all_results
@@ -771,8 +814,8 @@ async def _fetch_verification_data(market: Market, market_type: str, macro_signa
 
     # Add VIX regime context
     if macro_signals:
-        vix_value = getattr(macro_signals, 'vix', None)
-        vix_label = getattr(macro_signals, 'vix_label', None)
+        vix_value = getattr(macro_signals, "vix", None)
+        vix_label = getattr(macro_signals, "vix_label", None)
         if vix_value and vix_label:
             context_parts.append(f"VIX regime: {vix_label} ({vix_value:.1f})")
 
@@ -817,20 +860,19 @@ Respond with ONLY valid JSON (no markdown, no explanation):
 
     try:
         resp = await client.messages.create(
-            model=CLAUDE_MODEL,
-            max_tokens=256,
-            messages=[{"role": "user", "content": verification_prompt}]
+            model=CLAUDE_MODEL, max_tokens=256, messages=[{"role": "user", "content": verification_prompt}]
         )
 
-        text = resp.content[0].text
+        text = resp.content[0].text  # type: ignore[union-attr]
         # Clean and parse JSON
         import json
+
         cleaned = _clean_json(text)
         result = json.loads(cleaned)
 
         # Validate response structure
         if "confidence" in result and "p_hat" in result:
-            return result
+            return result  # type: ignore[no-any-return]
 
         return None
 
@@ -849,7 +891,7 @@ def _build_few_shot_examples(learning_agent) -> str:
 
     Returns formatted string for prompt injection.
     """
-    if not learning_agent or not hasattr(learning_agent, '_predictions'):
+    if not learning_agent or not hasattr(learning_agent, "_predictions"):
         return ""
 
     preds = learning_agent._predictions
@@ -857,11 +899,11 @@ def _build_few_shot_examples(learning_agent) -> str:
     # Filter for resolved, correct predictions
     # (Note: Prediction doesn't have confidence field - just get successful predictions)
     resolved_correct = [
-        p for p in preds
+        p
+        for p in preds
         if p.resolved
         and p.outcome is not None
-        and ((p.direction == "BUY YES" and p.outcome) or
-             (p.direction == "BUY NO" and not p.outcome))
+        and ((p.direction == "BUY YES" and p.outcome) or (p.direction == "BUY NO" and not p.outcome))
         and p.brier_score is not None
         and p.brier_score < 0.15  # Good calibration (brier < 0.15 is high confidence proxy)
     ]
@@ -883,7 +925,7 @@ def _build_few_shot_examples(learning_agent) -> str:
         examples += f"   Our p̂: {p.our_probability:.2f} | Market: {p.market_price:.2f} | "
         examples += f"Edge: {p.our_probability - p.market_price:+.2f}\n"
         examples += f"   Outcome: {outcome_str} | Brier: {p.brier_score:.4f}\n"
-        if hasattr(p, 'reasoning') and p.reasoning:
+        if hasattr(p, "reasoning") and p.reasoning:
             examples += f"   Reasoning: {p.reasoning[:120]}...\n"
         examples += "\n"
 
@@ -927,6 +969,7 @@ async def _astra_batch_adversarial(
         market_list.append(entry)
 
     from datetime import datetime, timezone
+
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     evidence_context = (
@@ -942,12 +985,12 @@ async def _astra_batch_adversarial(
     # Build VIX regime context (Phase 7: VIX Regime Conditioning)
     vix_context = ""
     if macro_signals:
-        vix_value = getattr(macro_signals, 'vix', None)
-        vix_label = getattr(macro_signals, 'vix_label', None)
-        vix_kelly_mult = getattr(macro_signals, 'vix_kelly_mult', 1.0)
+        vix_value = getattr(macro_signals, "vix", None)
+        vix_label = getattr(macro_signals, "vix_label", None)
+        vix_kelly_mult = getattr(macro_signals, "vix_kelly_mult", 1.0)
 
         if vix_value is not None and vix_label:
-            vix_context = f"\n\n━━━ MARKET REGIME (VIX) ━━━\n"
+            vix_context = "\n\n━━━ MARKET REGIME (VIX) ━━━\n"
             vix_context += f"VIX: {vix_value:.1f} — Regime: {vix_label.upper()}\n"
             vix_context += f"Kelly multiplier: {vix_kelly_mult:.2f}x\n"
 
@@ -1006,8 +1049,8 @@ async def _astra_batch_adversarial(
             ),
         )
 
-        pro_text = _clean_json(pro_response.content[0].text)
-        con_text = _clean_json(con_response.content[0].text)
+        pro_text = _clean_json(pro_response.content[0].text)  # type: ignore[union-attr]
+        con_text = _clean_json(con_response.content[0].text)  # type: ignore[union-attr]
         pro_data = json.loads(pro_text)
         con_data = json.loads(con_text)
 
@@ -1021,11 +1064,13 @@ async def _astra_batch_adversarial(
 
         for entry in market_list:
             cid = entry["id"]
-            synthesis_input.append({
-                "market": entry,
-                "pro_analysis": pro_by_id.get(cid, {}),
-                "con_analysis": con_by_id.get(cid, {}),
-            })
+            synthesis_input.append(
+                {
+                    "market": entry,
+                    "pro_analysis": pro_by_id.get(cid, {}),
+                    "con_analysis": con_by_id.get(cid, {}),
+                }
+            )
 
         synth_msg = (
             f"Date: {today}\n\n"
@@ -1041,18 +1086,22 @@ async def _astra_batch_adversarial(
             system=synth_system,
         )
 
-        synth_text = _clean_json(synth_response.content[0].text)
+        synth_text = _clean_json(synth_response.content[0].text)  # type: ignore[union-attr]
         try:
             synth_parsed = json.loads(synth_text)
         except json.JSONDecodeError as json_err:
             # Response was truncated or malformed — log char count and retry with smaller batch
-            char_count = len(synth_response.content[0].text)
+            char_count = len(synth_response.content[0].text)  # type: ignore[union-attr]
             logger.warning(
                 "Synthesizer JSON parse failed (%s) — response was %d chars (max_tokens=12288). "
                 "Batch of %d markets may be too large. Falling back to single-pass.",
-                json_err, char_count, len(markets_and_estimates)
+                json_err,
+                char_count,
+                len(markets_and_estimates),
             )
-            return await _astra_batch_single_pass(markets_and_estimates, learning_context, learning_agent, macro_signals)
+            return await _astra_batch_single_pass(
+                markets_and_estimates, learning_context, learning_agent, macro_signals
+            )
 
         # ── Schema validator (S1 quality gate) ───────────────────────────────
         # Validates that synthesizer actually applied the adversarial framework.
@@ -1061,8 +1110,9 @@ async def _astra_batch_adversarial(
         if quality_failures:
             logger.warning(
                 "Adversarial schema failures in %d/%d items: %s — using valid items only",
-                len(quality_failures), len(synth_parsed),
-                quality_failures[:3]   # Log first 3 failures
+                len(quality_failures),
+                len(synth_parsed),
+                quality_failures[:3],  # Log first 3 failures
             )
         synth_parsed = valid_items  # Only pass schema-valid items downstream
 
@@ -1103,7 +1153,7 @@ async def _build_estimates_from_adversarial(
         trap_flags = item.get("trap_flags", [])
         no_trade = bool(item.get("no_trade", False))
         kelly = float(item.get("kelly_position_pct", 0.0))
-        stake = int(item.get("stake", 50000))   # Default to high stake if not provided
+        stake = int(item.get("stake", 50000))  # Default to high stake if not provided
 
         # ── PHASE 9: Verification Loop for Low-Confidence Estimates ───────────
         # Research backing: AlphaQuanter (2025) — verification loop improves
@@ -1134,8 +1184,7 @@ async def _build_estimates_from_adversarial(
                         no_trade = True
                         if not item.get("no_trade_reason"):
                             item["no_trade_reason"] = (
-                                f"Low confidence ({new_conf:.2f}) + small edge "
-                                f"({new_edge:+.2%}) after verification"
+                                f"Low confidence ({new_conf:.2f}) + small edge ({new_edge:+.2%}) after verification"
                             )
                         logger.info(
                             f"Verification failed for {market.question[:60]}: "
@@ -1156,9 +1205,11 @@ async def _build_estimates_from_adversarial(
         if market.hours_to_expiry < 48:
             no_trade = True
             if not item.get("no_trade_reason"):
-                item["no_trade_reason"] = f"Market resolves in {market.hours_to_expiry:.0f}h — LLM info edge likely priced in"
-        elif market.hours_to_expiry < 168:   # < 1 week
-            conf = max(0.0, conf - 0.05)     # Reduce confidence near resolution
+                item["no_trade_reason"] = (
+                    f"Market resolves in {market.hours_to_expiry:.0f}h — LLM info edge likely priced in"
+                )
+        elif market.hours_to_expiry < 168:  # < 1 week
+            conf = max(0.0, conf - 0.05)  # Reduce confidence near resolution
 
         # Enforce V2 rule: 2+ trap flags + conf < 0.75 → no_trade
         if len(trap_flags) >= 2 and conf < 0.75:
@@ -1168,12 +1219,10 @@ async def _build_estimates_from_adversarial(
         # If our p_hat is >5× the market price on a sub-20¢ sports market,
         # the model hallucinated (no Tier A sports data means it cannot
         # legitimately give >3× the market price).
-        if (market.category == "sports"
-                and market.yes_price < 0.20
-                and p > market.yes_price * 5.0):
+        if market.category == "sports" and market.yes_price < 0.20 and p > market.yes_price * 5.0:
             # Anchor to market price with a small structural adjustment
             p = round(market.yes_price * 1.05, 4)  # allow only 5% adjustment
-            conf = min(conf, 0.52)                  # very low confidence
+            conf = min(conf, 0.52)  # very low confidence
             no_trade = True
             item["no_trade_reason"] = (
                 f"Sports hallucination guard: p_hat={item.get('p_hat', 0):.3f} "
@@ -1204,46 +1253,50 @@ async def _build_estimates_from_adversarial(
         synthesis = item.get("synthesis_reasoning", "")
         full_reasoning = synthesis if synthesis else f"PRO: {pro_summ} | CON: {con_summ}"
 
-        results.append(Estimate(
-            market_condition_id=cid,
-            question=market.question,
-            category=market.category,
-            probability=p,
-            probability_low=p_low,
-            probability_high=p_high,
-            confidence=conf,
-            market_type=item.get("market_type", market.category.title()),
-            modeling_approach=item.get("modeling_approach", "B"),
-            trap_flags=trap_flags,
-            edge=round(edge, 4),
-            ev_after_costs=round(ev, 4),
-            robustness_score=rob,
-            kelly_position_pct=kelly if not no_trade else 0.0,
-            source="astra_v2_adversarial",
-            truth_state=item.get("truth_state", "Assumed"),
-            reasoning=full_reasoning[:300],
-            key_evidence_needed=item.get("key_evidence_needed", ""),
-            no_trade=no_trade,
-            no_trade_reason=item.get("no_trade_reason", ""),
-            details={
-                "model": CLAUDE_MODEL,
-                "adversarial": True,
-                "dominant_evidence_tier": dominant_tier,
-                "correlation_collapses": collapses,
-                "p_neutral": p_neutral,
-                "p_aware": p_aware,
-                "edge_signal": round(abs(p_neutral - market.yes_price), 4),
-                "raw": item,
-            },
-            # Adversarial-specific fields
-            p_neutral=p_neutral,
-            p_aware=p_aware,
-            pro_summary=pro_summ,
-            con_summary=con_summ,
-            dominant_evidence_tier=dominant_tier,
-            correlation_collapses=collapses,
-            adversarial_mode=True,
-        ))
+        results.append(
+            Estimate(
+                market_condition_id=cid,
+                question=market.question,
+                category=market.category,
+                probability=p,
+                probability_low=p_low,
+                probability_high=p_high,
+                confidence=conf,
+                market_type=item.get("market_type", market.category.title()),
+                modeling_approach=item.get("modeling_approach", "B"),
+                trap_flags=trap_flags,
+                edge=round(edge, 4),
+                ev_after_costs=round(ev, 4),
+                robustness_score=rob,
+                kelly_position_pct=kelly if not no_trade else 0.0,
+                source="astra_v2_adversarial",
+                truth_state=item.get("truth_state", "Assumed"),
+                reasoning=full_reasoning[:300],
+                key_evidence_needed=item.get("key_evidence_needed", ""),
+                no_trade=no_trade,
+                no_trade_reason=item.get("no_trade_reason", ""),
+                details={
+                    "model": CLAUDE_MODEL,
+                    "adversarial": True,
+                    "dominant_evidence_tier": dominant_tier,
+                    "correlation_collapses": collapses,
+                    "p_neutral": p_neutral,
+                    "p_aware": p_aware,
+                    "edge_signal": round(abs(p_neutral - market.yes_price), 4),
+                    "raw": item,
+                    "prompt_bundle_hash": PROMPT_BUNDLE_HASH,
+                    "estimator_version": ESTIMATOR_VERSION,
+                },
+                # Adversarial-specific fields
+                p_neutral=p_neutral,
+                p_aware=p_aware,
+                pro_summary=pro_summ,
+                con_summary=con_summ,
+                dominant_evidence_tier=dominant_tier,
+                correlation_collapses=collapses,
+                adversarial_mode=True,
+            )
+        )
 
     return results
 
@@ -1275,6 +1328,7 @@ async def _astra_batch_single_pass(
         market_list.append(entry)
 
     from datetime import datetime, timezone
+
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     system = ASTRA_V2_SYSTEM
@@ -1297,7 +1351,7 @@ async def _astra_batch_single_pass(
             system=system,
         )
 
-        text = _clean_json(response.content[0].text)
+        text = _clean_json(response.content[0].text)  # type: ignore[union-attr]
         parsed = json.loads(text)
 
         market_map = {m.condition_id: m for m, _ in markets_and_estimates}
@@ -1322,40 +1376,49 @@ async def _astra_batch_single_pass(
                 no_trade = True
 
             # Sports hallucination guard (same as adversarial path)
-            if (market.category == "sports"
-                    and market.yes_price < 0.20
-                    and p > market.yes_price * 5.0):
+            if market.category == "sports" and market.yes_price < 0.20 and p > market.yes_price * 5.0:
                 p = round(market.yes_price * 1.05, 4)
                 conf = min(conf, 0.52)
                 no_trade = True
 
-            results.append(Estimate(
-                market_condition_id=cid,
-                question=market.question,
-                category=market.category,
-                probability=p,
-                probability_low=p_low,
-                probability_high=p_high,
-                confidence=conf,
-                market_type=item.get("market_type", market.category.title()),
-                modeling_approach=item.get("modeling_approach", "B"),
-                trap_flags=trap_flags,
-                edge=round(edge, 4),
-                ev_after_costs=round(ev, 4),
-                robustness_score=rob,
-                kelly_position_pct=kelly if not no_trade else 0.0,
-                source="astra_v2",
-                truth_state=item.get("truth_state", "Assumed"),
-                reasoning=item.get("reasoning", ""),
-                key_evidence_needed=item.get("key_evidence_needed", ""),
-                no_trade=no_trade,
-                no_trade_reason=item.get("no_trade_reason", ""),
-                details={"model": CLAUDE_MODEL, "raw": item},
-            ))
+            results.append(
+                Estimate(
+                    market_condition_id=cid,
+                    question=market.question,
+                    category=market.category,
+                    probability=p,
+                    probability_low=p_low,
+                    probability_high=p_high,
+                    confidence=conf,
+                    market_type=item.get("market_type", market.category.title()),
+                    modeling_approach=item.get("modeling_approach", "B"),
+                    trap_flags=trap_flags,
+                    edge=round(edge, 4),
+                    ev_after_costs=round(ev, 4),
+                    robustness_score=rob,
+                    kelly_position_pct=kelly if not no_trade else 0.0,
+                    source="astra_v2",
+                    truth_state=item.get("truth_state", "Assumed"),
+                    reasoning=item.get("reasoning", ""),
+                    key_evidence_needed=item.get("key_evidence_needed", ""),
+                    no_trade=no_trade,
+                    no_trade_reason=item.get("no_trade_reason", ""),
+                    details={
+                        "model": CLAUDE_MODEL,
+                        "raw": item,
+                        "prompt_bundle_hash": PROMPT_BUNDLE_HASH,
+                        "estimator_version": ESTIMATOR_VERSION,
+                    },
+                )
+            )
 
     except Exception as e:
-        logger.error("Single-pass estimation failed (%s: %s) — %d markets unestimated",
-                     type(e).__name__, e, len(markets_and_estimates))
+        logger.error(
+            "Single-pass estimation failed (%s: %s) — %d markets unestimated",
+            type(e).__name__,
+            e,
+            len(markets_and_estimates),
+        )
 
     return results
 

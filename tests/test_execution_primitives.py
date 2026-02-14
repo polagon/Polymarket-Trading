@@ -4,14 +4,17 @@ Unit tests for execution layer primitives.
 CRITICAL: These tests lock invariants that prevent production failures.
 Tests MUST pass before any merge/deployment.
 """
-import pytest
-import time
-from execution import fees, units, mid, expiration
 
+import time
+
+import pytest
+
+from execution import expiration, fees, mid, units
 
 # ============================================================================
 # FEE TESTS (CRITICAL FIX #2, #11)
 # ============================================================================
+
 
 def test_effective_cost_buy_basic():
     """Test BUY cost calculation with standard 2% fee."""
@@ -52,12 +55,13 @@ def test_fees_never_hardcoded():
     for fee_bps in [100, 200, 300]:  # 1%, 2%, 3%
         cost = fees.effective_cost_buy(0.50, 100.0, fee_bps)
         expected = 50.0 * (1.0 + fee_bps / 10000.0)
-        assert abs(cost - expected) < 0.0001, f"Fee must come from parameter, not hardcoded"
+        assert abs(cost - expected) < 0.0001, "Fee must come from parameter, not hardcoded"
 
 
 # ============================================================================
 # UNIT CONVERSION TESTS (CRITICAL FIX #10)
 # ============================================================================
+
 
 def test_tokens_to_usd_buy():
     """Test BUY position conversion to USD exposure."""
@@ -97,8 +101,8 @@ def test_usd_to_tokens_edge_cases():
 def test_aggregate_exposure_mixed_positions():
     """Test portfolio exposure aggregation with long + short positions."""
     positions = {
-        "YES_token_1": 100.0,   # Long 100 YES @ 50¢
-        "NO_token_2": -50.0,    # Short 50 NO @ 40¢
+        "YES_token_1": 100.0,  # Long 100 YES @ 50¢
+        "NO_token_2": -50.0,  # Short 50 NO @ 40¢
     }
     mids = {
         "YES_token_1": 0.50,
@@ -128,6 +132,7 @@ def test_units_consistent_internal():
 # ============================================================================
 # MID CALCULATION TESTS (ChatGPT Final Fix)
 # ============================================================================
+
 
 def test_mid_standard_case():
     """Test standard mid calculation with both bid and ask."""
@@ -185,6 +190,7 @@ def test_mid_reliability_check():
 # GTD EXPIRATION TESTS (CRITICAL FIX #1, #9, #20)
 # ============================================================================
 
+
 def test_gtd_expiration_basic():
     """Test GTD expiration calculation."""
     now = int(time.time())
@@ -221,6 +227,7 @@ def test_gtd_never_uses_ttl_seconds():
 # ============================================================================
 # INTEGRATION SMOKE TEST
 # ============================================================================
+
 
 def test_full_order_flow_simulation():
     """

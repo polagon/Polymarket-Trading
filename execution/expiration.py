@@ -4,9 +4,11 @@ GTD (Good-Til-Date) expiration timestamp computation.
 CRITICAL FIX #1, #9, #20: Polymarket GTD requires unix timestamp with safety buffer.
 Buffer is configurable and logs rejections for empirical tuning.
 """
+
 import logging
 import time
-from config import GTD_SAFETY_BUFFER_SECONDS, GTD_DESIRED_SECONDS
+
+from config import GTD_DESIRED_SECONDS, GTD_SAFETY_BUFFER_SECONDS
 
 logger = logging.getLogger(__name__)
 

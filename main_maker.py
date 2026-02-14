@@ -8,45 +8,46 @@ Integrates all layers:
 - Execution (CLOB executor)
 - Reporting (truth report)
 """
+
 import asyncio
 import logging
 import time
 from datetime import datetime
 from typing import Dict, List
 
-from feeds.market_ws import MarketWebSocketFeed
-from feeds.user_ws import UserWebSocketFeed
+from config import (
+    ACTIVE_QUOTE_COUNT,
+    PAPER_MODE,
+    QS_BOOK_STALENESS_S_PAPER,
+    QS_BOOK_STALENESS_S_PROD,
+    QS_MIN_LIQUIDITY,
+    RECONCILE_INTERVAL_SECONDS,
+    WS_STALENESS_THRESHOLD_MS,
+)
 from execution.clob_executor import CLOBExecutor
 from execution.order_state_store import OrderStateStore
-from execution.wallet import preflight_checks
 from execution.paper_simulator import PaperTradingSimulator
-from risk.portfolio_engine import PortfolioRiskEngine
+from execution.wallet import preflight_checks
+from feeds.market_ws import MarketWebSocketFeed
+from feeds.user_ws import UserWebSocketFeed
+from models.types import Fill, Market, MarketState, OrderBook
+from reporting.truth_report import TruthReportBuilder, write_daily_report
 from risk import market_state as market_state_module
-from strategy.quoteability_scorer import (
-    compute_qs,
-    select_active_set,
-    should_mutate_quotes,
-    reset_qs_veto_counters,
-    get_qs_veto_summary,
-)
+from risk.portfolio_engine import PortfolioRiskEngine
+from scanner.event_refresher import EventRefresher
+from scanner.market_fetcher_v2 import fetch_markets_with_metadata
 from strategy.market_maker import create_maker_orders
 from strategy.markout_tracker import MarkoutTracker
 from strategy.parity_scanner import scan_all_parity
-from strategy.satellite_filter import scan_satellite_opportunities, load_astra_predictions
-from strategy.resolution_risk_scorer import compute_rrs
-from scanner.market_fetcher_v2 import fetch_markets_with_metadata
-from scanner.event_refresher import EventRefresher
-from reporting.truth_report import TruthReportBuilder, write_daily_report
-from models.types import Market, OrderBook, Fill, MarketState
-from config import (
-    ACTIVE_QUOTE_COUNT,
-    RECONCILE_INTERVAL_SECONDS,
-    WS_STALENESS_THRESHOLD_MS,
-    PAPER_MODE,
-    QS_BOOK_STALENESS_S_PROD,
-    QS_BOOK_STALENESS_S_PAPER,
-    QS_MIN_LIQUIDITY,
+from strategy.quoteability_scorer import (
+    compute_qs,
+    get_qs_veto_summary,
+    reset_qs_veto_counters,
+    select_active_set,
+    should_mutate_quotes,
 )
+from strategy.resolution_risk_scorer import compute_rrs
+from strategy.satellite_filter import load_astra_predictions, scan_satellite_opportunities
 
 logging.basicConfig(
     level=logging.INFO,
@@ -76,18 +77,14 @@ class MarketMakerRuntime:
         self.executor = CLOBExecutor(clob_client, self.order_store)
         self.risk_engine = PortfolioRiskEngine()
         self.markout_tracker = MarkoutTracker()
-        self.truth_report_builder = TruthReportBuilder(
-            date=datetime.now().strftime("%Y-%m-%d")
-        )
+        self.truth_report_builder = TruthReportBuilder(date=datetime.now().strftime("%Y-%m-%d"))
         self.event_refresher = EventRefresher()
 
         # Paper trading simulator (if in paper mode)
         self.paper_simulator = PaperTradingSimulator() if PAPER_MODE else None
 
         # Feeds
-        self.market_feed = MarketWebSocketFeed(
-            on_stale_callback=self._on_feed_stale
-        )
+        self.market_feed = MarketWebSocketFeed(on_stale_callback=self._on_feed_stale)
         self.user_feed = UserWebSocketFeed(
             api_key=None,  # TODO: Load from config
             on_fill_callback=self._on_fill,
@@ -141,7 +138,7 @@ class MarketMakerRuntime:
             # Reconciliation
             logger.info("Reconciling order state with CLOB...")
             try:
-                clob_orders = []  # TODO: Fetch from CLOB
+                clob_orders = []  # type: ignore[var-annotated]  # TODO: Fetch from CLOB
                 self.order_store.reconcile_with_clob(clob_orders)
             except Exception as e:
                 logger.error(f"Reconciliation failed: {e}")
@@ -167,7 +164,8 @@ class MarketMakerRuntime:
         # Load Astra predictions
         logger.info("Loading Astra V2 predictions...")
         from config import PREDICTIONS_FILE
-        self.astra_predictions = load_astra_predictions(PREDICTIONS_FILE)
+
+        self.astra_predictions = load_astra_predictions(PREDICTIONS_FILE)  # type: ignore[arg-type]
 
         logger.info("Startup complete. Beginning main loop...")
         self.running = True
@@ -244,11 +242,10 @@ class MarketMakerRuntime:
 
                 # Warmup: wait for initial book snapshots (Cycle 1 only)
                 if cycle_count == 1:
-                    from config import WS_WARMUP_TIMEOUT_S, WS_WARMUP_MIN_BOOKS
+                    from config import WS_WARMUP_MIN_BOOKS, WS_WARMUP_TIMEOUT_S
 
                     logger.info(
-                        f"Cycle 1 warmup: waiting up to {WS_WARMUP_TIMEOUT_S}s "
-                        f"for min {WS_WARMUP_MIN_BOOKS} books..."
+                        f"Cycle 1 warmup: waiting up to {WS_WARMUP_TIMEOUT_S}s for min {WS_WARMUP_MIN_BOOKS} books..."
                     )
 
                     warmup_start = time.time()
@@ -256,12 +253,10 @@ class MarketMakerRuntime:
 
                     while warmup_elapsed < WS_WARMUP_TIMEOUT_S:
                         feed_health = self.market_feed.get_feed_health()
-                        books_received = feed_health['unique_assets_with_book']
+                        books_received = feed_health["unique_assets_with_book"]
 
                         if books_received >= WS_WARMUP_MIN_BOOKS:
-                            logger.info(
-                                f"Warmup complete: {books_received} books received in {warmup_elapsed:.1f}s"
-                            )
+                            logger.info(f"Warmup complete: {books_received} books received in {warmup_elapsed:.1f}s")
                             break
 
                         await asyncio.sleep(0.5)  # Check every 500ms
@@ -307,16 +302,18 @@ class MarketMakerRuntime:
 
                     # Override with toxicity
                     cluster_id = self.risk_engine.assign_cluster(market)
-                    qs = self.markout_tracker.override_quoteability(
-                        market.condition_id, cluster_id, qs
-                    )
+                    qs = self.markout_tracker.override_quoteability(market.condition_id, cluster_id, qs)
 
                     self.qs_scores[market.condition_id] = qs
 
                     # Sample debug for first 5 markets with books (enhanced logging)
                     if sample_count < 5:
                         spread = book.best_ask - book.best_bid if book.best_bid and book.best_ask else 0
-                        spread_bps = spread / ((book.best_ask + book.best_bid) / 2) * 10000 if book.best_bid and book.best_ask else 0
+                        spread_bps = (
+                            spread / ((book.best_ask + book.best_bid) / 2) * 10000
+                            if book.best_bid and book.best_ask
+                            else 0
+                        )
 
                         # Determine primary veto reason
                         primary_veto = "none"
@@ -324,12 +321,18 @@ class MarketMakerRuntime:
                             # Check veto reasons in order of priority
                             if rrs > 0.35:
                                 primary_veto = "rrs"
-                            elif market.state in (MarketState.CLOSE_WINDOW, MarketState.POST_CLOSE,
-                                                   MarketState.PROPOSED, MarketState.CHALLENGE_WINDOW):
+                            elif market.state in (
+                                MarketState.CLOSE_WINDOW,
+                                MarketState.POST_CLOSE,
+                                MarketState.PROPOSED,
+                                MarketState.CHALLENGE_WINDOW,
+                            ):
                                 primary_veto = "state"
                             elif spread < market.tick_size:
                                 primary_veto = "crossed"
-                            elif book.timestamp_age_ms > ((QS_BOOK_STALENESS_S_PAPER if PAPER_MODE else QS_BOOK_STALENESS_S_PROD) * 1000):
+                            elif book.timestamp_age_ms > (
+                                (QS_BOOK_STALENESS_S_PAPER if PAPER_MODE else QS_BOOK_STALENESS_S_PROD) * 1000
+                            ):
                                 primary_veto = "stale"
                             elif market.liquidity < QS_MIN_LIQUIDITY:
                                 primary_veto = "liquidity"
@@ -338,7 +341,7 @@ class MarketMakerRuntime:
 
                         logger.info(
                             f"QS_SAMPLE cond={market.condition_id[:12]} yes_asset={market.yes_token_id[:12]} "
-                            f"has_book=True book_age_s={book.timestamp_age_ms/1000:.1f} "
+                            f"has_book=True book_age_s={book.timestamp_age_ms / 1000:.1f} "
                             f"bid={book.best_bid:.3f} ask={book.best_ask:.3f} spread={spread:.4f} tick={market.tick_size:.2f} "
                             f"rrs={rrs:.2f} state={market.state.value} qs={qs:.3f} veto={primary_veto}"
                         )
@@ -362,15 +365,13 @@ class MarketMakerRuntime:
 
                 # Log QS veto summary
                 from strategy.quoteability_scorer import get_qs_veto_summary
+
                 logger.info(f"QS veto summary: {get_qs_veto_summary()}")
 
                 # Log top 10 markets by QS (for debugging)
                 if self.qs_scores:
                     top_10 = sorted(self.qs_scores.items(), key=lambda x: x[1], reverse=True)[:10]
-                    logger.info(
-                        f"Top 10 QS: " +
-                        ", ".join([f"{cid[:8]}={qs:.3f}" for cid, qs in top_10])
-                    )
+                    logger.info("Top 10 QS: " + ", ".join([f"{cid[:8]}={qs:.3f}" for cid, qs in top_10]))
 
                 # Log feed health
                 feed_health = self.market_feed.get_feed_health()
@@ -384,14 +385,9 @@ class MarketMakerRuntime:
                 )
 
                 # 5. Select active set
-                cluster_assignments = {
-                    m.condition_id: self.risk_engine.assign_cluster(m)
-                    for m in markets
-                }
+                cluster_assignments = {m.condition_id: self.risk_engine.assign_cluster(m) for m in markets}
 
-                self.active_set = select_active_set(
-                    markets, self.qs_scores, cluster_assignments
-                )
+                self.active_set = select_active_set(markets, self.qs_scores, cluster_assignments)
 
                 logger.info(f"Active set: {len(self.active_set)} markets")
 
@@ -402,12 +398,15 @@ class MarketMakerRuntime:
                     self.zero_active_cycles = 0  # Reset on non-zero active set
 
                 # Reseed check: trigger if persistently zero active
-                from config import RESEED_TRIGGER_ZERO_ACTIVE_CYCLES, RESEED_MIN_INTERVAL_SECONDS
+                from config import RESEED_MIN_INTERVAL_SECONDS, RESEED_TRIGGER_ZERO_ACTIVE_CYCLES
+
                 now = time.time()
                 time_since_last_reseed = now - self.last_reseed_time
 
-                if (self.zero_active_cycles >= RESEED_TRIGGER_ZERO_ACTIVE_CYCLES and
-                    time_since_last_reseed >= RESEED_MIN_INTERVAL_SECONDS):
+                if (
+                    self.zero_active_cycles >= RESEED_TRIGGER_ZERO_ACTIVE_CYCLES
+                    and time_since_last_reseed >= RESEED_MIN_INTERVAL_SECONDS
+                ):
                     logger.warning(
                         f"RESEED TRIGGER: {self.zero_active_cycles} consecutive zero-active cycles. "
                         f"Reseeding universe..."
@@ -425,8 +424,7 @@ class MarketMakerRuntime:
                     except Exception as e:
                         self.reseed_consecutive_failures += 1
                         logger.error(
-                            f"RESEED failed ({self.reseed_consecutive_failures} consecutive): {e}",
-                            exc_info=True
+                            f"RESEED failed ({self.reseed_consecutive_failures} consecutive): {e}", exc_info=True
                         )
 
                         if self.reseed_consecutive_failures >= 5:
@@ -445,17 +443,13 @@ class MarketMakerRuntime:
                         continue
 
                     # Get inventory
-                    inventory_usd = self.risk_engine.get_market_exposure(
-                        market.condition_id
-                    )
+                    inventory_usd = self.risk_engine.get_market_exposure(market.condition_id)
 
                     # Get RRS (GAP #7 integration)
                     rrs = compute_rrs(market, market.raw_metadata)
 
                     # Create orders
-                    bid_order, ask_order = create_maker_orders(
-                        market, book, inventory_usd, rrs, market.state
-                    )
+                    bid_order, ask_order = create_maker_orders(market, book, inventory_usd, rrs, market.state)
 
                     if bid_order:
                         maker_intents.append(bid_order)
@@ -465,27 +459,17 @@ class MarketMakerRuntime:
                 logger.info(f"Generated {len(maker_intents)} maker orders")
 
                 # 7. Scan parity arb
-                yes_books = {
-                    m.condition_id: self.market_feed.get_book(m.yes_token_id)
-                    for m in markets
-                }
-                no_books = {
-                    m.condition_id: self.market_feed.get_book(m.no_token_id)
-                    for m in markets
-                }
+                yes_books = {m.condition_id: self.market_feed.get_book(m.yes_token_id) for m in markets}
+                no_books = {m.condition_id: self.market_feed.get_book(m.no_token_id) for m in markets}
 
-                parity_opps = scan_all_parity(
-                    markets, yes_books, no_books, self.risk_engine
-                )
+                parity_opps = scan_all_parity(markets, yes_books, no_books, self.risk_engine)
 
                 logger.info(f"Parity scan: {len(parity_opps)} opportunities")
 
                 # 8. Scan satellite opportunities
                 satellite_exposure = self.risk_engine.exposure.satellite_risk_used_usd
 
-                satellite_recs = scan_satellite_opportunities(
-                    markets, self.astra_predictions, satellite_exposure
-                )
+                satellite_recs = scan_satellite_opportunities(markets, self.astra_predictions, satellite_exposure)
 
                 logger.info(f"Satellite scan: {len(satellite_recs)} opportunities")
 
@@ -494,12 +478,9 @@ class MarketMakerRuntime:
                     batches = self.executor.slice_batch(maker_intents)
                     for batch in batches:
                         result = await self.executor.submit_batch_orders(batch)
-                        logger.info(
-                            f"Batch submitted: {result['submitted']} orders, "
-                            f"{result['failed']} failed"
-                        )
+                        logger.info(f"Batch submitted: {result['submitted']} orders, {result['failed']} failed")
                         # Record quote events
-                        self.truth_report_builder.record_quote_event("quote", count=result['submitted'])
+                        self.truth_report_builder.record_quote_event("quote", count=result["submitted"])
 
                 # 10. Monitor staleness (skip in PAPER_MODE for burn-in)
                 if not PAPER_MODE:
@@ -533,7 +514,7 @@ class MarketMakerRuntime:
         PAPER MODE: Fetches more markets (500 vs 200) for better NORMAL state coverage.
         """
         try:
-            from config import MARKET_FETCH_LIMIT_PROD, MARKET_FETCH_LIMIT_PAPER, PAPER_MODE
+            from config import MARKET_FETCH_LIMIT_PAPER, MARKET_FETCH_LIMIT_PROD, PAPER_MODE
 
             fetch_limit = MARKET_FETCH_LIMIT_PAPER if PAPER_MODE else MARKET_FETCH_LIMIT_PROD
 
@@ -543,7 +524,9 @@ class MarketMakerRuntime:
                 active_only=True,
             )
 
-            logger.info(f"Fetched {len(markets)} markets (mode={'PAPER' if PAPER_MODE else 'PROD'}, limit={fetch_limit})")
+            logger.info(
+                f"Fetched {len(markets)} markets (mode={'PAPER' if PAPER_MODE else 'PROD'}, limit={fetch_limit})"
+            )
 
             # Register markets with executor (GAP #1 FIX)
             for market in markets:
@@ -567,8 +550,8 @@ class MarketMakerRuntime:
         """
         from config import (
             MAX_SUBSCRIBE_MARKETS,
-            PREFILTER_EXCLUDE_CLOSE_WINDOW,
             PAPER_MODE,
+            PREFILTER_EXCLUDE_CLOSE_WINDOW,
             STATE_CLOSE_WINDOW_THRESHOLD_HOURS,
         )
         from risk.market_state import update_market_state
@@ -612,8 +595,9 @@ class MarketMakerRuntime:
 
         # Log top 5 activity scores for observability
         if subscribe_markets:
-            top_5_scores = [(m.condition_id[:12], m.activity_score, m.volume_24h, m.liquidity)
-                            for m in subscribe_markets[:5]]
+            top_5_scores = [
+                (m.condition_id[:12], m.activity_score, m.volume_24h, m.liquidity) for m in subscribe_markets[:5]
+            ]
             logger.info(f"Top 5 activity scores: {top_5_scores}")
 
         logger.info(f"Subscribing to top {len(subscribe_markets)} markets by activity score")
@@ -629,7 +613,7 @@ class MarketMakerRuntime:
         if new_assets:
             batch_size = 100
             for i in range(0, len(new_assets), batch_size):
-                batch = new_assets[i:i+batch_size]
+                batch = new_assets[i : i + batch_size]
                 await self.market_feed.subscribe(batch)
                 await asyncio.sleep(0.1)  # Small delay between batches
 
@@ -682,7 +666,7 @@ class MarketMakerRuntime:
         await self._subscribe_books(markets)
 
         # 5. Warmup to collect fresh books
-        from config import WS_WARMUP_TIMEOUT_S, WS_WARMUP_MIN_BOOKS
+        from config import WS_WARMUP_MIN_BOOKS, WS_WARMUP_TIMEOUT_S
 
         logger.info(f"Reseed warmup: waiting up to {WS_WARMUP_TIMEOUT_S}s for {WS_WARMUP_MIN_BOOKS} books...")
 
@@ -691,7 +675,7 @@ class MarketMakerRuntime:
 
         while warmup_elapsed < WS_WARMUP_TIMEOUT_S:
             feed_health = self.market_feed.get_feed_health()
-            books_received = feed_health['unique_assets_with_book']
+            books_received = feed_health["unique_assets_with_book"]
 
             if books_received >= WS_WARMUP_MIN_BOOKS:
                 logger.info(f"Reseed warmup complete: {books_received} books in {warmup_elapsed:.1f}s")
@@ -702,8 +686,7 @@ class MarketMakerRuntime:
 
         feed_health = self.market_feed.get_feed_health()
         logger.info(
-            f"Reseed complete: books_received={feed_health['unique_assets_with_book']} "
-            f"warmup_s={warmup_elapsed:.1f}"
+            f"Reseed complete: books_received={feed_health['unique_assets_with_book']} warmup_s={warmup_elapsed:.1f}"
         )
 
     async def _simulate_paper_fills(self, markets: List[Market]):
@@ -716,7 +699,7 @@ class MarketMakerRuntime:
         for market in markets:
             book = self.market_feed.get_book(market.yes_token_id)
             if book:
-                self.paper_simulator.record_book_snapshot(market.condition_id, book)
+                self.paper_simulator.record_book_snapshot(market.condition_id, book)  # type: ignore[union-attr]
 
         # Check each live order for potential fill
         live_orders = self.order_store.get_live_orders()
@@ -729,11 +712,12 @@ class MarketMakerRuntime:
 
             # Calculate time in market
             from datetime import datetime
+
             placed_time = datetime.fromisoformat(order.placed_at)
             time_in_market = (datetime.now() - placed_time).total_seconds()
 
             # Simulate fill probability
-            filled, size_filled, fill_price = self.paper_simulator.simulate_fill_probability(
+            filled, size_filled, fill_price = self.paper_simulator.simulate_fill_probability(  # type: ignore[union-attr]
                 order,
                 time_in_market,
                 book,
@@ -742,22 +726,20 @@ class MarketMakerRuntime:
             if filled and size_filled > 0:
                 # Create simulated Fill
                 from execution.mid import compute_mid
+
                 mid = compute_mid(book.best_bid, book.best_ask, book.last_mid, book.timestamp_age_ms)
 
-                fill = self.paper_simulator.create_simulated_fill(
+                fill = self.paper_simulator.create_simulated_fill(  # type: ignore[union-attr]
                     order,
                     size_filled,
-                    fill_price,
+                    fill_price,  # type: ignore[arg-type]
                     mid or 0.5,
                 )
 
                 # Route through the same fill handler
                 self._on_fill(fill)
 
-                logger.info(
-                    f"Paper fill simulated: {order.order_id} "
-                    f"{size_filled:.2f} tokens @ {fill_price:.4f}"
-                )
+                logger.info(f"Paper fill simulated: {order.order_id} {size_filled:.2f} tokens @ {fill_price:.4f}")
 
     def _on_fill(self, fill: Fill):
         """
@@ -798,6 +780,7 @@ class MarketMakerRuntime:
 
             # GAP #2: Classify maker/taker
             from execution.mid import compute_mid
+
             book = self.market_feed.get_book(order.token_id)
             book_mid = None
             if book:
@@ -827,7 +810,7 @@ class MarketMakerRuntime:
         pnl = 0.0  # TODO: Compute realized P&L from position tracking
 
         # Get markout values if available
-        markout_data = self.markout_tracker.get_markout(fill.fill_id) if fill.maker else {}
+        markout_data = self.markout_tracker.get_markout(fill.fill_id) if fill.maker else {}  # type: ignore[attr-defined]
 
         self.truth_report_builder.record_fill(
             fill=fill,
@@ -870,12 +853,12 @@ class MarketMakerRuntime:
                 "sharpe_90d": 0.0,
                 "calmar_90d": 0.0,
                 "max_drawdown": 0.0,
-                "cluster_exposures": dict(self.risk_engine.exposure.cluster_exposure_usd),
-                "aggregate_exposure": sum(self.risk_engine.exposure.cluster_exposure_usd.values()),
-                "max_market_inventory": max(self.risk_engine.exposure.market_exposure_usd.values(), default=0.0),
+                "cluster_exposures": dict(self.risk_engine.exposure.cluster_exposure_usd),  # type: ignore[attr-defined]
+                "aggregate_exposure": sum(self.risk_engine.exposure.cluster_exposure_usd.values()),  # type: ignore[attr-defined]
+                "max_market_inventory": max(self.risk_engine.exposure.market_exposure_usd.values(), default=0.0),  # type: ignore[attr-defined]
             }
 
-            self.truth_report_builder.set_portfolio_snapshot(**portfolio_snapshot)
+            self.truth_report_builder.set_portfolio_snapshot(**portfolio_snapshot)  # type: ignore[arg-type]
 
             # Record health metrics
             # TODO: Track actual uptime from feed connections
@@ -907,10 +890,7 @@ class MarketMakerRuntime:
 
     def _on_feed_disconnect(self):
         """Handle user feed disconnect (CIRCUIT BREAKER)."""
-        logger.error(
-            "CIRCUIT BREAKER: User feed disconnected. "
-            "Entering unsafe mode and canceling all orders."
-        )
+        logger.error("CIRCUIT BREAKER: User feed disconnected. Entering unsafe mode and canceling all orders.")
 
         self.unsafe_mode = True
         asyncio.create_task(self.executor.cancel_all(reason="Feed disconnect"))

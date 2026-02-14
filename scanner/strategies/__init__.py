@@ -9,15 +9,16 @@ Usage:
     registry = build_registry()
     signals = registry.run_all(markets, context)
 """
+
+from scanner.strategies.arb_strategy import ArbitrageStrategy
 from scanner.strategies.base import (
     BaseStrategy,
-    TradeSignal,
     StrategyContext,
     StrategyMetrics,
     StrategyRegistry,
+    TradeSignal,
 )
 from scanner.strategies.longshot_strategy import LongshotStrategy
-from scanner.strategies.arb_strategy import ArbitrageStrategy
 
 
 def build_registry() -> StrategyRegistry:

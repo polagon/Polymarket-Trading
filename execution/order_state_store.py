@@ -5,16 +5,17 @@ CRITICAL FIXES:
 - #5: Stores BOTH human-friendly AND execution-truth fields for reconciliation
 - GAP #3: Partial fill tracking + atomic storage
 """
+
 import json
 import logging
 import os
 import tempfile
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
-from datetime import datetime, timezone
 
-from models.types import StoredOrder, OrderStatus
 from config import MEMORY_DIR
+from models.types import OrderStatus, StoredOrder
 
 logger = logging.getLogger(__name__)
 
@@ -125,9 +126,7 @@ class OrderStateStore:
             ORDER_STORE_FILE.parent.mkdir(parents=True, exist_ok=True)
 
             # GAP #3 FIX: Atomic write via temp file + rename
-            temp_fd, temp_path = tempfile.mkstemp(
-                dir=ORDER_STORE_FILE.parent, prefix=".order_store_", suffix=".tmp"
-            )
+            temp_fd, temp_path = tempfile.mkstemp(dir=ORDER_STORE_FILE.parent, prefix=".order_store_", suffix=".tmp")
             try:
                 with os.fdopen(temp_fd, "w") as f:
                     json.dump(data, f, indent=2)
@@ -139,7 +138,7 @@ class OrderStateStore:
                 # Clean up temp file on error
                 try:
                     os.unlink(temp_path)
-                except:
+                except OSError:
                     pass
                 raise e
 
@@ -214,11 +213,7 @@ class OrderStateStore:
 
     def get_live_orders_by_market(self, condition_id: str) -> list[StoredOrder]:
         """Get live orders for a specific market."""
-        return [
-            o
-            for o in self.orders.values()
-            if o.condition_id == condition_id and o.status == OrderStatus.LIVE
-        ]
+        return [o for o in self.orders.values() if o.condition_id == condition_id and o.status == OrderStatus.LIVE]
 
     def reconcile_with_clob(self, clob_open_orders: list[dict]):
         """
@@ -233,12 +228,10 @@ class OrderStateStore:
         Returns:
             dict with reconciliation stats
         """
-        logger.info(f"Reconciling Order State Store with CLOB...")
+        logger.info("Reconciling Order State Store with CLOB...")
 
         clob_order_ids = {o["orderId"] for o in clob_open_orders}
-        store_live_order_ids = {
-            order_id for order_id, order in self.orders.items() if order.status == OrderStatus.LIVE
-        }
+        store_live_order_ids = {order_id for order_id, order in self.orders.items() if order.status == OrderStatus.LIVE}
 
         # Orders in store but not in CLOB → mark CANCELED
         missing_in_clob = store_live_order_ids - clob_order_ids
@@ -330,10 +323,7 @@ class OrderStateStore:
         # If fully filled, mark as FILLED
         if order.remaining_size <= 0:
             order.status = OrderStatus.FILLED
-            logger.info(
-                f"Order {order_id} FULLY FILLED: "
-                f"{order.filled_size}/{order.original_size} tokens"
-            )
+            logger.info(f"Order {order_id} FULLY FILLED: {order.filled_size}/{order.original_size} tokens")
         else:
             # Partial fill, keep LIVE
             logger.info(

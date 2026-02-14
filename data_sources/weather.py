@@ -2,14 +2,15 @@
 Fetches NOAA weather forecast data (free, no API key needed).
 Parses weather market questions and estimates probabilities from official forecasts.
 """
-import re
+
 import asyncio
+import re
 from dataclasses import dataclass
 from typing import Optional
+
 import aiohttp
 
 from config import NOAA_API_URL
-
 
 # Common city/location coordinates for weather markets
 LOCATION_MAP = {
@@ -55,7 +56,7 @@ async def _get_grid_point(session: aiohttp.ClientSession, lat: float, lon: float
     try:
         async with session.get(url, headers=headers, timeout=aiohttp.ClientTimeout(total=10)) as resp:
             if resp.status == 200:
-                return await resp.json()
+                return await resp.json()  # type: ignore[no-any-return]
     except Exception:
         pass
     return None
@@ -66,7 +67,7 @@ async def _get_forecast(session: aiohttp.ClientSession, forecast_url: str) -> Op
     try:
         async with session.get(forecast_url, headers=headers, timeout=aiohttp.ClientTimeout(total=10)) as resp:
             if resp.status == 200:
-                return await resp.json()
+                return await resp.json()  # type: ignore[no-any-return]
     except Exception:
         pass
     return None
@@ -127,7 +128,7 @@ async def fetch_forecast(location: str) -> Optional[NOAAForecast]:
                     precip_chance = float(pval)
             else:
                 # Parse from text: "Chance of rain 40%"
-                m = re.search(r'(\d+)\s*%\s*chance', detailed.lower())
+                m = re.search(r"(\d+)\s*%\s*chance", detailed.lower())
                 if m:
                     precip_chance = float(m.group(1))
 
@@ -164,7 +165,7 @@ def parse_weather_question(question: str) -> Optional[dict]:
 
     if not location:
         # Try to extract any capitalized city name
-        m = re.search(r'in ([A-Z][a-z]+(?: [A-Z][a-z]+)?)', question)
+        m = re.search(r"in ([A-Z][a-z]+(?: [A-Z][a-z]+)?)", question)
         if m:
             location = m.group(1).lower()
 
@@ -192,7 +193,7 @@ def parse_weather_question(question: str) -> Optional[dict]:
     temp_threshold = None
     if weather_type == "temperature":
         # Look for temperature value
-        m = re.search(r'(\d+)\s*(?:°?\s*f|°?\s*c|degrees?)', q)
+        m = re.search(r"(\d+)\s*(?:°?\s*f|°?\s*c|degrees?)", q)
         if m:
             temp_threshold = float(m.group(1))
 
@@ -257,6 +258,7 @@ def estimate_probability(question: str, forecast: Optional[NOAAForecast]) -> Opt
             # Forecast uncertainty ~ ±5°F for 1-day, higher for multi-day
             uncertainty_f = 6.0
             import math
+
             z = diff / uncertainty_f
             # Probability that actual high exceeds threshold
             prob_above = 0.5 + 0.5 * math.tanh(z * 1.0)
@@ -305,5 +307,5 @@ def estimate_probability(question: str, forecast: Optional[NOAAForecast]) -> Opt
             "noaa_high_f": forecast.temperature_high_f,
             "noaa_precip_pct": forecast.precipitation_chance,
             "noaa_short_forecast": forecast.short_forecast,
-        }
+        },
     }

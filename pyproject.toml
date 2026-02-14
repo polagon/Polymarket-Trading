@@ -1,0 +1,48 @@
+[project]
+name = "astra-polymarket"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+exclude = [".venv", "venv", "venv.bak*", "memory", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",   # line too long (let formatter handle)
+    "E402",   # module level import not at top (sys.path manipulations)
+    "F401",   # imported but unused (re-exports in __init__.py)
+    "F841",   # local variable assigned but never used
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["scanner", "execution", "ops", "risk", "models", "reporting", "data_sources"]
+
+[tool.mypy]
+python_version = "3.12"
+check_untyped_defs = true
+warn_unused_configs = true
+warn_return_any = true
+no_implicit_optional = true
+exclude = ["^\\.venv", "^venv", "^venv\\.bak", "^memory"]
+
+[[tool.mypy.overrides]]
+module = [
+    "anthropic.*",
+    "numpy.*",
+    "websockets.*",
+    "py_clob_client.*",
+    "pandas.*",
+    "rich.*",
+    "aiohttp.*",
+    "aiohttp_socks.*",
+    "mcp.*",
+    "dotenv.*",
+    "scipy.*",
+    "sklearn.*",
+    "pytest.*",
+    "requests.*",
+]
+ignore_missing_imports = true

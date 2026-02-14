@@ -3,16 +3,18 @@ Unit tests for risk layer (Market State Machine + Portfolio Risk Engine).
 
 CRITICAL: These tests lock risk invariants that prevent blowups.
 """
+
 import pytest
-from models.types import Market, MarketState, Event
+
+from config import BANKROLL, MAX_AGG_EXPOSURE_PCT, MAX_CLUSTER_EXPOSURE_PCT
+from models.types import Event, Market, MarketState
 from risk import market_state
 from risk.portfolio_engine import PortfolioRiskEngine
-from config import BANKROLL, MAX_CLUSTER_EXPOSURE_PCT, MAX_AGG_EXPOSURE_PCT
-
 
 # ============================================================================
 # MARKET STATE MACHINE TESTS (CRITICAL FIX #3)
 # ============================================================================
+
 
 def test_state_normal():
     """Test NORMAL state for markets far from close."""
@@ -147,6 +149,7 @@ def test_allowed_actions_challenge_window():
 # ============================================================================
 # PORTFOLIO RISK ENGINE TESTS (CRITICAL FIX #5, #17, #18, #21)
 # ============================================================================
+
 
 def test_cluster_assignment_deterministic():
     """CRITICAL INVARIANT: Same market → same cluster_id across restarts."""

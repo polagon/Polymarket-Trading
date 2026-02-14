@@ -25,19 +25,20 @@ This module:
   - Tracks pending follower trades
   - Generates trade signals when leaders resolve
 """
+
 import asyncio
-import json
 import hashlib
+import json
 import math
-from dataclasses import dataclass, asdict, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
 import anthropic
 
 from config import ANTHROPIC_API_KEY, CLAUDE_MODEL
 from scanner.market_fetcher import Market
-
 
 CLUSTERS_FILE = Path("memory/semantic_clusters.json")
 RELATIONSHIPS_FILE = Path("memory/market_relationships.json")
@@ -50,14 +51,15 @@ MARKETS_PER_CLUSTER = 10
 @dataclass
 class MarketRelationship:
     """A detected semantic relationship between two markets."""
+
     leader_id: str
     follower_id: str
     leader_question: str
     follower_question: str
-    relationship: str          # "same_outcome" or "different_outcome"
-    confidence: float          # 0-1
-    reasoning: str             # Why they are related
-    cluster_label: str         # Topic cluster (e.g. "US-Canada Trade War")
+    relationship: str  # "same_outcome" or "different_outcome"
+    confidence: float  # 0-1
+    reasoning: str  # Why they are related
+    cluster_label: str  # Topic cluster (e.g. "US-Canada Trade War")
     discovered_at: str
     # Post-resolution tracking
     resolved: bool = False
@@ -70,15 +72,16 @@ class MarketRelationship:
 @dataclass
 class FollowerTrade:
     """A pending trade triggered by a leader resolution."""
+
     follower_id: str
     follower_question: str
-    direction: str             # "BUY YES" or "BUY NO"
+    direction: str  # "BUY YES" or "BUY NO"
     confidence: float
     reasoning: str
     cluster_label: str
-    triggered_by: str          # leader condition_id
+    triggered_by: str  # leader condition_id
     triggered_at: str
-    min_edge: float = 0.08     # Minimum edge required to actually trade
+    min_edge: float = 0.08  # Minimum edge required to actually trade
 
 
 class SemanticClusterEngine:
@@ -120,14 +123,10 @@ class SemanticClusterEngine:
         return []
 
     def _save_relationships(self):
-        RELATIONSHIPS_FILE.write_text(
-            json.dumps([asdict(r) for r in self._relationships], indent=2)
-        )
+        RELATIONSHIPS_FILE.write_text(json.dumps([asdict(r) for r in self._relationships], indent=2))
 
     def _save_follower_trades(self):
-        FOLLOWERS_FILE.write_text(
-            json.dumps([asdict(t) for t in self._follower_trades], indent=2)
-        )
+        FOLLOWERS_FILE.write_text(json.dumps([asdict(t) for t in self._follower_trades], indent=2))
 
     def _markets_hash(self, markets: list[Market]) -> str:
         """Hash market IDs to detect when market set has changed."""
@@ -138,9 +137,7 @@ class SemanticClusterEngine:
         """Return follower trades that haven't been executed yet."""
         return [t for t in self._follower_trades if not t.triggered_at == "executed"]
 
-    def check_leader_resolutions(
-        self, current_markets: list[Market]
-    ) -> list[FollowerTrade]:
+    def check_leader_resolutions(self, current_markets: list[Market]) -> list[FollowerTrade]:
         """
         Check if any relationship leaders have resolved (disappeared from active list).
         Returns new FollowerTrade signals to act on.
@@ -238,10 +235,7 @@ class SemanticClusterEngine:
         self._last_cluster_hash = current_hash
 
         # Only work with markets that have reasonable liquidity and duration
-        eligible = [
-            m for m in markets
-            if m.liquidity >= 1000 and m.hours_to_expiry >= 24
-        ]
+        eligible = [m for m in markets if m.liquidity >= 1000 and m.hours_to_expiry >= 24]
 
         if len(eligible) < 20:
             return self._relationships
@@ -255,12 +249,10 @@ class SemanticClusterEngine:
             return self._relationships
 
         # Step 2: Discover relationships within each cluster
-        new_relationships = await self._discover_within_clusters(clusters)
+        new_relationships = await self._discover_within_clusters(clusters)  # type: ignore[arg-type]
 
         # Merge with existing — don't duplicate
-        existing_pairs = {
-            (r.leader_id, r.follower_id) for r in self._relationships
-        }
+        existing_pairs = {(r.leader_id, r.follower_id) for r in self._relationships}
         added = 0
         for rel in new_relationships:
             pair = (rel.leader_id, rel.follower_id)
@@ -274,9 +266,7 @@ class SemanticClusterEngine:
 
         return self._relationships
 
-    async def _cluster_markets(
-        self, markets: list[Market], k: int
-    ) -> list[list[Market]]:
+    async def _cluster_markets(self, markets: list[Market], k: int) -> list[list[Market]]:
         """
         Use Claude to cluster markets into K semantic groups.
         Returns a list of clusters (each cluster is a list of markets).
@@ -285,8 +275,7 @@ class SemanticClusterEngine:
 
         # Build a compact market list for Claude
         market_data = [
-            {"id": m.condition_id[:12], "q": m.question[:120], "price": round(m.yes_price, 3)}
-            for m in markets
+            {"id": m.condition_id[:12], "q": m.question[:120], "price": round(m.yes_price, 3)} for m in markets
         ]
 
         prompt = f"""You are a prediction market analyst. Group these {len(markets)} markets into {k} semantic clusters.
@@ -306,9 +295,10 @@ Return ONLY a JSON object: {{"clusters": [{{"label": "...", "ids": ["id1", "id2"
                 max_tokens=4096,
                 messages=[{"role": "user", "content": prompt}],
             )
-            text = response.content[0].text.strip()
+            text = response.content[0].text.strip()  # type: ignore[union-attr]
             # Strip markdown
             import re
+
             text = re.sub(r"^```(?:json)?\s*\n?", "", text)
             text = re.sub(r"\n?```\s*$", "", text)
             data = json.loads(text)
@@ -324,14 +314,12 @@ Return ONLY a JSON object: {{"clusters": [{{"label": "...", "ids": ["id1", "id2"
                         cluster_markets.append(market)
                 if len(cluster_markets) >= 2:
                     # Attach label to first market for reference
-                    clusters.append((cluster_def.get("label", "Unknown"), cluster_markets))
+                    clusters.append((cluster_def.get("label", "Unknown"), cluster_markets))  # type: ignore[arg-type]
             return clusters
         except Exception:
             return []
 
-    async def _discover_within_clusters(
-        self, clusters: list[tuple[str, list[Market]]]
-    ) -> list[MarketRelationship]:
+    async def _discover_within_clusters(self, clusters: list[tuple[str, list[Market]]]) -> list[MarketRelationship]:
         """
         For each cluster, ask Claude to identify correlated/anti-correlated pairs.
         """
@@ -350,7 +338,7 @@ Return ONLY a JSON object: {{"clusters": [{{"label": "...", "ids": ["id1", "id2"
 
         for result in results:
             if not isinstance(result, Exception) and result:
-                all_relationships.extend(result)
+                all_relationships.extend(result)  # type: ignore[arg-type]
 
         return all_relationships
 
@@ -365,8 +353,7 @@ Return ONLY a JSON object: {{"clusters": [{{"label": "...", "ids": ["id1", "id2"
             return []
 
         market_data = [
-            {"id": m.condition_id[:12], "q": m.question[:120], "price": round(m.yes_price, 3)}
-            for m in markets
+            {"id": m.condition_id[:12], "q": m.question[:120], "price": round(m.yes_price, 3)} for m in markets
         ]
 
         prompt = f"""Cluster topic: "{cluster_label}"
@@ -392,8 +379,9 @@ Rules:
                 max_tokens=1024,
                 messages=[{"role": "user", "content": prompt}],
             )
-            text = response.content[0].text.strip()
+            text = response.content[0].text.strip()  # type: ignore[union-attr]
             import re
+
             text = re.sub(r"^```(?:json)?\s*\n?", "", text)
             text = re.sub(r"\n?```\s*$", "", text)
             data = json.loads(text)
@@ -413,17 +401,19 @@ Rules:
                 if leader.condition_id == follower.condition_id:
                     continue
 
-                relationships.append(MarketRelationship(
-                    leader_id=leader.condition_id,
-                    follower_id=follower.condition_id,
-                    leader_question=leader.question,
-                    follower_question=follower.question,
-                    relationship=rel_type,
-                    confidence=confidence,
-                    reasoning=pair.get("reasoning", ""),
-                    cluster_label=cluster_label,
-                    discovered_at=now,
-                ))
+                relationships.append(
+                    MarketRelationship(
+                        leader_id=leader.condition_id,
+                        follower_id=follower.condition_id,
+                        leader_question=leader.question,
+                        follower_question=follower.question,
+                        relationship=rel_type,
+                        confidence=confidence,
+                        reasoning=pair.get("reasoning", ""),
+                        cluster_label=cluster_label,
+                        discovered_at=now,
+                    )
+                )
 
             return relationships
         except Exception:
@@ -433,10 +423,7 @@ Rules:
         """Summary statistics for the clustering engine."""
         total = len(self._relationships)
         resolved = [r for r in self._relationships if r.resolved]
-        correct = [
-            r for r in resolved
-            if r.outcome_correct is not None and r.outcome_correct
-        ]
+        correct = [r for r in resolved if r.outcome_correct is not None and r.outcome_correct]
         pending_followers = len(self.get_pending_follower_trades())
 
         return {

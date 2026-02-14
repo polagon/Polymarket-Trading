@@ -6,9 +6,10 @@ Research backing: 4 papers show multi-timeframe analysis beats single-interval b
 
 Storage: memory/price_snapshots.json (rolling 168-hour window per asset)
 """
+
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from datetime import datetime, timezone, timedelta
 from typing import Optional
 
 SNAPSHOTS_FILE = Path(__file__).resolve().parent.parent / "memory" / "price_snapshots.json"
@@ -20,16 +21,16 @@ def _load_snapshots() -> dict:
     if not SNAPSHOTS_FILE.exists():
         return {}
     try:
-        with open(SNAPSHOTS_FILE, 'r') as f:
-            return json.load(f)
-    except:
+        with open(SNAPSHOTS_FILE, "r") as f:
+            return json.load(f)  # type: ignore[no-any-return]
+    except Exception:
         return {}
 
 
 def _save_snapshots(snapshots: dict):
     """Save price snapshot history to disk."""
     SNAPSHOTS_FILE.parent.mkdir(parents=True, exist_ok=True)
-    with open(SNAPSHOTS_FILE, 'w') as f:
+    with open(SNAPSHOTS_FILE, "w") as f:
         json.dump(snapshots, f, indent=2)
 
 
@@ -55,10 +56,7 @@ def store_price_snapshot(asset_id: str, price: float, timestamp: Optional[str] =
 
     # Prune old snapshots (keep only last 168 hours)
     cutoff = datetime.now(timezone.utc) - timedelta(hours=MAX_HISTORY_HOURS)
-    snapshots[asset_id] = [
-        s for s in snapshots[asset_id]
-        if datetime.fromisoformat(s["timestamp"]) > cutoff
-    ]
+    snapshots[asset_id] = [s for s in snapshots[asset_id] if datetime.fromisoformat(s["timestamp"]) > cutoff]
 
     # Sort by timestamp (most recent last)
     snapshots[asset_id].sort(key=lambda s: s["timestamp"])
@@ -83,9 +81,7 @@ def get_price_history(asset_id: str, hours: int = 24) -> list[tuple[str, float]]
 
     cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
     recent = [
-        (s["timestamp"], s["price"])
-        for s in snapshots[asset_id]
-        if datetime.fromisoformat(s["timestamp"]) > cutoff
+        (s["timestamp"], s["price"]) for s in snapshots[asset_id] if datetime.fromisoformat(s["timestamp"]) > cutoff
     ]
 
     return recent
@@ -184,13 +180,13 @@ def compute_rsi_14(asset_id: str, periods: int = 14) -> Optional[float]:
     losses = []
 
     for i in range(1, len(prices)):
-        change = prices[i] - prices[i-1]
+        change = prices[i] - prices[i - 1]
         if change > 0:
             gains.append(change)
             losses.append(0)
         else:
             gains.append(0)
-            losses.append(abs(change))
+            losses.append(abs(change))  # type: ignore[arg-type]
 
     if len(gains) < periods:
         return None

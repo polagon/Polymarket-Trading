@@ -3,13 +3,14 @@ Parity Scanner - YES/NO consistency arbitrage.
 
 CRITICAL FIX #2, #7: Query BOTH YES and NO books separately (not identity formula).
 """
+
 import logging
 from typing import List, Optional
 
-from models.types import Market, OrderBook, ArbitrageOpp
+from config import DISABLE_PARITY_FOR_NEG_RISK, PARITY_MIN_PROFIT
 from execution import fees
+from models.types import ArbitrageOpp, Market, OrderBook
 from risk.portfolio_engine import PortfolioRiskEngine
-from config import PARITY_MIN_PROFIT, DISABLE_PARITY_FOR_NEG_RISK
 
 logger = logging.getLogger(__name__)
 
@@ -56,9 +57,7 @@ def scan_parity_arb(
         return None
 
     # Compute net profit after fees
-    net_profit = fees.net_parity_profit(
-        yes_ask, no_ask, market.fee_rate_bps, size=1.0
-    )
+    net_profit = fees.net_parity_profit(yes_ask, no_ask, market.fee_rate_bps, size=1.0)
 
     if net_profit < PARITY_MIN_PROFIT:
         return None

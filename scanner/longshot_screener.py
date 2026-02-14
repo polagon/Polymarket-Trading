@@ -21,43 +21,44 @@ Also based on: CyberK "AI Agents Making Millions on Polymarket"
   "If an agent can acquire both sides at a combined cost below $1,
    profit becomes guaranteed regardless of the outcome."
 """
+
 from dataclasses import dataclass
 from typing import Optional
 
-from scanner.market_fetcher import Market
 from config import MIN_MARKET_LIQUIDITY
-
+from scanner.market_fetcher import Market
 
 # Longshot thresholds (from microstructure research)
-LONGSHOT_MAX_YES_PRICE = 0.08    # Markets priced below 8¢ YES
-LONGSHOT_MIN_YES_PRICE = 0.01    # Avoid dust markets
-LONGSHOT_BASE_EDGE = 0.025       # Conservative: even 2.5% structural edge at 5¢
-LONGSHOT_MIN_LIQUIDITY = 1000    # Need at least $1k to have meaningful order
+LONGSHOT_MAX_YES_PRICE = 0.08  # Markets priced below 8¢ YES
+LONGSHOT_MIN_YES_PRICE = 0.01  # Avoid dust markets
+LONGSHOT_BASE_EDGE = 0.025  # Conservative: even 2.5% structural edge at 5¢
+LONGSHOT_MIN_LIQUIDITY = 1000  # Need at least $1k to have meaningful order
 
 # Arbitrage threshold
-ARB_MAX_COMBINED = 0.97          # YES + NO combined price (0.97 leaves 3¢ for fees/slippage)
-ARB_MIN_LIQUIDITY = 2000         # Need both sides liquid
+ARB_MAX_COMBINED = 0.97  # YES + NO combined price (0.97 leaves 3¢ for fees/slippage)
+ARB_MIN_LIQUIDITY = 2000  # Need both sides liquid
 
 # Category-specific confidence multipliers (from research)
 CATEGORY_CONFIDENCE = {
     "entertainment": 0.80,
-    "other": 0.72,       # "world events" proxy
+    "other": 0.72,  # "world events" proxy
     "sports": 0.68,
     "weather": 0.65,
     "crypto": 0.55,
-    "politics": 0.60,    # explicitly lower — institutional entrants closing gaps
+    "politics": 0.60,  # explicitly lower — institutional entrants closing gaps
 }
 
 
 @dataclass
 class LongshotSignal:
     """A BUY NO signal from the longshot bias screener."""
+
     market: Market
-    yes_price: float          # e.g. 0.04 (4¢)
-    no_price: float           # e.g. 0.96
-    structural_edge: float    # Expected edge from longshot bias (positive = BUY NO)
+    yes_price: float  # e.g. 0.04 (4¢)
+    no_price: float  # e.g. 0.96
+    structural_edge: float  # Expected edge from longshot bias (positive = BUY NO)
     ev_after_costs: float
-    robustness: int           # 1-5
+    robustness: int  # 1-5
     confidence: float
     reasoning: str
     source: str = "longshot_screener"
@@ -98,12 +99,13 @@ class LongshotSignal:
 @dataclass
 class ArbitrageSignal:
     """A guaranteed-profit signal from YES+NO combined price < $1."""
+
     market: Market
     yes_price: float
     no_price: float
-    combined_price: float     # yes + no
+    combined_price: float  # yes + no
     guaranteed_profit_pct: float  # (1 - combined) / combined
-    min_position_usd: float   # Minimum to make meaningful profit after fees
+    min_position_usd: float  # Minimum to make meaningful profit after fees
     source: str = "arbitrage_scanner"
 
 
@@ -146,7 +148,7 @@ def screen_longshot_markets(markets: list[Market]) -> list[LongshotSignal]:
         true_yes_probability = yes * (1 - overpricing_factor)
         structural_edge = yes - true_yes_probability  # How much YES is overpriced
 
-        ev = structural_edge - 0.005   # Subtract fees
+        ev = structural_edge - 0.005  # Subtract fees
 
         if ev <= 0:
             continue
@@ -154,11 +156,11 @@ def screen_longshot_markets(markets: list[Market]) -> list[LongshotSignal]:
         # Robustness: how robust is this edge to estimation error?
         # The longshot bias is consistent — even if we're off, direction is clear
         if yes <= 0.03:
-            rob = 4   # Very clear longshot — overpricing strong
+            rob = 4  # Very clear longshot — overpricing strong
         elif yes <= 0.05:
             rob = 4
         else:
-            rob = 3   # 6-8¢ — still significant but less extreme
+            rob = 3  # 6-8¢ — still significant but less extreme
 
         # Extra confidence boost for high-liquidity longshots (more toxic flow = more overpricing)
         if market.liquidity > 50000:
@@ -171,16 +173,18 @@ def screen_longshot_markets(markets: list[Market]) -> list[LongshotSignal]:
             f"Category: {cat} ({conf_base:.0%} conf tier)."
         )
 
-        signals.append(LongshotSignal(
-            market=market,
-            yes_price=yes,
-            no_price=no or (1 - yes),
-            structural_edge=structural_edge,
-            ev_after_costs=round(ev, 4),
-            robustness=rob,
-            confidence=conf_base,
-            reasoning=reasoning,
-        ))
+        signals.append(
+            LongshotSignal(
+                market=market,
+                yes_price=yes,
+                no_price=no or (1 - yes),
+                structural_edge=structural_edge,
+                ev_after_costs=round(ev, 4),
+                robustness=rob,
+                confidence=conf_base,
+                reasoning=reasoning,
+            )
+        )
 
     # Sort by EV * confidence (best opportunities first)
     return sorted(signals, key=lambda s: s.ev_after_costs * s.confidence, reverse=True)
@@ -214,7 +218,7 @@ def scan_for_arbitrage(markets: list[Market]) -> list[ArbitrageSignal]:
             continue
         # Skip long-dated markets — arb edge erodes with time (metaggdev finding)
         # Long-dated combined price can stay <1 for days with no resolution in sight
-        if market.hours_to_expiry > 168:   # 7 days
+        if market.hours_to_expiry > 168:  # 7 days
             continue
 
         combined = yes + no
@@ -233,14 +237,16 @@ def scan_for_arbitrage(markets: list[Market]) -> list[ArbitrageSignal]:
         # Min position to make it worth executing (>$5 profit after gas/fees)
         min_position = max(50.0, 5.0 / net_profit_pct)
 
-        signals.append(ArbitrageSignal(
-            market=market,
-            yes_price=yes,
-            no_price=no,
-            combined_price=combined,
-            guaranteed_profit_pct=round(net_profit_pct, 4),
-            min_position_usd=round(min_position, 2),
-        ))
+        signals.append(
+            ArbitrageSignal(
+                market=market,
+                yes_price=yes,
+                no_price=no,
+                combined_price=combined,
+                guaranteed_profit_pct=round(net_profit_pct, 4),
+                min_position_usd=round(min_position, 2),
+            )
+        )
 
     # Best arbitrage first (highest guaranteed profit %)
     return sorted(signals, key=lambda s: s.guaranteed_profit_pct, reverse=True)

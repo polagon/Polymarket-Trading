@@ -6,26 +6,28 @@ CRITICAL FIXES:
 - #6: Tick rounding before clamping
 - #12: Uses time_to_close
 """
-import logging
-from typing import Tuple, Optional
 
-from models.types import Market, OrderBook, OrderIntent, MarketState
-from execution import mid as mid_module, units, expiration
-from risk import market_state
+import logging
+from typing import Optional, Tuple
+
 from config import (
+    BANKROLL,
+    BASE_QUOTE_SIZE_USD,
     FV_BASE_HALF_WIDTH,
     FV_HIGH_CHURN_MULTIPLIER,
     FV_JUMP_RISK_MULTIPLIER,
     FV_NEAR_CLOSE_MULTIPLIER,
-    BASE_QUOTE_SIZE_USD,
     INVENTORY_SIZE_REDUCTION_MAX,
     INVENTORY_SKEW_MAX_CENTS,
     MAX_MARKET_INVENTORY_PCT,
-    BANKROLL,
-    MIN_PRICE,
     MAX_PRICE,
+    MIN_PRICE,
     STANDARD_TICK_SIZE,
 )
+from execution import expiration, units
+from execution import mid as mid_module
+from models.types import Market, MarketState, OrderBook, OrderIntent
+from risk import market_state
 
 logger = logging.getLogger(__name__)
 
@@ -150,8 +152,7 @@ def compute_quotes(
     # Hard veto: refuse if spread collapsed
     if bid >= ask:
         raise ValueError(
-            f"Cannot place quotes: bid {bid:.4f} >= ask {ask:.4f}. "
-            f"Spread collapsed for {market.condition_id}"
+            f"Cannot place quotes: bid {bid:.4f} >= ask {ask:.4f}. Spread collapsed for {market.condition_id}"
         )
 
     return (bid, ask)
@@ -283,8 +284,7 @@ def create_maker_orders(
     )
 
     logger.info(
-        f"Maker orders created: {market.condition_id} "
-        f"bid={bid:.4f}@{bid_size:.2f} ask={ask:.4f}@{ask_size:.2f}"
+        f"Maker orders created: {market.condition_id} bid={bid:.4f}@{bid_size:.2f} ask={ask:.4f}@{ask_size:.2f}"
     )
 
     return (bid_order, ask_order)

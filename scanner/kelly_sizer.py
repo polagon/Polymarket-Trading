@@ -2,6 +2,7 @@
 Kelly Criterion position sizing for binary prediction markets.
 Uses fractional Kelly (25%) with hard position size caps.
 """
+
 from config import MAX_KELLY_FRACTION, MAX_POSITION_PCT
 
 

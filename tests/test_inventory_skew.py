@@ -1,8 +1,10 @@
 """
 Test inventory skew math (CRITICAL FIX #4).
 """
+
 import pytest
-from config import BANKROLL, MAX_MARKET_INVENTORY_PCT, INVENTORY_SKEW_MAX_CENTS
+
+from config import BANKROLL, INVENTORY_SKEW_MAX_CENTS, MAX_MARKET_INVENTORY_PCT
 
 
 def test_inventory_skew_correct_sign():

@@ -8,10 +8,12 @@ Applies Astra's Module 3 minimum bar to flag tradeable mispricings:
   - No trap flags that triggered no_trade
   - Not marked no_trade by Astra
 """
+
 from dataclasses import dataclass
+
+from config import MIN_CONFIDENCE, MIN_MARKET_LIQUIDITY, MISPRICING_THRESHOLD
 from scanner.market_fetcher import Market
 from scanner.probability_estimator import Estimate
-from config import MISPRICING_THRESHOLD, MIN_CONFIDENCE, MIN_MARKET_LIQUIDITY
 
 
 def _apply_longshot_calibration(our_estimate: float, market_price: float) -> float:
@@ -43,14 +45,14 @@ def _apply_longshot_calibration(our_estimate: float, market_price: float) -> flo
 class Opportunity:
     market: Market
     estimate: Estimate
-    market_price: float       # Current YES price (0-1)
-    our_estimate: float       # Astra's p_hat (0-1)
-    edge: float               # p_hat - market_implied (signed)
-    direction: str            # "BUY YES" or "BUY NO"
-    ev_after_costs: float     # Expected value after fees/slippage
-    robustness_score: int     # 1-5 (Astra V2 Module 3)
-    score: float              # abs(edge) * confidence * (robustness/5) — sorting key
-    kelly_pct: float          # Suggested position as % of bankroll
+    market_price: float  # Current YES price (0-1)
+    our_estimate: float  # Astra's p_hat (0-1)
+    edge: float  # p_hat - market_implied (signed)
+    direction: str  # "BUY YES" or "BUY NO"
+    ev_after_costs: float  # Expected value after fees/slippage
+    robustness_score: int  # 1-5 (Astra V2 Module 3)
+    score: float  # abs(edge) * confidence * (robustness/5) — sorting key
+    kelly_pct: float  # Suggested position as % of bankroll
 
 
 def find_opportunities(
@@ -122,18 +124,20 @@ def find_opportunities(
 
         if net_arbitrage > 0.005:  # Profitable after fees (0.5¢ minimum)
             # Risk-free arbitrage: buy both YES and NO, guaranteed profit on resolution
-            opportunities.append(Opportunity(
-                market=market,
-                estimate=est,
-                market_price=market.yes_price,
-                our_estimate=0.50,  # Neutral probability (we profit either way)
-                edge=net_arbitrage,
-                direction="BUY BOTH",  # Special flag for arbitrage
-                ev_after_costs=net_arbitrage,  # Pure arbitrage EV
-                robustness_score=5,  # Maximum robustness (risk-free)
-                score=999.0 + (net_arbitrage * 100),  # Always top priority, scaled by edge
-                kelly_pct=0.25,  # Max Kelly for risk-free arb (limited by liquidity)
-            ))
+            opportunities.append(
+                Opportunity(
+                    market=market,
+                    estimate=est,
+                    market_price=market.yes_price,
+                    our_estimate=0.50,  # Neutral probability (we profit either way)
+                    edge=net_arbitrage,
+                    direction="BUY BOTH",  # Special flag for arbitrage
+                    ev_after_costs=net_arbitrage,  # Pure arbitrage EV
+                    robustness_score=5,  # Maximum robustness (risk-free)
+                    score=999.0 + (net_arbitrage * 100),  # Always top priority, scaled by edge
+                    kelly_pct=0.25,  # Max Kelly for risk-free arb (limited by liquidity)
+                )
+            )
             continue  # Skip normal mispricing logic for arbitrage opportunities
 
         # Astra V2 Module 3 minimum bar
@@ -168,17 +172,19 @@ def find_opportunities(
         if wb > 0:
             score = score * (1.0 + wb)  # e.g. 3σ spike → +5% score boost
 
-        opportunities.append(Opportunity(
-            market=market,
-            estimate=est,
-            market_price=market.yes_price,
-            our_estimate=calibrated_p,   # use calibrated estimate
-            edge=edge,
-            direction=direction,
-            ev_after_costs=est.ev_after_costs,
-            robustness_score=est.robustness_score,
-            score=score,
-            kelly_pct=est.kelly_position_pct,
-        ))
+        opportunities.append(
+            Opportunity(
+                market=market,
+                estimate=est,
+                market_price=market.yes_price,
+                our_estimate=calibrated_p,  # use calibrated estimate
+                edge=edge,
+                direction=direction,
+                ev_after_costs=est.ev_after_costs,
+                robustness_score=est.robustness_score,
+                score=score,
+                kelly_pct=est.kelly_position_pct,
+            )
+        )
 
     return sorted(opportunities, key=lambda x: x.score, reverse=True)

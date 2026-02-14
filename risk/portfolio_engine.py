@@ -7,25 +7,26 @@ CRITICAL FIXES:
 - #18: Balance reservations from open orders
 - #21: Near-close ratchet uses time_to_close
 """
-import logging
-import hashlib
-from typing import Optional, Tuple
-from collections import defaultdict
 
-from models.types import Market, Event, PortfolioExposure, Cluster
-from execution import units
-from risk import market_state
+import hashlib
+import logging
+from collections import defaultdict
+from typing import Optional, Tuple
+
 from config import (
     BANKROLL,
-    MAX_CLUSTER_EXPOSURE_PCT,
     MAX_AGG_EXPOSURE_PCT,
+    MAX_CLUSTER_EXPOSURE_PCT,
     MAX_MARKET_INVENTORY_PCT,
+    NEAR_RESOLUTION_CAP_MULTIPLIER,
+    NEAR_RESOLUTION_HOURS,
+    NEG_RISK_SINGLE_CLUSTER,
     SATELLITE_RISK_BUDGET_PCT,
     TAKER_RISK_BUDGET_PCT,
-    NEAR_RESOLUTION_HOURS,
-    NEAR_RESOLUTION_CAP_MULTIPLIER,
-    NEG_RISK_SINGLE_CLUSTER,
 )
+from execution import units
+from models.types import Cluster, Event, Market, PortfolioExposure
+from risk import market_state
 
 logger = logging.getLogger(__name__)
 
@@ -61,9 +62,7 @@ class PortfolioRiskEngine:
         if market.event and (market.event.neg_risk or market.event.augmented_neg_risk):
             if NEG_RISK_SINGLE_CLUSTER:
                 cluster_id = f"negRisk_event_{market.event.event_id}"
-                logger.info(
-                    f"Market {market.condition_id}: negRisk event → cluster {cluster_id}"
-                )
+                logger.info(f"Market {market.condition_id}: negRisk event → cluster {cluster_id}")
                 self.cluster_cache[market.condition_id] = cluster_id
                 return cluster_id
 
@@ -165,9 +164,7 @@ class PortfolioRiskEngine:
 
         return (True, "OK")
 
-    def update_exposure(
-        self, cluster_id: str, market_id: str, token_id: str, delta_usd: float, delta_tokens: float
-    ):
+    def update_exposure(self, cluster_id: str, market_id: str, token_id: str, delta_usd: float, delta_tokens: float):
         """
         Update exposure after position change (entry or exit).
 
@@ -181,26 +178,19 @@ class PortfolioRiskEngine:
             delta_tokens: Change in token count (signed)
         """
         # Update cluster exposure
-        self.exposure.cluster_exposures[cluster_id] = (
-            self.exposure.cluster_exposures.get(cluster_id, 0.0) + delta_usd
-        )
+        self.exposure.cluster_exposures[cluster_id] = self.exposure.cluster_exposures.get(cluster_id, 0.0) + delta_usd
 
         # Update market exposure
-        self.exposure.market_exposures[market_id] = (
-            self.exposure.market_exposures.get(market_id, 0.0) + delta_usd
-        )
+        self.exposure.market_exposures[market_id] = self.exposure.market_exposures.get(market_id, 0.0) + delta_usd
 
         # Update token inventory (CRITICAL FIX #5)
-        self.exposure.token_inventory[token_id] = (
-            self.exposure.token_inventory.get(token_id, 0.0) + delta_tokens
-        )
+        self.exposure.token_inventory[token_id] = self.exposure.token_inventory.get(token_id, 0.0) + delta_tokens
 
         # Update aggregate
         self.exposure.total_exposure_usd += delta_usd
 
         logger.debug(
-            f"Exposure updated: {market_id} {cluster_id} "
-            f"delta_usd={delta_usd:.2f} delta_tokens={delta_tokens:.2f}"
+            f"Exposure updated: {market_id} {cluster_id} delta_usd={delta_usd:.2f} delta_tokens={delta_tokens:.2f}"
         )
 
     def reserve_for_order(self, order: dict):
@@ -284,10 +274,7 @@ class PortfolioRiskEngine:
             current = self.exposure.reserved_tokens_by_token_id.get(token_id, 0.0)
             self.exposure.reserved_tokens_by_token_id[token_id] = max(0.0, current - fill_size)
 
-            logger.info(
-                f"Partial fill reservation release: {order_id} "
-                f"released {fill_size:.2f} tokens"
-            )
+            logger.info(f"Partial fill reservation release: {order_id} released {fill_size:.2f} tokens")
 
     def transfer_reservation_on_replace(self, old_order: dict, new_order: dict):
         """
@@ -323,9 +310,7 @@ class PortfolioRiskEngine:
             True if parity arb allowed, False otherwise
         """
         if market.event and (market.event.neg_risk or market.event.augmented_neg_risk):
-            logger.warning(
-                f"Market {market.condition_id}: negRisk event → parity arb disabled"
-            )
+            logger.warning(f"Market {market.condition_id}: negRisk event → parity arb disabled")
             return False
 
         return True

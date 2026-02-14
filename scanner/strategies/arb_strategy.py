@@ -7,11 +7,12 @@ Profit is guaranteed at resolution regardless of outcome.
 Note: Requires live CLOB execution to capture both legs atomically.
 In paper trading mode, signals are recorded but only one leg can be tracked.
 """
+
 from typing import Optional
 
-from scanner.market_fetcher import Market
 from scanner.longshot_screener import scan_for_arbitrage
-from scanner.strategies.base import BaseStrategy, TradeSignal, StrategyContext
+from scanner.market_fetcher import Market
+from scanner.strategies.base import BaseStrategy, StrategyContext, TradeSignal
 
 
 class ArbitrageStrategy(BaseStrategy):
@@ -71,10 +72,10 @@ class ArbitrageStrategy(BaseStrategy):
             condition_id=market.condition_id,
             question=market.question,
             direction=direction,
-            confidence=0.90,   # High confidence — maths, not prediction
+            confidence=0.90,  # High confidence — maths, not prediction
             target_price=entry_price,
             kelly_pct=round(kelly, 4),
-            edge=1.0 - sig.combined_price,   # The spread is the edge
+            edge=1.0 - sig.combined_price,  # The spread is the edge
             ev_after_costs=sig.guaranteed_profit_pct,
             source=self.name,
             reasoning=reasoning,

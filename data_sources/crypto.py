@@ -3,15 +3,16 @@ Fetches crypto price data from CoinGecko (free, no API key needed).
 Computes probability estimates for crypto price markets using
 a lognormal distribution model.
 """
-import re
-import math
+
 import asyncio
+import math
+import re
 from dataclasses import dataclass
 from typing import Optional
+
 import aiohttp
 
 from config import COINGECKO_API_URL
-
 
 # Map common token names/symbols to CoinGecko IDs
 COINGECKO_ID_MAP = {
@@ -93,7 +94,7 @@ async def fetch_prices(coin_ids: list[str]) -> dict[str, CryptoContext]:
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, params=params, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+            async with session.get(url, params=params, timeout=aiohttp.ClientTimeout(total=10)) as resp:  # type: ignore[arg-type]
                 if resp.status != 200:
                     return {}
                 data = await resp.json()
@@ -112,8 +113,9 @@ async def fetch_prices(coin_ids: list[str]) -> dict[str, CryptoContext]:
     return result
 
 
-def _lognormal_prob_above(current_price: float, target_price: float,
-                           annualized_vol: float, days_to_expiry: float) -> float:
+def _lognormal_prob_above(
+    current_price: float, target_price: float, annualized_vol: float, days_to_expiry: float
+) -> float:
     """
     Probability that price is above target_price at expiry, assuming lognormal.
     Uses risk-neutral drift = 0 (prediction market context).
@@ -163,7 +165,7 @@ def parse_crypto_question(question: str) -> Optional[dict]:
     # Find coin
     coin_id = None
     for symbol, gid in COINGECKO_ID_MAP.items():
-        if re.search(r'\b' + re.escape(symbol) + r'\b', q):
+        if re.search(r"\b" + re.escape(symbol) + r"\b", q):
             coin_id = gid
             break
 
@@ -171,8 +173,8 @@ def parse_crypto_question(question: str) -> Optional[dict]:
         return None
 
     # Find direction
-    above = bool(re.search(r'\babove\b|\bhigher than\b|\bexceed\b|\bhit\b|\breach\b|\bbreak\b', q))
-    below = bool(re.search(r'\bbelow\b|\bunder\b|\bfall below\b|\bdrop below\b', q))
+    above = bool(re.search(r"\babove\b|\bhigher than\b|\bexceed\b|\bhit\b|\breach\b|\bbreak\b", q))
+    below = bool(re.search(r"\bbelow\b|\bunder\b|\bfall below\b|\bdrop below\b", q))
 
     if not above and not below:
         return None
@@ -182,12 +184,12 @@ def parse_crypto_question(question: str) -> Optional[dict]:
     # Find price target
     # Match patterns like $1m, $100k, $100,000, $1.5b
     price_patterns = [
-        (r'\$([0-9,]+(?:\.[0-9]+)?)\s*b(?:illion)?\b', 1e9),   # $1b, $1billion
-        (r'\$([0-9,]+(?:\.[0-9]+)?)\s*m(?:illion)?\b', 1e6),   # $1m, $1million
-        (r'\$([0-9,]+(?:\.[0-9]+)?)\s*k\b', 1e3),               # $80k
-        (r'\$([0-9,]+(?:\.[0-9]+)?)\b', 1),                     # $100,000
-        (r'\b([0-9,]+(?:\.[0-9]+)?)\s*k\b', 1e3),               # 80k
-        (r'\b([0-9]{4,}(?:,[0-9]{3})*(?:\.[0-9]+)?)\b', 1),    # 100,000
+        (r"\$([0-9,]+(?:\.[0-9]+)?)\s*b(?:illion)?\b", 1e9),  # $1b, $1billion
+        (r"\$([0-9,]+(?:\.[0-9]+)?)\s*m(?:illion)?\b", 1e6),  # $1m, $1million
+        (r"\$([0-9,]+(?:\.[0-9]+)?)\s*k\b", 1e3),  # $80k
+        (r"\$([0-9,]+(?:\.[0-9]+)?)\b", 1),  # $100,000
+        (r"\b([0-9,]+(?:\.[0-9]+)?)\s*k\b", 1e3),  # 80k
+        (r"\b([0-9]{4,}(?:,[0-9]{3})*(?:\.[0-9]+)?)\b", 1),  # 100,000
     ]
 
     target_price = None
@@ -213,8 +215,7 @@ def parse_crypto_question(question: str) -> Optional[dict]:
     }
 
 
-def estimate_probability(question: str, days_to_expiry: float,
-                          price_data: dict[str, CryptoContext]) -> Optional[dict]:
+def estimate_probability(question: str, days_to_expiry: float, price_data: dict[str, CryptoContext]) -> Optional[dict]:
     """
     Returns probability estimate and metadata for a crypto price market.
     Returns None if the question can't be parsed or data is missing.
@@ -229,9 +230,7 @@ def estimate_probability(question: str, days_to_expiry: float,
         return None
 
     vol = VOLATILITY_MAP.get(coin_id, DEFAULT_VOLATILITY)
-    prob_above = _lognormal_prob_above(
-        ctx.current_price, parsed["target_price"], vol, days_to_expiry
-    )
+    prob_above = _lognormal_prob_above(ctx.current_price, parsed["target_price"], vol, days_to_expiry)
 
     if parsed["direction"] == "above":
         probability = prob_above
@@ -240,7 +239,9 @@ def estimate_probability(question: str, days_to_expiry: float,
 
     # Confidence: higher when current price is far from target (less model sensitivity)
     # Lower when near the boundary (small vol estimate errors matter a lot)
-    distance_ratio = abs(math.log(ctx.current_price / parsed["target_price"])) / (vol * math.sqrt(max(days_to_expiry, 1) / 365))
+    distance_ratio = abs(math.log(ctx.current_price / parsed["target_price"])) / (
+        vol * math.sqrt(max(days_to_expiry, 1) / 365)
+    )
     confidence = min(0.85, 0.4 + distance_ratio * 0.15)
 
     return {
@@ -254,5 +255,5 @@ def estimate_probability(question: str, days_to_expiry: float,
             "direction": parsed["direction"],
             "days_to_expiry": days_to_expiry,
             "annualized_vol": vol,
-        }
+        },
     }

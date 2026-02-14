@@ -2,12 +2,14 @@
 Fetches active markets and prices from Polymarket Gamma API.
 No authentication required for read-only access.
 """
+
+import asyncio
 import json
 import time
-import asyncio
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Optional
+
 import aiohttp
 
 from config import GAMMA_API_URL, MAX_REQUESTS_PER_MINUTE, MIN_HOURS_TO_EXPIRY, MIN_MARKET_LIQUIDITY
@@ -21,7 +23,7 @@ class Market:
     category: str
     yes_token_id: Optional[str]
     no_token_id: Optional[str]
-    yes_price: float = 0.0   # outcome price from Gamma API (0-1)
+    yes_price: float = 0.0  # outcome price from Gamma API (0-1)
     no_price: float = 0.0
     liquidity: float = 0.0
     volume: float = 0.0
@@ -71,9 +73,10 @@ def _hours_to_expiry(end_date_str: Optional[str]) -> float:
 
 def _infer_category(question: str, tags: list) -> str:
     import re
+
     q = question.lower()
     tag_names = []
-    for t in (tags or []):
+    for t in tags or []:
         if isinstance(t, dict):
             tag_names.append(t.get("label", "").lower())
         else:
@@ -83,23 +86,75 @@ def _infer_category(question: str, tags: list) -> str:
     def matches(keywords: list[str], text: str) -> bool:
         for kw in keywords:
             # Use word boundaries for short tokens to avoid false substring matches
-            pattern = r'\b' + re.escape(kw) + r'\b'
+            pattern = r"\b" + re.escape(kw) + r"\b"
             if re.search(pattern, text):
                 return True
         return False
 
     # Crypto: use word-boundary matching to avoid "netherlands" matching "eth"
-    crypto_kw = ["btc", "bitcoin", "eth", "ethereum", "sol", "solana", "crypto",
-                 "xrp", "bnb", "doge", "usdt", "altcoin", "defi", "nft",
-                 "blockchain", "web3", "market cap"]
-    weather_kw = ["temperature", "hurricane", "tropical storm", "rain", "snow",
-                  "tornado", "flood", "drought", "weather", "celsius", "fahrenheit",
-                  "wildfire", "earthquake", "blizzard", "typhoon", "precipitation",
-                  "heat wave", "frost"]
-    sports_kw = ["nfl", "nba", "mlb", "nhl", "soccer", "football", "basketball",
-                 "baseball", "championship", "super bowl", "world cup", "playoffs",
-                 "mvp", "draft", "premier league", "champions league", "ufc", "nascar",
-                 "tennis", "golf", "formula 1", "f1"]
+    crypto_kw = [
+        "btc",
+        "bitcoin",
+        "eth",
+        "ethereum",
+        "sol",
+        "solana",
+        "crypto",
+        "xrp",
+        "bnb",
+        "doge",
+        "usdt",
+        "altcoin",
+        "defi",
+        "nft",
+        "blockchain",
+        "web3",
+        "market cap",
+    ]
+    weather_kw = [
+        "temperature",
+        "hurricane",
+        "tropical storm",
+        "rain",
+        "snow",
+        "tornado",
+        "flood",
+        "drought",
+        "weather",
+        "celsius",
+        "fahrenheit",
+        "wildfire",
+        "earthquake",
+        "blizzard",
+        "typhoon",
+        "precipitation",
+        "heat wave",
+        "frost",
+    ]
+    sports_kw = [
+        "nfl",
+        "nba",
+        "mlb",
+        "nhl",
+        "soccer",
+        "football",
+        "basketball",
+        "baseball",
+        "championship",
+        "super bowl",
+        "world cup",
+        "playoffs",
+        "mvp",
+        "draft",
+        "premier league",
+        "champions league",
+        "ufc",
+        "nascar",
+        "tennis",
+        "golf",
+        "formula 1",
+        "f1",
+    ]
 
     if matches(crypto_kw, q) or matches(crypto_kw, tag_str):
         return "crypto"
@@ -115,7 +170,7 @@ async def fetch_active_markets(limit: int = 500) -> list[Market]:
     Fetch active markets from the Gamma API.
     Prices are included directly in the Gamma response via outcomePrices.
     """
-    markets = []
+    markets = []  # type: ignore[var-annotated]
     offset = 0
     page_size = 100
 
@@ -199,7 +254,7 @@ def _parse_market(item: dict) -> Optional[Market]:
         return None
 
     # Get tags from events if available
-    tags = []
+    tags = []  # type: ignore[var-annotated]
     events = item.get("events") or []
     for event in events:
         if isinstance(event, dict):

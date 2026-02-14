@@ -8,16 +8,18 @@ CRITICAL: Fetches ALL metadata needed for production:
 - event_id + negRisk flags
 - min_size (if available)
 """
-import json
-import time
+
 import asyncio
+import json
 import logging
+import time
 from datetime import datetime, timezone
-from typing import Optional, List
+from typing import List, Optional
+
 import aiohttp
 
-from models.types import Market, Event, MarketState
 from config import GAMMA_API_URL, MAX_REQUESTS_PER_MINUTE
+from models.types import Event, Market, MarketState
 
 logger = logging.getLogger(__name__)
 
@@ -116,9 +118,9 @@ def compute_activity_score(market: Market) -> float:
         time_score = 0.3
 
     activity_score = (
-        ACTIVITY_SCORE_WEIGHTS["volume_24h"] * volume_score +
-        ACTIVITY_SCORE_WEIGHTS["liquidity"] * liquidity_score +
-        ACTIVITY_SCORE_WEIGHTS["time_recency"] * time_score
+        ACTIVITY_SCORE_WEIGHTS["volume_24h"] * volume_score
+        + ACTIVITY_SCORE_WEIGHTS["liquidity"] * liquidity_score
+        + ACTIVITY_SCORE_WEIGHTS["time_recency"] * time_score
     )
 
     return activity_score
@@ -147,7 +149,7 @@ async def fetch_markets_with_metadata(
     Returns:
         List of Market instances with full metadata
     """
-    markets = []
+    markets = []  # type: ignore[var-annotated]
     offset = 0
     page_size = 100
 
@@ -161,8 +163,8 @@ async def fetch_markets_with_metadata(
                     "offset": offset,
                 }
                 if active_only:
-                    params["active"] = "true"
-                    params["closed"] = "false"
+                    params["active"] = "true"  # type: ignore[assignment]
+                    params["closed"] = "false"  # type: ignore[assignment]
 
                 async with session.get(
                     f"{GAMMA_API_URL}/markets",
@@ -260,7 +262,7 @@ def _parse_market_with_metadata(item: dict) -> Optional[Market]:
     volume_24h = float(item.get("volumeNum") or item.get("volume") or 0)
 
     # Category inference
-    tags = []
+    tags = []  # type: ignore[var-annotated]
     events_data = item.get("events") or []
     for event_dict in events_data:
         if isinstance(event_dict, dict):

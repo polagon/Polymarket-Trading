@@ -2,18 +2,20 @@
 Core data models for allocator-grade Polymarket system.
 All dataclasses follow ChatGPT-approved Core Spec v1.
 """
+
 from dataclasses import dataclass, field
-from typing import Optional, Literal
 from datetime import datetime
 from enum import Enum
-
+from typing import Literal, Optional
 
 # ============================================================================
 # MARKET STATE MACHINE (CRITICAL FIX #3)
 # ============================================================================
 
+
 class MarketState(str, Enum):
     """Market lifecycle states per three-clock time model."""
+
     NORMAL = "normal"
     WATCH = "watch"
     CLOSE_WINDOW = "close_window"
@@ -27,12 +29,14 @@ class MarketState(str, Enum):
 # EVENT & MARKET (with negRisk flags, CRITICAL FIX #17)
 # ============================================================================
 
+
 @dataclass
 class Event:
     """
     Polymarket event (can contain multiple markets).
     CRITICAL: negRisk and augmentedNegRisk flags affect cluster assignment.
     """
+
     event_id: str
     title: str
     neg_risk: bool = False  # negRisk events break parity assumptions
@@ -50,6 +54,7 @@ class Market:
     - #2: feeRateBps from metadata (NOT hardcoded)
     - #17: event with negRisk flags
     """
+
     condition_id: str
     question: str
     description: str
@@ -101,12 +106,14 @@ class Market:
         This property is kept for backward compatibility only.
         """
         from execution.mid import compute_mid
+
         return compute_mid(self.yes_bid, self.yes_ask)
 
 
 # ============================================================================
 # ORDER BOOK (with staleness tracking)
 # ============================================================================
+
 
 @dataclass
 class OrderBook:
@@ -115,6 +122,7 @@ class OrderBook:
 
     Includes staleness and churn tracking for QS computation.
     """
+
     token_id: str
 
     # Best prices
@@ -140,6 +148,7 @@ class OrderBook:
 # FILL (with maker/taker flag for markout tracking)
 # ============================================================================
 
+
 @dataclass
 class Fill:
     """
@@ -149,6 +158,7 @@ class Fill:
     - Includes maker/taker flag for Truth Report separation
     - GAP #2 FIX: Enhanced classification logic
     """
+
     fill_id: str
     order_id: str
     condition_id: str
@@ -221,6 +231,7 @@ class Fill:
 # ORDER INTENT (internal representation)
 # ============================================================================
 
+
 @dataclass
 class OrderIntent:
     """
@@ -230,6 +241,7 @@ class OrderIntent:
 
     GAP #2 FIX: Includes origin for maker/taker classification.
     """
+
     condition_id: str
     token_id: str
 
@@ -254,6 +266,7 @@ class OrderIntent:
 # SIGNED ORDER PAYLOAD (execution-truth fields, CRITICAL FIX #5)
 # ============================================================================
 
+
 @dataclass
 class SignedOrderPayload:
     """
@@ -261,6 +274,7 @@ class SignedOrderPayload:
 
     CRITICAL FIX #5: Includes execution-truth fields for reconciliation.
     """
+
     # Human-friendly fields
     token_id: str
     price: float
@@ -286,8 +300,10 @@ class SignedOrderPayload:
 # STORED ORDER (Order State Store, CRITICAL FIX #5)
 # ============================================================================
 
+
 class OrderStatus(str, Enum):
     """Order lifecycle states."""
+
     PENDING = "pending"
     LIVE = "live"
     FILLED = "filled"
@@ -305,6 +321,7 @@ class StoredOrder:
     - GAP #2: Order origin tracking for maker/taker classification
     - GAP #3: Partial fill tracking
     """
+
     # Identifier
     order_id: str
 
@@ -350,6 +367,7 @@ class StoredOrder:
 # CLUSTER ASSIGNMENT
 # ============================================================================
 
+
 @dataclass
 class Cluster:
     """
@@ -357,6 +375,7 @@ class Cluster:
 
     CRITICAL: Deterministic assignment (same market → same cluster_id).
     """
+
     cluster_id: str
     markets: list[str] = field(default_factory=list)  # condition_ids
 
@@ -373,6 +392,7 @@ class Cluster:
 # PORTFOLIO EXPOSURE (CRITICAL FIX #5, #18)
 # ============================================================================
 
+
 @dataclass
 class PortfolioExposure:
     """
@@ -382,6 +402,7 @@ class PortfolioExposure:
     - #5: Token-level inventory, mark-to-mid USD
     - #18: Balance reservations from open orders
     """
+
     # Per-market exposure (mark-to-mid USD)
     market_exposures: dict[str, float] = field(default_factory=dict)  # condition_id → USD
 
@@ -407,6 +428,7 @@ class PortfolioExposure:
 # ARBITRAGE OPPORTUNITY (CRITICAL FIX #7)
 # ============================================================================
 
+
 @dataclass
 class ArbitrageOpp:
     """
@@ -414,6 +436,7 @@ class ArbitrageOpp:
 
     CRITICAL FIX #7: Execution mode + leg risk awareness.
     """
+
     type: Literal["YES_NO_PARITY", "DUPLICATE_MARKETS"]
 
     markets: list[Market]

@@ -7,6 +7,7 @@ Hard veto gates:
 - RRS > 0.35 → refuse maker quoting
 - RRS > 0.25 → refuse satellite trades
 """
+
 import logging
 from typing import Dict
 
@@ -87,17 +88,10 @@ def compute_rrs(market: Market, metadata: Dict) -> float:
     clarification_risk = 0.8 if metadata.get("clarification_posted") else 0.2
 
     # Weighted sum
-    rrs = (
-        0.40 * ambiguity_score +
-        0.30 * dispute_score +
-        0.20 * time_risk +
-        0.10 * clarification_risk
-    )
+    rrs = 0.40 * ambiguity_score + 0.30 * dispute_score + 0.20 * time_risk + 0.10 * clarification_risk
 
     if rrs > 0.35:
-        logger.warning(
-            f"High RRS={rrs:.3f} for {market.condition_id}: {market.question[:80]}"
-        )
+        logger.warning(f"High RRS={rrs:.3f} for {market.condition_id}: {market.question[:80]}")
 
     return rrs
 

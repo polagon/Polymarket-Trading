@@ -4,8 +4,10 @@ Quick startup test for main_maker.py runtime.
 
 Tests that all components initialize without errors.
 """
+
 import asyncio
 import logging
+
 from main_maker import MarketMakerRuntime
 
 logging.basicConfig(

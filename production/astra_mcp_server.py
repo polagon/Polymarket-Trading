@@ -32,6 +32,7 @@ Once connected, you can ask Claude Code:
   "Show me the current paper portfolio"
   "Any whale signals or arbitrage right now?"
 """
+
 import asyncio
 import json
 import sys
@@ -43,17 +44,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import TextContent, Tool
 
 # Astra imports
-from config import BANKROLL, ANTHROPIC_API_KEY
-from scanner.market_fetcher import fetch_active_markets
-from scanner.longshot_screener import scan_for_arbitrage, screen_longshot_markets
+from config import ANTHROPIC_API_KEY, BANKROLL
+from data_sources.economic_calendar import check_markets_for_events, get_todays_events
 from data_sources.signals import fetch_all_signals
 from data_sources.whale_tracker import track_volume_and_detect_whales
-from data_sources.economic_calendar import check_markets_for_events, get_todays_events
 from production.clob_executor import get_credentials_status, is_live_trading_enabled
-
+from scanner.longshot_screener import scan_for_arbitrage, screen_longshot_markets
+from scanner.market_fetcher import fetch_active_markets
 
 # ─────────────────────────────────────────────────────────────────────────────
 # MCP Server setup
@@ -65,6 +65,7 @@ app = Server("astra-polymarket")
 # ─────────────────────────────────────────────────────────────────────────────
 # Tool: get_portfolio
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 @app.list_tools()
 async def list_tools() -> list[Tool]:
@@ -171,6 +172,7 @@ async def list_tools() -> list[Tool]:
 # Tool implementations
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 @app.call_tool()
 async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
@@ -193,19 +195,18 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
         lines = [
             f"# Astra Paper Portfolio — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-            f"",
+            "",
             f"**Bankroll:** ${BANKROLL:.2f} starting",
             f"**Open positions:** {len(open_pos)}",
             f"**Resolved trades:** {len(resolved)}",
             f"**Win rate:** {win_rate:.0%}",
             f"**Total P&L:** ${total_pnl:+.2f}",
-            f"",
-            f"## Open Positions",
+            "",
+            "## Open Positions",
         ]
-        for p in open_pos[-10:]:   # last 10
+        for p in open_pos[-10:]:  # last 10
             lines.append(
-                f"- {p['direction']} ${p['position_size']:.2f} @ {p['entry_price']:.3f} | "
-                f"{p['question'][:60]}"
+                f"- {p['direction']} ${p['position_size']:.2f} @ {p['entry_price']:.3f} | {p['question'][:60]}"
             )
         if len(open_pos) > 10:
             lines.append(f"  ... and {len(open_pos) - 10} more")
@@ -234,7 +235,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             lines = [
                 f"# Astra Scan Results — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
                 f"Scanned **{len(markets)}** markets",
-                f"",
+                "",
                 f"## Arbitrage Signals ({len(arb_signals)} found)",
             ]
             for arb in arb_signals[:5]:
@@ -244,21 +245,19 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                     f"{arb.market.question[:60]}"
                 )
 
-            lines.extend([f"", f"## Longshot BUY NO Signals ({len(longshot_signals)} found)"])
+            lines.extend(["", f"## Longshot BUY NO Signals ({len(longshot_signals)} found)"])
             for ls in longshot_signals[:5]:
                 lines.append(
-                    f"- YES@{ls.yes_price:.1%} → BUY NO | EV={ls.ev_after_costs:+.3f} | "
-                    f"{ls.market.question[:60]}"
+                    f"- YES@{ls.yes_price:.1%} → BUY NO | EV={ls.ev_after_costs:+.3f} | {ls.market.question[:60]}"
                 )
 
-            lines.extend([f"", f"## Whale Signals ({len(whale_signals)} volume spikes)"])
+            lines.extend(["", f"## Whale Signals ({len(whale_signals)} volume spikes)"])
             for sig in list(whale_signals.values())[:3]:
                 lines.append(
-                    f"- {sig.spike_ratio:.1f}× volume spike | ${sig.current_volume:,.0f} | "
-                    f"{sig.question[:60]}"
+                    f"- {sig.spike_ratio:.1f}× volume spike | ${sig.current_volume:,.0f} | {sig.question[:60]}"
                 )
 
-            lines.extend([f"", f"## Calendar Proximity ({len(calendar_events)} markets near events)"])
+            lines.extend(["", f"## Calendar Proximity ({len(calendar_events)} markets near events)"])
             for cid, events in list(calendar_events.items())[:3]:
                 market = next((m for m in markets if m.condition_id == cid), None)
                 if market and events:
@@ -281,8 +280,8 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
             return [TextContent(type="text", text="Error: ANTHROPIC_API_KEY not configured.")]
 
         try:
-            from scanner.probability_estimator import _astra_batch_adversarial
             from scanner.market_fetcher import Market
+            from scanner.probability_estimator import _astra_batch_adversarial
 
             # Create a synthetic Market object for evaluation
             synthetic_market = Market(
@@ -305,11 +304,11 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
             est = results[0]
             lines = [
-                f"# Astra Adversarial Evaluation",
+                "# Astra Adversarial Evaluation",
                 f"**Question:** {question}",
                 f"**Market price:** {market_price:.3f}",
-                f"",
-                f"## Result",
+                "",
+                "## Result",
                 f"- **p_hat:** {est.probability:.3f}",
                 f"- **p_neutral:** {est.p_neutral:.3f} (ignores market price)",
                 f"- **p_aware:** {est.p_aware:.3f} (Bayesian with market prior)",
@@ -320,14 +319,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
                 f"- **Kelly:** {est.kelly_position_pct:.2%} of bankroll",
                 f"- **Truth state:** {est.truth_state}",
                 f"- **Trade?** {'✅ YES' if not est.no_trade else f'❌ NO — {est.no_trade_reason}'}",
-                f"",
-                f"## Adversarial Analysis",
+                "",
+                "## Adversarial Analysis",
                 f"**PRO (YES case):** {est.pro_summary}",
                 f"**CON (NO case):** {est.con_summary}",
-                f"",
-                f"## Synthesis",
+                "",
+                "## Synthesis",
                 f"{est.reasoning}",
-                f"",
+                "",
                 f"*Evidence tier: {est.dominant_evidence_tier} | "
                 f"Correlation collapses: {est.correlation_collapses} | "
                 f"Mode: {'adversarial' if est.adversarial_mode else 'single-pass'}*",
@@ -378,7 +377,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
     # ── get_calendar_events ───────────────────────────────────────────────────
     elif name == "get_calendar_events":
         window = float(arguments.get("window_hours", 48))
-        events = get_todays_events(window_hours=window)
+        events = get_todays_events(window_hours=window)  # type: ignore[assignment]
         try:
             markets = await fetch_active_markets(limit=200)
             market_events = check_markets_for_events(markets, window)
@@ -389,14 +388,14 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         lines = [f"# Economic Calendar — Next {window:.0f}h\n"]
         if events:
             lines.append(f"## Upcoming Events ({len(events)})")
-            for ev in events:
+            for ev in events:  # type: ignore[assignment]
                 lines.append(f"- **{ev.name}** ({ev.event_type}) — {ev.date_utc[:16]} UTC")
                 lines.append(f"  {ev.description}")
         else:
             lines.append(f"No high-impact events in next {window:.0f}h.")
 
         if market_events:
-            lines.extend([f"", f"## Markets Near Events ({len(market_events)})"])
+            lines.extend(["", f"## Markets Near Events ({len(market_events)})"])
             market_by_id = {m.condition_id: m for m in markets}
             for cid, evts in list(market_events.items())[:10]:
                 market = market_by_id.get(cid)
@@ -411,18 +410,16 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         try:
             ctx = await fetch_all_signals()
             vix_str = (
-                f"{ctx.macro.vix:.1f} [{ctx.macro.vix_label}] "
-                f"Kelly×{ctx.macro.vix_kelly_multiplier:.2f}"
-                if ctx.macro and ctx.macro.vix is not None else "unavailable"
+                f"{ctx.macro.vix:.1f} [{ctx.macro.vix_label}] Kelly×{ctx.macro.vix_kelly_multiplier:.2f}"
+                if ctx.macro and ctx.macro.vix is not None
+                else "unavailable"
             )
             spread_str = (
                 f"{ctx.macro.yield_spread_10y2y:+.2f}% [{ctx.macro.recession_signal}]"
-                if ctx.macro and ctx.macro.yield_spread_10y2y is not None else "unavailable"
+                if ctx.macro and ctx.macro.yield_spread_10y2y is not None
+                else "unavailable"
             )
-            fg_str = (
-                f"{ctx.fear_greed.label} ({ctx.fear_greed.value}/100)"
-                if ctx.fear_greed else "unavailable"
-            )
+            fg_str = f"{ctx.fear_greed.label} ({ctx.fear_greed.value}/100)" if ctx.fear_greed else "unavailable"
         except Exception:
             vix_str = spread_str = fg_str = "unavailable (signals fetch failed)"
 
@@ -431,21 +428,21 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 
         lines = [
             f"# Astra System Status — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-            f"",
-            f"## API & Credentials",
+            "",
+            "## API & Credentials",
             f"- Anthropic API: {'✅ configured' if ANTHROPIC_API_KEY else '❌ not set'}",
             f"- {get_credentials_status()}",
             f"- Paper positions file: {'✅ exists' if has_positions else '⚠️  not found (run paper_trader.py)'}",
-            f"",
-            f"## Market Signals",
+            "",
+            "## Market Signals",
             f"- VIX: {vix_str}",
             f"- Yield spread: {spread_str}",
             f"- Crypto Fear/Greed: {fg_str}",
-            f"",
-            f"## Configuration",
+            "",
+            "## Configuration",
             f"- Bankroll: ${BANKROLL:.2f}",
-            f"- Circuit breaker: 5% daily loss limit",
-            f"- Order TTL (arb): 30s (when CLOB live)",
+            "- Circuit breaker: 5% daily loss limit",
+            "- Order TTL (arb): 30s (when CLOB live)",
         ]
         return [TextContent(type="text", text="\n".join(lines))]
 
@@ -455,6 +452,7 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 # ─────────────────────────────────────────────────────────────────────────────
 # Entry point
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 async def main():
     async with stdio_server() as (read_stream, write_stream):

@@ -10,25 +10,26 @@ CRITICAL: This is the ONLY place that:
 
 Strategy modules CANNOT bypass this layer.
 """
+
 import logging
 import time
-from typing import List, Optional, Tuple
 from collections import deque
+from typing import List, Optional, Tuple
 
-from models.types import OrderIntent, SignedOrderPayload, StoredOrder, OrderStatus, Market
-from execution import fees, units, expiration
-from execution.order_state_store import OrderStateStore
 from config import (
     MAX_BATCH_ORDERS,
-    POST_ONLY_ALLOWED_TYPES,
-    VALID_ORDER_TYPES,
+    MAX_PRICE,
+    MIN_PRICE,
     MUTATION_MAX_PER_CYCLE,
     MUTATION_MAX_PER_MINUTE,
     MUTATION_MIN_DRIFT_TICKS,
+    POST_ONLY_ALLOWED_TYPES,
     STANDARD_TICK_SIZE,
-    MIN_PRICE,
-    MAX_PRICE,
+    VALID_ORDER_TYPES,
 )
+from execution import expiration, fees, units
+from execution.order_state_store import OrderStateStore
+from models.types import Market, OrderIntent, OrderStatus, SignedOrderPayload, StoredOrder
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,7 @@ class CLOBExecutor:
         self.order_store = order_store
 
         # Rolling mutation budget (per minute)
-        self.mutation_timestamps = deque(maxlen=MUTATION_MAX_PER_MINUTE)
+        self.mutation_timestamps = deque(maxlen=MUTATION_MAX_PER_MINUTE)  # type: ignore[var-annotated]
 
         # GAP #5: Per-market mutation tracking + reject storm handling
         self.per_market_last_mutation: dict[str, float] = {}
@@ -74,8 +75,7 @@ class CLOBExecutor:
         """
         self.market_cache[market.condition_id] = market
         logger.debug(
-            f"Registered market {market.condition_id}: "
-            f"tick_size={market.tick_size}, fee_rate_bps={market.fee_rate_bps}"
+            f"Registered market {market.condition_id}: tick_size={market.tick_size}, fee_rate_bps={market.fee_rate_bps}"
         )
 
     def validate_market_constraints(self, intent: OrderIntent, market: Market) -> Tuple[bool, str]:
@@ -259,7 +259,10 @@ class CLOBExecutor:
 
         # Check budget
         if len(self.mutation_timestamps) + count > MUTATION_MAX_PER_MINUTE:
-            return False, f"Mutation budget exhausted: {len(self.mutation_timestamps)}/{MUTATION_MAX_PER_MINUTE} per minute"
+            return (
+                False,
+                f"Mutation budget exhausted: {len(self.mutation_timestamps)}/{MUTATION_MAX_PER_MINUTE} per minute",
+            )
 
         return True, "OK"
 
@@ -276,10 +279,7 @@ class CLOBExecutor:
         self.reject_counts[market_id] = self.reject_counts.get(market_id, 0) + 1
         reject_count = self.reject_counts[market_id]
 
-        logger.warning(
-            f"Order rejected for {market_id}: {error} "
-            f"(reject count: {reject_count})"
-        )
+        logger.warning(f"Order rejected for {market_id}: {error} (reject count: {reject_count})")
 
         # Reject storm detection (5+ rejects)
         if reject_count >= 5:
@@ -345,8 +345,7 @@ class CLOBExecutor:
         """
         if len(intents) > MAX_BATCH_ORDERS:
             raise ValueError(
-                f"Batch size {len(intents)} exceeds limit {MAX_BATCH_ORDERS}. "
-                "Slice batches before calling this method."
+                f"Batch size {len(intents)} exceeds limit {MAX_BATCH_ORDERS}. Slice batches before calling this method."
             )
 
         submitted = 0
@@ -468,8 +467,7 @@ class CLOBExecutor:
         result = await self.cancel_orders(order_ids)
 
         logger.warning(
-            f"Cancel-all complete: {result['canceled']} canceled, {result['failed']} failed. "
-            f"Reason: {reason}"
+            f"Cancel-all complete: {result['canceled']} canceled, {result['failed']} failed. Reason: {reason}"
         )
 
     def slice_batch(self, intents: List[OrderIntent]) -> List[List[OrderIntent]]:

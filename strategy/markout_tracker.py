@@ -7,20 +7,22 @@ QS can look great while you're being picked off slowly.
 "This single module is often the difference between 'looks amazing in paper' and 'dies live.'"
 - ChatGPT
 """
+
 import logging
-from typing import Dict, Optional, List
-from collections import deque, defaultdict
+from collections import defaultdict, deque
+from typing import Dict, List, Optional
+
 import numpy as np
 
-from models.types import Fill, OrderBook
 from config import (
     MARKOUT_INTERVALS,
+    TOXIC_FV_BAND_MULTIPLIER,
     TOXIC_MARKOUT_MEAN_VETO,
     TOXIC_MARKOUT_MILD,
     TOXIC_MARKOUT_WINDOW_SIZE,
-    TOXIC_FV_BAND_MULTIPLIER,
     TOXIC_SIZE_MULTIPLIER,
 )
+from models.types import Fill, OrderBook
 
 logger = logging.getLogger(__name__)
 
@@ -37,14 +39,10 @@ class MarkoutTracker:
 
     def __init__(self):
         # Markout history per market
-        self.markout_history: Dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=TOXIC_MARKOUT_WINDOW_SIZE)
-        )
+        self.markout_history: Dict[str, deque] = defaultdict(lambda: deque(maxlen=TOXIC_MARKOUT_WINDOW_SIZE))
 
         # Cluster-level markout
-        self.cluster_markout_history: Dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=TOXIC_MARKOUT_WINDOW_SIZE)
-        )
+        self.cluster_markout_history: Dict[str, deque] = defaultdict(lambda: deque(maxlen=TOXIC_MARKOUT_WINDOW_SIZE))
 
         # Fill tracking for markout computation
         self.pending_fills: List[dict] = []
@@ -78,7 +76,7 @@ class MarkoutTracker:
         fill_price = fill.price
         fill_timestamp = fill.timestamp
 
-        markouts = {}
+        markouts = {}  # type: ignore[var-annotated]
 
         for interval in intervals:
             target_ts = fill_timestamp + (interval * 1000)  # Convert to ms
@@ -87,7 +85,7 @@ class MarkoutTracker:
             closest_mid = self._find_closest_snapshot(book_snapshots, target_ts)
 
             if closest_mid is None:
-                markouts[f"markout_{interval}s"] = None
+                markouts[f"markout_{interval}s"] = None  # type: ignore[assignment]
                 continue
 
             # Compute markout
@@ -260,15 +258,15 @@ class MarkoutTracker:
             logger.warning(f"Cannot record fill for markout: no mid for {fill.fill_id}")
             return
 
-        self.pending_fills.append({
-            "fill": fill,
-            "mid_at_fill": mid,
-            "timestamp_ms": fill.timestamp,
-        })
-
-        logger.debug(
-            f"Recorded fill for markout: {fill.fill_id} mid={mid:.4f} @ {fill.timestamp}"
+        self.pending_fills.append(
+            {
+                "fill": fill,
+                "mid_at_fill": mid,
+                "timestamp_ms": fill.timestamp,
+            }
         )
+
+        logger.debug(f"Recorded fill for markout: {fill.fill_id} mid={mid:.4f} @ {fill.timestamp}")
 
     def override_quoteability(
         self,

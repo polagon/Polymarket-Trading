@@ -10,16 +10,17 @@ Implements Module 6 of the Astra V2 operating framework:
 - Post-resolution review with rule proposals
 - Anti-hallucination: unmeasured things are labeled as such
 """
-import json
+
 import asyncio
-from dataclasses import dataclass, asdict
+import json
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
 import anthropic
 
 from config import ANTHROPIC_API_KEY, CLAUDE_MODEL
-
 
 MEMORY_FILE = Path("memory/predictions.json")
 STRATEGY_FILE = Path("memory/strategy.md")
@@ -63,6 +64,7 @@ END your response with a JSON block (inside ```json ... ```) with ONLY the param
 @dataclass
 class Prediction:
     """A recorded Astra prediction with full audit trail."""
+
     market_condition_id: str
     question: str
     category: str
@@ -90,18 +92,20 @@ class Prediction:
 @dataclass
 class CalibrationBucket:
     """Calibration stats for a probability range bucket."""
+
     bucket: str
     predicted_avg: float
     actual_rate: float
     n: int
     brier_avg: float
-    bias: float          # actual_rate - predicted_avg (+ = we were underconfident)
+    bias: float  # actual_rate - predicted_avg (+ = we were underconfident)
     overconfidence: float  # predicted_avg - actual_rate (+ = overconfident)
 
 
 @dataclass
 class JournalEntry:
     """Structured log entry — matches Astra V2 output format."""
+
     timestamp: str
     market_condition_id: str
     question: str
@@ -201,18 +205,17 @@ class LearningAgent:
                 "total_pnl": 0.0,
             }
 
-        correct = sum(1 for p in resolved if
-                      (p.direction == "BUY YES" and p.outcome) or
-                      (p.direction == "BUY NO" and not p.outcome))
+        correct = sum(
+            1
+            for p in resolved
+            if (p.direction == "BUY YES" and p.outcome) or (p.direction == "BUY NO" and not p.outcome)
+        )
 
         brier_scores = [p.brier_score for p in resolved if p.brier_score is not None]
         brier_avg = sum(brier_scores) / len(brier_scores) if brier_scores else None
 
         # Overconfidence: avg(p_hat - outcome), positive = overconfident
-        overconf = sum(
-            p.our_probability - (1.0 if p.outcome else 0.0)
-            for p in resolved
-        ) / len(resolved)
+        overconf = sum(p.our_probability - (1.0 if p.outcome else 0.0) for p in resolved) / len(resolved)
 
         total_pnl = sum(p.profit_loss or 0.0 for p in resolved)
 
@@ -285,15 +288,17 @@ class LearningAgent:
             actual_rate = sum(1 for p in bucket if p.outcome) / len(bucket)
             brier_scores = [p.brier_score for p in bucket if p.brier_score is not None]
             brier_avg = sum(brier_scores) / len(brier_scores) if brier_scores else 0.0
-            results.append(CalibrationBucket(
-                bucket=f"{low:.1f}-{high:.1f}",
-                predicted_avg=round(predicted_avg, 4),
-                actual_rate=round(actual_rate, 4),
-                n=len(bucket),
-                brier_avg=round(brier_avg, 4),
-                bias=round(actual_rate - predicted_avg, 4),
-                overconfidence=round(predicted_avg - actual_rate, 4),
-            ))
+            results.append(
+                CalibrationBucket(
+                    bucket=f"{low:.1f}-{high:.1f}",
+                    predicted_avg=round(predicted_avg, 4),
+                    actual_rate=round(actual_rate, 4),
+                    n=len(bucket),
+                    brier_avg=round(brier_avg, 4),
+                    bias=round(actual_rate - predicted_avg, 4),
+                    overconfidence=round(predicted_avg - actual_rate, 4),
+                )
+            )
         return results
 
     async def evolve(self):
@@ -345,25 +350,25 @@ class LearningAgent:
             response = await client.messages.create(
                 model=CLAUDE_MODEL,
                 max_tokens=1200,  # Increased: enough for structured overrides + analysis
-                messages=[{
-                    "role": "user",
-                    "content": f"{ASTRA_EVOLUTION_PROMPT}\n\nPERFORMANCE DATA:\n{json.dumps(analysis, indent=2)}"
-                }],
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"{ASTRA_EVOLUTION_PROMPT}\n\nPERFORMANCE DATA:\n{json.dumps(analysis, indent=2)}",
+                    }
+                ],
             )
 
-            brier_note = (
-                f"Brier: {stats.get('brier_score_avg', 'N/A')} "
-                f"(benchmark: random=0.25, perfect=0.0)"
-            )
+            brier_note = f"Brier: {stats.get('brier_score_avg', 'N/A')} (benchmark: random=0.25, perfect=0.0)"
             overconf_note = (
                 f"Overconfidence index: {stats.get('overconfidence_index', 'N/A')} "
                 f"(positive = overconfident, target = near 0)"
             )
 
-            raw_text = response.content[0].text
+            raw_text = response.content[0].text  # type: ignore[union-attr]
 
             # Extract machine-readable overrides from JSON block if present
             import re as _re
+
             override_match = _re.search(r"```json\s*(\{.*?\})\s*```", raw_text, _re.DOTALL)
             if override_match:
                 try:
@@ -373,16 +378,16 @@ class LearningAgent:
                     if clean_overrides:
                         OVERRIDES_FILE.write_text(json.dumps(clean_overrides, indent=2))
                         import logging as _log
+
                         _log.getLogger("astra.learning").info(
                             "Strategy overrides written: %s (expires %s)",
                             list(clean_overrides.keys()),
-                            clean_overrides.get("expires", "?")
+                            clean_overrides.get("expires", "?"),
                         )
                 except Exception as parse_err:
                     import logging as _log
-                    _log.getLogger("astra.learning").warning(
-                        "Failed to parse strategy overrides JSON: %s", parse_err
-                    )
+
+                    _log.getLogger("astra.learning").warning("Failed to parse strategy overrides JSON: %s", parse_err)
 
             new_strategy = (
                 f"# Astra V2 Strategy Context\n"
@@ -400,6 +405,7 @@ class LearningAgent:
 
         except Exception as e:
             import logging as _log
+
             _log.getLogger("astra.learning").error(
                 "evolve() failed: %s: %s — strategy not updated", type(e).__name__, e
             )

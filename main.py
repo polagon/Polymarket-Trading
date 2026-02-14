@@ -8,24 +8,25 @@ Run: python main.py
      python main.py --once    (single scan, no loop)
      python main.py --stats   (show learning stats only)
 """
+
 import asyncio
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from config import SCAN_INTERVAL_SECONDS, BANKROLL, ANTHROPIC_API_KEY, ODDS_API_KEY
-from scanner.market_fetcher import fetch_active_markets, fetch_prices
-from scanner.probability_estimator import estimate_markets
-from scanner.mispricing_detector import find_opportunities
-from scanner.learning_agent import LearningAgent, Prediction
-from scanner.trade_logger import init_db, log_market_snapshot, log_estimate
-from data_sources import crypto as crypto_source
-from data_sources.weather import parse_weather_question, fetch_forecast
-from data_sources.sports import get_sports_estimates
-from data_sources.signals import fetch_all_signals
-from data_sources.price_history import store_price_snapshot
 import report
+from config import ANTHROPIC_API_KEY, BANKROLL, ODDS_API_KEY, SCAN_INTERVAL_SECONDS
+from data_sources import crypto as crypto_source
+from data_sources.price_history import store_price_snapshot
+from data_sources.signals import fetch_all_signals
+from data_sources.sports import get_sports_estimates
+from data_sources.weather import fetch_forecast, parse_weather_question
+from scanner.learning_agent import LearningAgent, Prediction
+from scanner.market_fetcher import fetch_active_markets, fetch_prices
+from scanner.mispricing_detector import find_opportunities
+from scanner.probability_estimator import estimate_markets
+from scanner.trade_logger import init_db, log_estimate, log_market_snapshot
 
 
 async def run_scan(learning_agent: LearningAgent, scan_number: int):
@@ -34,14 +35,14 @@ async def run_scan(learning_agent: LearningAgent, scan_number: int):
     KILL_SWITCH_PATH = Path("/tmp/astra_kill")
     if KILL_SWITCH_PATH.exists():
         report.console.print("[red bold]🛑 KILL SWITCH ACTIVATED[/red bold]")
-        report.console.print(f"[red]Found /tmp/astra_kill — halting immediately.[/red]")
-        report.console.print(f"[yellow]Remove file to resume: rm /tmp/astra_kill[/yellow]")
+        report.console.print("[red]Found /tmp/astra_kill — halting immediately.[/red]")
+        report.console.print("[yellow]Remove file to resume: rm /tmp/astra_kill[/yellow]")
         sys.exit(0)
 
     t_start = time.time()
 
     # 1. Fetch markets
-    report.console.print(f"[dim]Fetching markets...[/dim]", end="\r")
+    report.console.print("[dim]Fetching markets...[/dim]", end="\r")
     markets = await fetch_active_markets(limit=300)
 
     if not markets:
@@ -92,9 +93,7 @@ async def run_scan(learning_agent: LearningAgent, scan_number: int):
     sports_estimates = {}
     if ODDS_API_KEY and sports_markets:
         try:
-            sports_estimates = await get_sports_estimates(
-                [m.question for m in sports_markets]
-            )
+            sports_estimates = await get_sports_estimates([m.question for m in sports_markets])
         except Exception:
             pass
 
@@ -192,8 +191,8 @@ async def show_stats(learning_agent: LearningAgent):
     stats = learning_agent.get_stats()
     calibration = learning_agent.calibration_buckets()
 
-    from rich.table import Table
     from rich import box
+    from rich.table import Table
 
     report.console.print("\n[bold]Learning Agent Stats[/bold]\n")
     report.console.print(f"Total predictions tracked: [white]{stats['total_predictions']}[/white]")
@@ -231,6 +230,7 @@ async def show_stats(learning_agent: LearningAgent):
     strategy = learning_agent.get_strategy_context()
     if strategy:
         from rich.panel import Panel
+
         report.console.print(Panel(strategy[:1000], title="[dim]Current Strategy Context[/dim]"))
 
 
@@ -239,6 +239,7 @@ async def main():
 
     # Initialize memory directory and database
     import os
+
     os.makedirs("memory", exist_ok=True)
     init_db()  # Initialize SQLite trade logger
 

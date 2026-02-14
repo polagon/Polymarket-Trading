@@ -6,14 +6,16 @@ CRITICAL FIX #3: Three-clock time model, NOT hours_to_expiry.
 - time_to_proposal_expected: Hours until resolution proposal
 - challenge_window_start: Unix timestamp when 2-hour challenge period begins
 """
+
 import logging
-from typing import Optional, Dict
-from models.types import Market, MarketState
+from typing import Dict, Optional
+
 from config import (
-    STATE_WATCH_THRESHOLD_HOURS,
-    STATE_CLOSE_WINDOW_THRESHOLD_HOURS,
     CHALLENGE_WINDOW_DURATION_HOURS,
+    STATE_CLOSE_WINDOW_THRESHOLD_HOURS,
+    STATE_WATCH_THRESHOLD_HOURS,
 )
+from models.types import Market, MarketState
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +74,7 @@ def update_market_state(market: Market, metadata: Optional[dict] = None) -> Mark
     return MarketState.NORMAL
 
 
-def get_allowed_actions(state: MarketState, rrs: float) -> Dict[str, any]:
+def get_allowed_actions(state: MarketState, rrs: float) -> Dict[str, any]:  # type: ignore[valid-type]
     """
     Define allowed actions per state.
 
