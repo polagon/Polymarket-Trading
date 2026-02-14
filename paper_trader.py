@@ -42,6 +42,7 @@ from config import (
     BURN_IN_MAX_FAILED_MONITORS,
     BURN_IN_MONITOR_CYCLES,
     CLAUDE_MODEL,
+    DEFINITION_CONTRACTS_PATH,
     DEPTH_PROXY_FLOOR_USD,
     DISK_FAIL_MB,
     DISK_WARN_MB,
@@ -92,6 +93,7 @@ from data_sources.weather import fetch_forecast, parse_weather_question
 from data_sources.whale_tracker import format_whale_context, track_volume_and_detect_whales
 
 # ── Loop 4: Allocator-grade modules ──────────────────────────────────────────
+from definitions.loader import dump_definitions, load_definitions
 from definitions.registry import DefinitionRegistry
 from execution.order_manager import OrderManager
 from metrics.drawdown import DrawdownTracker
@@ -893,6 +895,25 @@ async def main():
 
     # ── Loop 4: Allocator-grade components ─────────────────────────────────────
     definition_registry = DefinitionRegistry()
+
+    # Load definition contracts from file (hard fail if file exists but is invalid)
+    contracts_path = Path(DEFINITION_CONTRACTS_PATH)
+    try:
+        n_loaded = load_definitions(contracts_path, definition_registry)
+        if n_loaded > 0:
+            report.console.print(f"[green]✓ Loaded {n_loaded} definition contracts[/green]")
+            report.console.print(f"[dim]{dump_definitions(definition_registry)}[/dim]")
+        else:
+            report.console.print("[yellow]⚠ No definition contracts loaded — all markets will SKIP at Gate 1[/yellow]")
+    except ValueError as e:
+        logger.critical("Definition contracts INVALID: %s", e)
+        raise SystemExit(1)
+
+    # Handle --dump-definitions CLI flag
+    if "--dump-definitions" in args:
+        print(dump_definitions(definition_registry))
+        return
+
     toxicity_analyzer = FlowToxicityAnalyzer(
         window_size=FLOW_TOXICITY_WINDOW,
         threshold=FLOW_TOXICITY_THRESHOLD,

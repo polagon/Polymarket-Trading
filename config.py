@@ -456,6 +456,12 @@ ORDER_STALE_THRESHOLD_S = int(os.getenv("ORDER_STALE_THRESHOLD_S", "60"))
 ORDER_MAX_CHASE_TICKS = int(os.getenv("ORDER_MAX_CHASE_TICKS", "3"))
 ORDER_TICK_SIZE = float(os.getenv("ORDER_TICK_SIZE", "0.01"))
 
+# Loop 4: Definition contracts
+DEFINITION_CONTRACTS_PATH = os.getenv(
+    "DEFINITION_CONTRACTS_PATH",
+    str(Path(__file__).resolve().parent / "definitions" / "contracts.crypto_threshold.json"),
+)
+
 # ─── Config Hash (Activity 2) ─────────────────────────────────────────────────
 import hashlib as _hashlib
 import json as _json
