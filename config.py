@@ -426,6 +426,36 @@ FEED_FAIL_AGE_S = float(os.getenv("FEED_FAIL_AGE_S", "120"))
 ERRORS_WARN = int(os.getenv("ERRORS_WARN", "3"))
 ERRORS_FAIL = int(os.getenv("ERRORS_FAIL", "10"))
 
+# ============================================================================
+# LOOP 4: ALLOCATOR-GRADE TRADABILITY
+# ============================================================================
+
+# ── EV Gate ──
+EV_MAKER_THRESHOLD = float(os.getenv("EV_MAKER_THRESHOLD", "0.005"))
+EV_BASE_ADVERSE_BUFFER = float(os.getenv("EV_BASE_ADVERSE_BUFFER", "0.002"))
+EV_BASE_SLIPPAGE = float(os.getenv("EV_BASE_SLIPPAGE", "0.003"))
+EV_K_SPREAD = float(os.getenv("EV_K_SPREAD", "0.5"))
+EV_K_DEPTH = float(os.getenv("EV_K_DEPTH", "0.01"))
+EV_EPS = 1e-9
+DEPTH_PROXY_FLOOR_USD = float(os.getenv("DEPTH_PROXY_FLOOR_USD", "100.0"))
+
+# ── Flow Toxicity ──
+FLOW_TOXICITY_WINDOW = int(os.getenv("FLOW_TOXICITY_WINDOW", "50"))
+FLOW_TOXICITY_THRESHOLD = float(os.getenv("FLOW_TOXICITY_THRESHOLD", "0.7"))
+FLOW_TOXICITY_MIN_SAMPLES = int(os.getenv("FLOW_TOXICITY_MIN_SAMPLES", "10"))
+
+# ── Risk Engine ──
+RISK_DAILY_LOSS_HALT_PCT = float(os.getenv("RISK_DAILY_LOSS_HALT_PCT", "0.05"))
+RISK_DRAWDOWN_HALT_PCT = float(os.getenv("RISK_DRAWDOWN_HALT_PCT", "0.15"))
+RISK_HALT_COOLDOWN_S = int(os.getenv("RISK_HALT_COOLDOWN_S", "300"))
+RISK_CATEGORY_CAPS: dict = {"crypto_threshold": 0.30}
+
+# ── Order Manager ──
+ORDER_DEFAULT_TTL_S = int(os.getenv("ORDER_DEFAULT_TTL_S", "120"))
+ORDER_STALE_THRESHOLD_S = int(os.getenv("ORDER_STALE_THRESHOLD_S", "60"))
+ORDER_MAX_CHASE_TICKS = int(os.getenv("ORDER_MAX_CHASE_TICKS", "3"))
+ORDER_TICK_SIZE = float(os.getenv("ORDER_TICK_SIZE", "0.01"))
+
 # ─── Config Hash (Activity 2) ─────────────────────────────────────────────────
 import hashlib as _hashlib
 import json as _json
@@ -486,6 +516,27 @@ _CONFIG_ALLOWLIST = frozenset(
         "MARKET_IMPACT_K",
         "BURN_IN_MONITOR_CYCLES",
         "BURN_IN_MAX_FAILED_MONITORS",
+        # Loop 4: EV Gate
+        "EV_MAKER_THRESHOLD",
+        "EV_BASE_ADVERSE_BUFFER",
+        "EV_BASE_SLIPPAGE",
+        "EV_K_SPREAD",
+        "EV_K_DEPTH",
+        "EV_EPS",
+        "DEPTH_PROXY_FLOOR_USD",
+        # Loop 4: Flow Toxicity
+        "FLOW_TOXICITY_WINDOW",
+        "FLOW_TOXICITY_THRESHOLD",
+        "FLOW_TOXICITY_MIN_SAMPLES",
+        # Loop 4: Risk Engine
+        "RISK_DAILY_LOSS_HALT_PCT",
+        "RISK_DRAWDOWN_HALT_PCT",
+        "RISK_HALT_COOLDOWN_S",
+        # Loop 4: Order Manager
+        "ORDER_DEFAULT_TTL_S",
+        "ORDER_STALE_THRESHOLD_S",
+        "ORDER_MAX_CHASE_TICKS",
+        "ORDER_TICK_SIZE",
     }
 )
 
