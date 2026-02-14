@@ -12,26 +12,28 @@ CRITICAL: These tests prove:
 
 All tests are deterministic and fast (no sleep, no network).
 """
-import pytest
+
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, Optional
+from unittest.mock import MagicMock, Mock, patch
 
-from execution.order_state_store import OrderStateStore
+import pytest
+
 from execution.clob_executor import CLOBExecutor
+from execution.order_state_store import OrderStateStore
+from models.types import (
+    Event,
+    Fill,
+    Market,
+    OrderBook,
+    OrderIntent,
+    OrderStatus,
+    StoredOrder,
+)
 from risk.portfolio_engine import PortfolioRiskEngine
 from scanner.event_refresher import EventRefresher
-from models.types import (
-    StoredOrder,
-    OrderStatus,
-    Market,
-    Event,
-    OrderBook,
-    Fill,
-    OrderIntent,
-)
 
 
 @pytest.fixture
@@ -97,9 +99,7 @@ def test_book():
 class TestOrderLifecycleWithReservations:
     """Test order lifecycle correctness under partial fills."""
 
-    def test_partial_fill_reduces_reservation(
-        self, tmp_order_store, fresh_portfolio, test_market
-    ):
+    def test_partial_fill_reduces_reservation(self, tmp_order_store, fresh_portfolio, test_market):
         """
         TEST 1: Partial fill → reservation reduces → cancel remainder releases.
 
@@ -147,9 +147,7 @@ class TestOrderLifecycleWithReservations:
 
         portfolio.reserve_for_order(order_dict)
 
-        initial_reserved = portfolio.exposure.reserved_usdc_by_market.get(
-            test_market.condition_id, 0.0
-        )
+        initial_reserved = portfolio.exposure.reserved_usdc_by_market.get(test_market.condition_id, 0.0)
         assert initial_reserved == 50.0  # 100 * 0.50
 
         # 3. Partial fill (50 tokens)
@@ -164,14 +162,10 @@ class TestOrderLifecycleWithReservations:
             "size_in_tokens": 50.0,  # Size filled
         }
 
-        portfolio.update_reservation_partial_fill(
-            order.order_id, 50.0, order_dict_partial
-        )
+        portfolio.update_reservation_partial_fill(order.order_id, 50.0, order_dict_partial)
 
         # Assert reservation reduced by filled portion
-        after_partial_reserved = portfolio.exposure.reserved_usdc_by_market.get(
-            test_market.condition_id, 0.0
-        )
+        after_partial_reserved = portfolio.exposure.reserved_usdc_by_market.get(test_market.condition_id, 0.0)
         assert after_partial_reserved == 25.0  # 50 * 0.50 remaining
         assert after_partial_reserved >= 0.0  # Never negative
 
@@ -182,9 +176,7 @@ class TestOrderLifecycleWithReservations:
         assert updated_order.status == OrderStatus.LIVE  # Still live
 
         # 4. Cancel remainder
-        order_store.update_order_status(
-            order.order_id, OrderStatus.CANCELED, datetime.now(timezone.utc).isoformat()
-        )
+        order_store.update_order_status(order.order_id, OrderStatus.CANCELED, datetime.now(timezone.utc).isoformat())
 
         order_dict_remaining = {
             "order_id": order.order_id,
@@ -198,16 +190,11 @@ class TestOrderLifecycleWithReservations:
         portfolio.release_reservation(order_dict_remaining)
 
         # Assert reservation fully released
-        final_reserved = portfolio.exposure.reserved_usdc_by_market.get(
-            test_market.condition_id, 0.0
-        )
+        final_reserved = portfolio.exposure.reserved_usdc_by_market.get(test_market.condition_id, 0.0)
         assert final_reserved == 0.0
         assert final_reserved >= 0.0  # CRITICAL: Never negative
 
-
-    def test_replace_transfers_reservation_no_double_count(
-        self, tmp_order_store, fresh_portfolio, test_market
-    ):
+    def test_replace_transfers_reservation_no_double_count(self, tmp_order_store, fresh_portfolio, test_market):
         """
         TEST 2: Replace order transfers reservation (no double reservation).
 
@@ -228,9 +215,7 @@ class TestOrderLifecycleWithReservations:
 
         portfolio.reserve_for_order(order_a_dict)
 
-        reserved_after_a = portfolio.exposure.reserved_usdc_by_market.get(
-            test_market.condition_id, 0.0
-        )
+        reserved_after_a = portfolio.exposure.reserved_usdc_by_market.get(test_market.condition_id, 0.0)
         assert reserved_after_a == 50.0  # 100 * 0.50
 
         # 2. Replace with order B (different price)
@@ -247,16 +232,11 @@ class TestOrderLifecycleWithReservations:
         portfolio.transfer_reservation_on_replace(order_a_dict, order_b_dict)
 
         # Assert reservation is for order B only (not A + B)
-        reserved_after_replace = portfolio.exposure.reserved_usdc_by_market.get(
-            test_market.condition_id, 0.0
-        )
+        reserved_after_replace = portfolio.exposure.reserved_usdc_by_market.get(test_market.condition_id, 0.0)
         assert reserved_after_replace == 51.0  # 100 * 0.51
         assert reserved_after_replace != 50.0 + 51.0  # NOT double counted
 
-
-    def test_full_fill_releases_all_reservation(
-        self, tmp_order_store, fresh_portfolio, test_market
-    ):
+    def test_full_fill_releases_all_reservation(self, tmp_order_store, fresh_portfolio, test_market):
         """TEST: Full fill → reservation fully released."""
         order_store = tmp_order_store
         portfolio = fresh_portfolio
@@ -357,7 +337,6 @@ class TestRejectStormHandling:
         assert market_id in executor.paused_until
         assert executor.paused_until[market_id] > time.time()
 
-
     def test_reject_storm_recovery_after_pause_expires(self, fake_executor, test_market):
         """TEST: After pause expires, market can trade again."""
         executor = fake_executor
@@ -386,7 +365,6 @@ class TestRejectStormHandling:
 
             # Assert reject counter reset
             assert market_id not in executor.paused_until
-
 
     def test_successful_order_resets_reject_counter(self, fake_executor, test_market):
         """TEST: Successful order resets reject counter."""
@@ -465,7 +443,6 @@ class TestNegRiskDetection:
         cached_event = refresher.event_cache[event_id]
         assert cached_event.neg_risk is True
 
-
     def test_negRisk_markets_identified(self):
         """TEST: negRisk markets correctly identified."""
         refresher = EventRefresher()
@@ -525,7 +502,6 @@ class TestNegRiskDetection:
         assert len(negRisk_markets) == 1
         assert negRisk_markets[0].condition_id == "market_1"
 
-
     def test_parity_disabled_for_negRisk_markets(self, fresh_portfolio):
         """TEST: Parity arb disabled for negRisk markets."""
         portfolio = fresh_portfolio
@@ -564,9 +540,7 @@ class TestFeedStalenessCircuitBreaker:
         order_store = tmp_order_store
 
         # Create order with old timestamp
-        old_timestamp = datetime.fromtimestamp(
-            time.time() - 20, tz=timezone.utc
-        ).isoformat()
+        old_timestamp = datetime.fromtimestamp(time.time() - 20, tz=timezone.utc).isoformat()
 
         order = StoredOrder(
             order_id="order_stale",
@@ -601,7 +575,6 @@ class TestFeedStalenessCircuitBreaker:
         updated_order = order_store.orders[order.order_id]
         assert updated_order.status == OrderStatus.EXPIRED
         assert "stale" in updated_order.cancel_reason.lower()
-
 
     def test_unsafe_mode_prevents_quoting(self):
         """TEST: Unsafe mode flag prevents quoting."""

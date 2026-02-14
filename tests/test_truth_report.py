@@ -7,6 +7,7 @@ Validates:
 - Schema correctness
 - Metric computation
 """
+
 import json
 import tempfile
 from datetime import datetime
@@ -35,7 +36,7 @@ def sample_fill():
         side="BUY",
         price=0.55,
         size_tokens=100.0,
-        timestamp=datetime(2026, 2, 12, 10, 30, 0),
+        timestamp=datetime(2026, 2, 12, 10, 30, 0),  # type: ignore[arg-type]
         maker=True,
         fee_rate_bps=200,
     )
@@ -244,7 +245,7 @@ def test_schema_correctness():
         side="BUY",
         price=0.55,
         size_tokens=100.0,
-        timestamp=datetime(2026, 2, 12, 10, 30, 0),
+        timestamp=datetime(2026, 2, 12, 10, 30, 0),  # type: ignore[arg-type]
         maker=True,
         fee_rate_bps=200,
     )

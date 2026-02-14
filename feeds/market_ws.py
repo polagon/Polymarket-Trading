@@ -3,16 +3,18 @@ Market WebSocket Feed - L2 order book ingestion.
 
 CRITICAL: Staleness detection triggers global "unsafe" signal for cancel-all.
 """
+
 import asyncio
 import json
 import logging
 import time
-from typing import Optional, Callable, Dict
 from collections import defaultdict, deque
+from typing import Callable, Dict, Optional
+
 import websockets
 
+from config import WS_RECONNECT_DELAY_SECONDS, WS_STALENESS_THRESHOLD_MS
 from models.types import OrderBook
-from config import WS_STALENESS_THRESHOLD_MS, WS_RECONNECT_DELAY_SECONDS
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +58,7 @@ class MarketWebSocketFeed:
 
         # Subscription state tracking (desired vs active)
         self.desired_asset_ids: set[str] = set()  # Canonical truth: what we WANT subscribed
-        self.active_asset_ids: set[str] = set()   # Last-known subscribed assets
+        self.active_asset_ids: set[str] = set()  # Last-known subscribed assets
         self.subscribed_assets: set[str] = set()  # Backward compat (alias for active_asset_ids)
 
         # Reconnection state
@@ -134,10 +136,7 @@ class MarketWebSocketFeed:
         jitter = random.uniform(0.8, 1.2)
         delay = min(self.reconnect_backoff * jitter, max_backoff)
 
-        logger.warning(
-            f"RECONNECT attempt {self.reconnect_failures + 1}/{max_failures} "
-            f"(backoff={delay:.1f}s)"
-        )
+        logger.warning(f"RECONNECT attempt {self.reconnect_failures + 1}/{max_failures} (backoff={delay:.1f}s)")
         await asyncio.sleep(delay)
 
         try:
@@ -164,7 +163,7 @@ class MarketWebSocketFeed:
     async def connect(self):
         """Connect to WebSocket."""
         try:
-            self.ws = await websockets.connect(self.ws_url)
+            self.ws = await websockets.connect(self.ws_url)  # type: ignore[assignment]
             self.running = True
             self.last_msg_ts = time.time()  # Reset message timestamp
             logger.info(f"Connected to market WebSocket: {self.ws_url}")
@@ -203,10 +202,7 @@ class MarketWebSocketFeed:
         if not self.ws or not asset_ids:
             return
 
-        subscribe_msg = {
-            "assets_ids": asset_ids,
-            "type": "market"
-        }
+        subscribe_msg = {"assets_ids": asset_ids, "type": "market"}
 
         payload_json = json.dumps(subscribe_msg)
 
@@ -240,10 +236,7 @@ class MarketWebSocketFeed:
         if not self.ws or not asset_ids:
             return
 
-        unsubscribe_msg = {
-            "assets_ids": asset_ids,
-            "operation": "unsubscribe"
-        }
+        unsubscribe_msg = {"assets_ids": asset_ids, "operation": "unsubscribe"}
 
         await self.ws.send(json.dumps(unsubscribe_msg))
         self.subscriptions_outbound_total += 1
@@ -280,7 +273,7 @@ class MarketWebSocketFeed:
                 # Subscribe to new assets
                 if to_subscribe:
                     logger.debug(f"Send loop: subscribing to {len(to_subscribe)} new assets")
-                    batches = [list(to_subscribe)[i:i+batch_size] for i in range(0, len(to_subscribe), batch_size)]
+                    batches = [list(to_subscribe)[i : i + batch_size] for i in range(0, len(to_subscribe), batch_size)]
                     for batch in batches:
                         await self._send_subscribe(batch)
                         await asyncio.sleep(0.1)  # Small delay between batches
@@ -288,7 +281,9 @@ class MarketWebSocketFeed:
                 # Unsubscribe from removed assets
                 if to_unsubscribe:
                     logger.debug(f"Send loop: unsubscribing from {len(to_unsubscribe)} removed assets")
-                    batches = [list(to_unsubscribe)[i:i+batch_size] for i in range(0, len(to_unsubscribe), batch_size)]
+                    batches = [
+                        list(to_unsubscribe)[i : i + batch_size] for i in range(0, len(to_unsubscribe), batch_size)
+                    ]
                     for batch in batches:
                         await self._send_unsubscribe(batch)
                         await asyncio.sleep(0.1)
@@ -318,7 +313,7 @@ class MarketWebSocketFeed:
                 if time_since_msg > 300:  # 5 minutes of silence
                     # Try ping to verify connection
                     try:
-                        pong_waiter = await self.ws.ping()
+                        pong_waiter = await self.ws.ping()  # type: ignore[attr-defined]
                         await asyncio.wait_for(pong_waiter, timeout=10.0)
                         logger.debug(f"Ping successful (quiet for {time_since_msg:.0f}s)")
                     except Exception as e:
@@ -347,7 +342,7 @@ class MarketWebSocketFeed:
 
         # Only send subscribe if connected
         if not self.is_connected():
-            logger.warning(f"Cannot subscribe (disconnected), will replay on reconnect")
+            logger.warning("Cannot subscribe (disconnected), will replay on reconnect")
             return
 
         # Send subscription (send loop will handle reconciliation)
@@ -373,7 +368,7 @@ class MarketWebSocketFeed:
 
         # Only send unsubscribe if connected
         if not self.is_connected():
-            logger.warning(f"Cannot unsubscribe (disconnected), skipping")
+            logger.warning("Cannot unsubscribe (disconnected), skipping")
             return
 
         # Send unsubscription
@@ -397,7 +392,7 @@ class MarketWebSocketFeed:
                 self.ws_messages_total += 1
 
                 # Handle non-JSON messages (PONG, INVALID OPERATION, etc.)
-                if isinstance(message, str) and not message.startswith(('{', '[')):
+                if isinstance(message, str) and not message.startswith(("{", "[")):
                     if message == "PONG":
                         logger.debug("Received PONG")
                         continue
@@ -435,8 +430,7 @@ class MarketWebSocketFeed:
                         # Log first few unknown messages to debug
                         if type_key == "unknown" and self.msg_type_counts["unknown"] <= 3:
                             logger.warning(
-                                f"Unknown message type: keys={list(data.keys())[:15]} "
-                                f"sample={str(data)[:300]}"
+                                f"Unknown message type: keys={list(data.keys())[:15]} sample={str(data)[:300]}"
                             )
 
                         await self._handle_message(data)
@@ -535,6 +529,7 @@ class MarketWebSocketFeed:
 
         # Get last_mid if book exists
         from execution.mid import compute_mid
+
         last_mid = None
         if asset_id in self.books:
             old_book = self.books[asset_id]
@@ -563,10 +558,7 @@ class MarketWebSocketFeed:
 
         bid_str = f"{best_bid:.4f}" if best_bid else "0.0000"
         ask_str = f"{best_ask:.4f}" if best_ask else "1.0000"
-        logger.debug(
-            f"Book updated: {asset_id} "
-            f"bid={bid_str} ask={ask_str} churn={churn_rate:.2f}/s"
-        )
+        logger.debug(f"Book updated: {asset_id} bid={bid_str} ask={ask_str} churn={churn_rate:.2f}/s")
 
     def get_book(self, token_id: str) -> Optional[OrderBook]:
         """
@@ -611,8 +603,7 @@ class MarketWebSocketFeed:
 
             if age_ms > WS_STALENESS_THRESHOLD_MS:
                 logger.warning(
-                    f"STALE BOOK DETECTED: {asset_id} age={age_ms}ms "
-                    f"(threshold={WS_STALENESS_THRESHOLD_MS}ms)"
+                    f"STALE BOOK DETECTED: {asset_id} age={age_ms}ms (threshold={WS_STALENESS_THRESHOLD_MS}ms)"
                 )
 
                 # Trigger callback (should trigger cancel-all)
@@ -675,9 +666,7 @@ class MarketWebSocketFeed:
             "books_count": len(self.books),
             "running": self.running,
             "last_message_age_ms": now_ms - self.last_message_time if self.last_message_time else None,
-            "avg_churn_rate": sum(b.churn_rate for b in self.books.values()) / len(self.books)
-            if self.books
-            else 0.0,
+            "avg_churn_rate": sum(b.churn_rate for b in self.books.values()) / len(self.books) if self.books else 0.0,
         }
 
     def get_feed_health(self) -> dict:
@@ -712,9 +701,13 @@ class MarketWebSocketFeed:
 
         # Find stalest books for debugging
         stalest_books = sorted(
-            [(asset_id, now_ms - self.books[asset_id].timestamp_ms) for asset_id in self.subscribed_assets if asset_id in self.books],
+            [
+                (asset_id, now_ms - self.books[asset_id].timestamp_ms)
+                for asset_id in self.subscribed_assets
+                if asset_id in self.books
+            ],
             key=lambda x: x[1],
-            reverse=True
+            reverse=True,
         )[:10]  # Top 10 stalest
 
         return {

@@ -3,17 +3,20 @@ Unit tests for CLOB Executor.
 
 CRITICAL: These tests lock execution invariants that prevent production failures.
 """
-import pytest
+
 import time
-from models.types import OrderIntent
+
+import pytest
+
+from config import MAX_BATCH_ORDERS, MUTATION_MAX_PER_MINUTE, POST_ONLY_ALLOWED_TYPES
 from execution.clob_executor import CLOBExecutor
 from execution.order_state_store import OrderStateStore
-from config import MAX_BATCH_ORDERS, POST_ONLY_ALLOWED_TYPES, MUTATION_MAX_PER_MINUTE
-
+from models.types import OrderIntent
 
 # ============================================================================
 # ORDER VALIDATION TESTS (CRITICAL FIX #1)
 # ============================================================================
+
 
 def test_post_only_only_valid_with_gtc_gtd():
     """CRITICAL INVARIANT: postOnly only valid with GTC/GTD."""
@@ -116,6 +119,7 @@ def test_no_ttl_seconds_anywhere():
 # TICK ROUNDING TESTS (CRITICAL FIX #6)
 # ============================================================================
 
+
 def test_tick_rounding_before_clamping():
     """CRITICAL INVARIANT: Tick rounding must happen BEFORE clamping."""
     store = OrderStateStore()
@@ -175,6 +179,7 @@ def test_tick_rounding_enforcement():
 # ============================================================================
 # BATCH LIMIT TESTS (CRITICAL FIX #4)
 # ============================================================================
+
 
 def test_batch_limit_enforced():
     """CRITICAL INVARIANT: Batch size must be ≤ MAX_BATCH_ORDERS."""
@@ -243,6 +248,7 @@ def test_batch_slicing():
 # MUTATION BUDGET TESTS (CRITICAL FIX #14)
 # ============================================================================
 
+
 def test_mutation_budget_rolling():
     """CRITICAL INVARIANT: Mutation budget enforced per minute."""
     store = OrderStateStore()
@@ -291,6 +297,7 @@ def test_mutation_debouncing():
 # ============================================================================
 # INTEGRATION SMOKE TEST
 # ============================================================================
+
 
 def test_full_order_submission_flow():
     """

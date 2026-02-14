@@ -1,17 +1,19 @@
 """
 Integration tests for final components (Truth Report, Parity, Satellite).
 """
+
 import pytest
-from models.types import Market, OrderBook, Fill, Event
+
+from models.types import Event, Fill, Market, OrderBook
 from reporting.truth_report import TruthReportBuilder
+from risk.portfolio_engine import PortfolioRiskEngine
 from strategy.parity_scanner import scan_parity_arb
 from strategy.satellite_filter import evaluate_satellite_trade
-from risk.portfolio_engine import PortfolioRiskEngine
-
 
 # ============================================================================
 # TRUTH REPORT TESTS
 # ============================================================================
+
 
 def test_truth_report_maker_taker_separation():
     """CRITICAL: Truth report must separate maker vs taker fills."""
@@ -28,7 +30,7 @@ def test_truth_report_maker_taker_separation():
         side="BUY",
         price=0.50,
         size_tokens=100.0,
-        timestamp=datetime(2026, 2, 12, 10, 0, 0),
+        timestamp=datetime(2026, 2, 12, 10, 0, 0),  # type: ignore[arg-type]
         maker=True,  # MAKER
         fee_rate_bps=200,
     )
@@ -44,7 +46,7 @@ def test_truth_report_maker_taker_separation():
         side="SELL",
         price=0.60,
         size_tokens=50.0,
-        timestamp=datetime(2026, 2, 12, 11, 0, 0),
+        timestamp=datetime(2026, 2, 12, 11, 0, 0),  # type: ignore[arg-type]
         maker=False,  # TAKER
         fee_rate_bps=200,
     )
@@ -65,9 +67,9 @@ def test_sharpe_computation():
 
     # Add daily returns
     returns = [0.001, 0.002, -0.001, 0.003, 0.001]  # Daily returns
-    report.daily_returns = returns
+    report.daily_returns = returns  # type: ignore[attr-defined]
 
-    sharpe = report.compute_sharpe(returns)
+    sharpe = report.compute_sharpe(returns)  # type: ignore[attr-defined]
 
     # Sharpe should be positive with positive mean return
     assert sharpe > 0
@@ -93,13 +95,13 @@ def test_gate_b_evaluation():
         )
 
         cluster_id = f"cluster{i % 9}"  # 9 unique clusters
-        report.add_fill(fill, cluster_id, pnl=0.01)
+        report.add_fill(fill, cluster_id, pnl=0.01)  # type: ignore[attr-defined]
 
     # Add daily returns for Sharpe
-    report.daily_returns = [0.001] * 30  # 30 days of 0.1% returns
+    report.daily_returns = [0.001] * 30  # type: ignore[attr-defined]  # 30 days of 0.1% returns
 
     # Evaluate
-    result = report.evaluate_gate_b(duration_days=10)
+    result = report.evaluate_gate_b(duration_days=10)  # type: ignore[attr-defined]
 
     # Check conditions
     assert result["conditions"]["fill_count"]["passed"] is True
@@ -109,6 +111,7 @@ def test_gate_b_evaluation():
 # ============================================================================
 # PARITY SCANNER TESTS (CRITICAL FIX #2, #7, #17)
 # ============================================================================
+
 
 def test_parity_queries_both_books():
     """CRITICAL FIX #2: Must query BOTH YES and NO books separately."""
@@ -247,6 +250,7 @@ def test_parity_acknowledges_leg_risk():
 # ============================================================================
 # SATELLITE FILTER TESTS
 # ============================================================================
+
 
 def test_satellite_high_conviction_gates():
     """Test satellite filter requires high conviction evidence."""

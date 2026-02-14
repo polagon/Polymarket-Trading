@@ -23,18 +23,19 @@ Schedule source:
 Update cadence: Update this file in January each year with the new schedule.
 Last updated: 2026-02-11
 """
+
 from dataclasses import dataclass
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 
 @dataclass
 class EconomicEvent:
-    name: str           # e.g. "FOMC Rate Decision"
-    event_type: str     # "FOMC" | "CPI" | "NFP" | "JOBS" | "GDP"
-    date_utc: str       # ISO format "YYYY-MM-DDTHH:MM:00+00:00"
-    impact: str         # "HIGH" | "MEDIUM"
-    description: str    # Brief description for Astra context
+    name: str  # e.g. "FOMC Rate Decision"
+    event_type: str  # "FOMC" | "CPI" | "NFP" | "JOBS" | "GDP"
+    date_utc: str  # ISO format "YYYY-MM-DDTHH:MM:00+00:00"
+    impact: str  # "HIGH" | "MEDIUM"
+    description: str  # Brief description for Astra context
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -45,138 +46,130 @@ class EconomicEvent:
 
 ECONOMIC_CALENDAR: list[EconomicEvent] = [
     # ── FOMC Meetings (Federal Open Market Committee rate decisions) ─────────
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-01-29T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision. Markets highly sensitive to rate surprises."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-03-19T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated dot plot projections."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-05-07T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-06-18T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated economic projections."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-07-30T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-09-17T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated dot plot."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-10-29T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-12-10T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated projections."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-01-28T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-03-18T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated dot plot projections."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-04-29T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-06-17T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated economic projections."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-07-29T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-09-16T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated dot plot."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-11-04T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision."),
-    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-12-16T19:00:00+00:00", "HIGH",
-                  "Fed funds rate decision + updated projections."),
-
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2025-01-29T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision. Markets highly sensitive to rate surprises.",
+    ),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2025-03-19T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated dot plot projections.",
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-05-07T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2025-06-18T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated economic projections.",
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-07-30T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision", "FOMC", "2025-09-17T19:00:00+00:00", "HIGH", "Fed funds rate decision + updated dot plot."
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2025-10-29T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2025-12-10T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated projections.",
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-01-28T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2026-03-18T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated dot plot projections.",
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-04-29T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2026-06-17T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated economic projections.",
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-07-29T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision", "FOMC", "2026-09-16T19:00:00+00:00", "HIGH", "Fed funds rate decision + updated dot plot."
+    ),
+    EconomicEvent("FOMC Rate Decision", "FOMC", "2026-11-04T19:00:00+00:00", "HIGH", "Fed funds rate decision."),
+    EconomicEvent(
+        "FOMC Rate Decision",
+        "FOMC",
+        "2026-12-16T19:00:00+00:00",
+        "HIGH",
+        "Fed funds rate decision + updated projections.",
+    ),
     # ── CPI (Consumer Price Index — monthly inflation) ───────────────────────
-    EconomicEvent("US CPI Release", "CPI", "2025-01-15T13:30:00+00:00", "HIGH",
-                  "December 2024 CPI. Key inflation metric watched by Fed."),
-    EconomicEvent("US CPI Release", "CPI", "2025-02-12T13:30:00+00:00", "HIGH",
-                  "January 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-03-12T13:30:00+00:00", "HIGH",
-                  "February 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-04-10T13:30:00+00:00", "HIGH",
-                  "March 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-05-13T13:30:00+00:00", "HIGH",
-                  "April 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-06-11T13:30:00+00:00", "HIGH",
-                  "May 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-07-15T13:30:00+00:00", "HIGH",
-                  "June 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-08-12T13:30:00+00:00", "HIGH",
-                  "July 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-09-10T13:30:00+00:00", "HIGH",
-                  "August 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-10-15T13:30:00+00:00", "HIGH",
-                  "September 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-11-13T13:30:00+00:00", "HIGH",
-                  "October 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2025-12-10T13:30:00+00:00", "HIGH",
-                  "November 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-01-14T13:30:00+00:00", "HIGH",
-                  "December 2025 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-02-11T13:30:00+00:00", "HIGH",
-                  "January 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-03-11T13:30:00+00:00", "HIGH",
-                  "February 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-04-10T13:30:00+00:00", "HIGH",
-                  "March 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-05-13T13:30:00+00:00", "HIGH",
-                  "April 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-06-10T13:30:00+00:00", "HIGH",
-                  "May 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-07-14T13:30:00+00:00", "HIGH",
-                  "June 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-08-12T13:30:00+00:00", "HIGH",
-                  "July 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-09-09T13:30:00+00:00", "HIGH",
-                  "August 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-10-14T13:30:00+00:00", "HIGH",
-                  "September 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-11-12T13:30:00+00:00", "HIGH",
-                  "October 2026 CPI."),
-    EconomicEvent("US CPI Release", "CPI", "2026-12-09T13:30:00+00:00", "HIGH",
-                  "November 2026 CPI."),
-
+    EconomicEvent(
+        "US CPI Release",
+        "CPI",
+        "2025-01-15T13:30:00+00:00",
+        "HIGH",
+        "December 2024 CPI. Key inflation metric watched by Fed.",
+    ),
+    EconomicEvent("US CPI Release", "CPI", "2025-02-12T13:30:00+00:00", "HIGH", "January 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-03-12T13:30:00+00:00", "HIGH", "February 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-04-10T13:30:00+00:00", "HIGH", "March 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-05-13T13:30:00+00:00", "HIGH", "April 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-06-11T13:30:00+00:00", "HIGH", "May 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-07-15T13:30:00+00:00", "HIGH", "June 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-08-12T13:30:00+00:00", "HIGH", "July 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-09-10T13:30:00+00:00", "HIGH", "August 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-10-15T13:30:00+00:00", "HIGH", "September 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-11-13T13:30:00+00:00", "HIGH", "October 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2025-12-10T13:30:00+00:00", "HIGH", "November 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-01-14T13:30:00+00:00", "HIGH", "December 2025 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-02-11T13:30:00+00:00", "HIGH", "January 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-03-11T13:30:00+00:00", "HIGH", "February 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-04-10T13:30:00+00:00", "HIGH", "March 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-05-13T13:30:00+00:00", "HIGH", "April 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-06-10T13:30:00+00:00", "HIGH", "May 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-07-14T13:30:00+00:00", "HIGH", "June 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-08-12T13:30:00+00:00", "HIGH", "July 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-09-09T13:30:00+00:00", "HIGH", "August 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-10-14T13:30:00+00:00", "HIGH", "September 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-11-12T13:30:00+00:00", "HIGH", "October 2026 CPI."),
+    EconomicEvent("US CPI Release", "CPI", "2026-12-09T13:30:00+00:00", "HIGH", "November 2026 CPI."),
     # ── NFP (Non-Farm Payrolls — first Friday of each month) ─────────────────
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-01-10T13:30:00+00:00", "HIGH",
-                  "December 2024 jobs report. Labour market health indicator."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-02-07T13:30:00+00:00", "HIGH",
-                  "January 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-03-07T13:30:00+00:00", "HIGH",
-                  "February 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-04-04T13:30:00+00:00", "HIGH",
-                  "March 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-05-02T13:30:00+00:00", "HIGH",
-                  "April 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-06-06T13:30:00+00:00", "HIGH",
-                  "May 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-07-03T13:30:00+00:00", "HIGH",
-                  "June 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-08-01T13:30:00+00:00", "HIGH",
-                  "July 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-09-05T13:30:00+00:00", "HIGH",
-                  "August 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-10-03T13:30:00+00:00", "HIGH",
-                  "September 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-11-07T13:30:00+00:00", "HIGH",
-                  "October 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-12-05T13:30:00+00:00", "HIGH",
-                  "November 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-01-09T13:30:00+00:00", "HIGH",
-                  "December 2025 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-02-06T13:30:00+00:00", "HIGH",
-                  "January 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-03-06T13:30:00+00:00", "HIGH",
-                  "February 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-04-03T13:30:00+00:00", "HIGH",
-                  "March 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-05-01T13:30:00+00:00", "HIGH",
-                  "April 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-06-05T13:30:00+00:00", "HIGH",
-                  "May 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-07-02T13:30:00+00:00", "HIGH",
-                  "June 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-08-07T13:30:00+00:00", "HIGH",
-                  "July 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-09-04T13:30:00+00:00", "HIGH",
-                  "August 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-10-02T13:30:00+00:00", "HIGH",
-                  "September 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-11-06T13:30:00+00:00", "HIGH",
-                  "October 2026 jobs report."),
-    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-12-04T13:30:00+00:00", "HIGH",
-                  "November 2026 jobs report."),
+    EconomicEvent(
+        "US Non-Farm Payrolls",
+        "NFP",
+        "2025-01-10T13:30:00+00:00",
+        "HIGH",
+        "December 2024 jobs report. Labour market health indicator.",
+    ),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-02-07T13:30:00+00:00", "HIGH", "January 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-03-07T13:30:00+00:00", "HIGH", "February 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-04-04T13:30:00+00:00", "HIGH", "March 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-05-02T13:30:00+00:00", "HIGH", "April 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-06-06T13:30:00+00:00", "HIGH", "May 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-07-03T13:30:00+00:00", "HIGH", "June 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-08-01T13:30:00+00:00", "HIGH", "July 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-09-05T13:30:00+00:00", "HIGH", "August 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-10-03T13:30:00+00:00", "HIGH", "September 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-11-07T13:30:00+00:00", "HIGH", "October 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2025-12-05T13:30:00+00:00", "HIGH", "November 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-01-09T13:30:00+00:00", "HIGH", "December 2025 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-02-06T13:30:00+00:00", "HIGH", "January 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-03-06T13:30:00+00:00", "HIGH", "February 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-04-03T13:30:00+00:00", "HIGH", "March 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-05-01T13:30:00+00:00", "HIGH", "April 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-06-05T13:30:00+00:00", "HIGH", "May 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-07-02T13:30:00+00:00", "HIGH", "June 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-08-07T13:30:00+00:00", "HIGH", "July 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-09-04T13:30:00+00:00", "HIGH", "August 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-10-02T13:30:00+00:00", "HIGH", "September 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-11-06T13:30:00+00:00", "HIGH", "October 2026 jobs report."),
+    EconomicEvent("US Non-Farm Payrolls", "NFP", "2026-12-04T13:30:00+00:00", "HIGH", "November 2026 jobs report."),
 ]
 
 
@@ -262,13 +255,13 @@ def format_calendar_context(
         market = market_by_id.get(cid)
         if not market:
             continue
-        for event, hours_delta in events[:2]:   # top 2 events per market
+        for event, hours_delta in events[:2]:  # top 2 events per market
             direction = "after" if hours_delta > 0 else "before"
             abs_h = abs(hours_delta)
             time_str = (
                 f"{abs_h:.0f}h {direction} market resolves"
                 if abs_h >= 1
-                else f"{abs_h*60:.0f}min {direction} market resolves"
+                else f"{abs_h * 60:.0f}min {direction} market resolves"
             )
             lines.append(
                 f"  • {market.question[:60]}\n"

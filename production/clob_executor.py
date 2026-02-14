@@ -40,10 +40,11 @@ Auto-claim:
   - Auto-claim via CLOB /redeem endpoint when position shows as resolved
   - Poll resolved positions every scan; batch-claim to reduce gas
 """
+
 import asyncio
 import os
 from dataclasses import dataclass
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 # These will be needed when live:
@@ -56,15 +57,15 @@ from typing import Optional
 # Configuration (from .env when live)
 # ─────────────────────────────────────────────────────────────────────────────
 
-POLY_PRIVATE_KEY = os.getenv("POLY_PRIVATE_KEY", "")          # L1 wallet private key
-POLY_API_KEY = os.getenv("POLY_API_KEY", "")                  # Builder Program API key
+POLY_PRIVATE_KEY = os.getenv("POLY_PRIVATE_KEY", "")  # L1 wallet private key
+POLY_API_KEY = os.getenv("POLY_API_KEY", "")  # Builder Program API key
 POLY_API_SECRET = os.getenv("POLY_API_SECRET", "")
 POLY_API_PASSPHRASE = os.getenv("POLY_API_PASSPHRASE", "")
-POLY_SOCKS5_PROXY = os.getenv("POLY_SOCKS5_PROXY", "")        # e.g. socks5://user:pass@host:1080
+POLY_SOCKS5_PROXY = os.getenv("POLY_SOCKS5_PROXY", "")  # e.g. socks5://user:pass@host:1080
 CLOB_API_URL = "https://clob.polymarket.com"
 
-ORDER_TTL_SECONDS = 30       # Auto-cancel arb orders after 30s if unfilled
-MAX_POSITION_USD = 500       # Hard cap per order in live trading
+ORDER_TTL_SECONDS = 30  # Auto-cancel arb orders after 30s if unfilled
+MAX_POSITION_USD = 500  # Hard cap per order in live trading
 MAX_DAILY_EXPOSURE_USD = 2000  # Daily total exposure limit
 
 
@@ -100,16 +101,18 @@ def get_credentials_status() -> str:
         missing.append("POLY_API_PASSPHRASE")
 
     if not missing:
-        proxy_str = f"  SOCKS5 proxy: {POLY_SOCKS5_PROXY}" if POLY_SOCKS5_PROXY else "  No SOCKS5 proxy (needed for US IPs)"
+        proxy_str = (
+            f"  SOCKS5 proxy: {POLY_SOCKS5_PROXY}" if POLY_SOCKS5_PROXY else "  No SOCKS5 proxy (needed for US IPs)"
+        )
         return f"✅ All CLOB credentials configured.\n{proxy_str}"
     return f"❌ Missing credentials: {', '.join(missing)}\n   Register at https://polymarket.com/build for Builder Program access."
 
 
 async def submit_order(
     token_id: str,
-    side: str,           # "BUY" or "SELL"
-    price: float,        # limit price (0-1)
-    size_usd: float,     # position size in USD
+    side: str,  # "BUY" or "SELL"
+    price: float,  # limit price (0-1)
+    size_usd: float,  # position size in USD
     is_arb: bool = False,  # arb orders get TTL auto-cancel
 ) -> OrderResult:
     """
@@ -128,7 +131,7 @@ async def submit_order(
         return OrderResult(
             success=False,
             error="Live trading not enabled — credentials not configured. "
-                  "Paper trading only. See production/clob_executor.py for setup."
+            "Paper trading only. See production/clob_executor.py for setup.",
         )
 
     # ── LIVE IMPLEMENTATION (uncomment when credentials available) ───────────

@@ -20,12 +20,14 @@ Usage:
     ctx = await fetch_all_signals()
     summary = ctx.summary()  # human-readable string for Astra prompt injection
 """
+
 import asyncio
 import logging
-import aiohttp
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
+
+import aiohttp
 
 from config import FRED_API_KEY
 
@@ -35,7 +37,8 @@ logger = logging.getLogger("astra.signals")
 # ---------------------------------------------------------------------------
 # Cache helpers
 # ---------------------------------------------------------------------------
-_cache: dict[str, tuple[float, object]] = {}   # key → (timestamp, value)
+_cache: dict[str, tuple[float, object]] = {}  # key → (timestamp, value)
+
 
 def _cached(key: str, ttl: int, value=None):
     """Read or write cache. If value is None, read. Otherwise, write and return."""
@@ -53,10 +56,11 @@ def _cached(key: str, ttl: int, value=None):
 # Data models
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class FearGreedIndex:
-    value: int           # 0 = Extreme Fear, 100 = Extreme Greed
-    label: str           # e.g. "Fear", "Greed", "Extreme Greed"
+    value: int  # 0 = Extreme Fear, 100 = Extreme Greed
+    label: str  # e.g. "Fear", "Greed", "Extreme Greed"
     timestamp: str
 
     @property
@@ -79,18 +83,19 @@ class FearGreedIndex:
         High greed → slightly bullish bias; extreme fear → bearish bias.
         Range: -0.05 to +0.05 (small overlay, not decisive)
         """
-        normalized = (self.value - 50) / 100   # -0.5 to +0.5
-        return round(normalized * 0.10, 3)       # max ±5%
+        normalized = (self.value - 50) / 100  # -0.5 to +0.5
+        return round(normalized * 0.10, 3)  # max ±5%
 
 
 @dataclass
 class MacroSignals:
     """US macroeconomic snapshot."""
-    fed_funds_rate: Optional[float]    # Current federal funds target rate
-    cpi_yoy: Optional[float]           # Latest CPI year-over-year %
-    yield_spread_10y2y: Optional[float] # 10Y minus 2Y treasury spread (recession proxy)
+
+    fed_funds_rate: Optional[float]  # Current federal funds target rate
+    cpi_yoy: Optional[float]  # Latest CPI year-over-year %
+    yield_spread_10y2y: Optional[float]  # 10Y minus 2Y treasury spread (recession proxy)
     unemployment_rate: Optional[float]  # Latest U-3 unemployment rate
-    vix: Optional[float] = None        # CBOE Volatility Index (equity fear gauge)
+    vix: Optional[float] = None  # CBOE Volatility Index (equity fear gauge)
     retrieved_at: str = ""
 
     @property
@@ -99,7 +104,7 @@ class MacroSignals:
         if self.yield_spread_10y2y is None:
             return "unknown"
         if self.yield_spread_10y2y < -0.5:
-            return "inverted_high_risk"   # Deep inversion
+            return "inverted_high_risk"  # Deep inversion
         if self.yield_spread_10y2y < 0:
             return "inverted_moderate"
         if self.yield_spread_10y2y < 0.5:
@@ -158,18 +163,18 @@ class MacroSignals:
             return "unknown"
         real_rate = self.fed_funds_rate - self.cpi_yoy
         if real_rate > 1.5:
-            return "restrictive_real_positive"    # Fed clearly tightening; credit negative
+            return "restrictive_real_positive"  # Fed clearly tightening; credit negative
         if real_rate > 0:
             return "tight_mildly_restrictive"
         if real_rate > -1.0:
             return "neutral_mildly_accommodative"
-        return "accommodative_real_negative"      # Fed behind the curve; credit positive
+        return "accommodative_real_negative"  # Fed behind the curve; credit positive
 
 
 @dataclass
 class CryptoMacro:
-    btc_dominance_pct: Optional[float]   # BTC's share of total crypto market cap
-    total_market_cap_usd: Optional[float] # Global crypto market cap in USD
+    btc_dominance_pct: Optional[float]  # BTC's share of total crypto market cap
+    total_market_cap_usd: Optional[float]  # Global crypto market cap in USD
     retrieved_at: str = ""
 
     @property
@@ -190,6 +195,7 @@ class MarketContext:
     Aggregated market context for injection into Astra V2 estimation prompts.
     All signals combined into a single object.
     """
+
     fear_greed: Optional[FearGreedIndex] = None
     macro: Optional[MacroSignals] = None
     crypto_macro: Optional[CryptoMacro] = None
@@ -205,18 +211,13 @@ class MarketContext:
 
         if self.fear_greed:
             fg = self.fear_greed
-            lines.append(
-                f"Crypto Sentiment: {fg.label} ({fg.value}/100) — "
-                f"bias={fg.crypto_bias:+.1%}"
-            )
+            lines.append(f"Crypto Sentiment: {fg.label} ({fg.value}/100) — bias={fg.crypto_bias:+.1%}")
 
         if self.crypto_macro:
             cm = self.crypto_macro
-            mcap = f"${cm.total_market_cap_usd/1e12:.2f}T" if cm.total_market_cap_usd else "N/A"
+            mcap = f"${cm.total_market_cap_usd / 1e12:.2f}T" if cm.total_market_cap_usd else "N/A"
             dom = f"{cm.btc_dominance_pct:.1f}%" if cm.btc_dominance_pct else "N/A"
-            lines.append(
-                f"Crypto Market: cap={mcap}, BTC dom={dom} [{cm.risk_environment}]"
-            )
+            lines.append(f"Crypto Market: cap={mcap}, BTC dom={dom} [{cm.risk_environment}]")
 
         if self.macro:
             m = self.macro
@@ -252,11 +253,12 @@ class MarketContext:
 # Signal fetchers
 # ---------------------------------------------------------------------------
 
+
 async def _fetch_fear_greed(session: aiohttp.ClientSession) -> Optional[FearGreedIndex]:
     """Alternative.me Fear & Greed Index — free, no API key."""
-    cached = _cached("fear_greed", ttl=1800)   # 30 min TTL
+    cached = _cached("fear_greed", ttl=1800)  # 30 min TTL
     if cached:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     try:
         async with session.get(
@@ -272,7 +274,7 @@ async def _fetch_fear_greed(session: aiohttp.ClientSession) -> Optional[FearGree
                     label=entry.get("value_classification", "Neutral"),
                     timestamp=entry.get("timestamp", ""),
                 )
-                return _cached("fear_greed", ttl=1800, value=result)
+                return _cached("fear_greed", ttl=1800, value=result)  # type: ignore[no-any-return]
     except Exception as e:
         logger.debug("Fear/Greed fetch failed: %s", e)
     return None
@@ -280,9 +282,9 @@ async def _fetch_fear_greed(session: aiohttp.ClientSession) -> Optional[FearGree
 
 async def _fetch_crypto_global(session: aiohttp.ClientSession) -> Optional[CryptoMacro]:
     """CoinGecko global market data — BTC dominance + total market cap."""
-    cached = _cached("crypto_global", ttl=600)   # 10 min TTL
+    cached = _cached("crypto_global", ttl=600)  # 10 min TTL
     if cached:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     try:
         async with session.get(
@@ -300,15 +302,13 @@ async def _fetch_crypto_global(session: aiohttp.ClientSession) -> Optional[Crypt
                     total_market_cap_usd=float(mcap) if mcap is not None else None,
                     retrieved_at=datetime.now(timezone.utc).isoformat(),
                 )
-                return _cached("crypto_global", ttl=600, value=result)
+                return _cached("crypto_global", ttl=600, value=result)  # type: ignore[no-any-return]
     except Exception as e:
         logger.debug("CoinGecko global fetch failed: %s", e)
     return None
 
 
-async def _fetch_yahoo_finance(
-    symbol: str, session: aiohttp.ClientSession, ttl: int = 3600
-) -> Optional[float]:
+async def _fetch_yahoo_finance(symbol: str, session: aiohttp.ClientSession, ttl: int = 3600) -> Optional[float]:
     """
     Fetch latest close price/value for a Yahoo Finance symbol (no API key).
     Works for indices: ^TNX (10Y yield), ^IRX (3M T-bill), ^VIX, DX-Y.NYB (DXY).
@@ -316,7 +316,7 @@ async def _fetch_yahoo_finance(
     cache_key = f"yahoo_{symbol}"
     cached = _cached(cache_key, ttl=ttl)
     if cached is not None:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     try:
         async with session.get(
@@ -329,12 +329,7 @@ async def _fetch_yahoo_finance(
                 data = await resp.json(content_type=None)
                 result_list = data.get("chart", {}).get("result", [])
                 if result_list:
-                    closes = (
-                        result_list[0]
-                        .get("indicators", {})
-                        .get("quote", [{}])[0]
-                        .get("close", [])
-                    )
+                    closes = result_list[0].get("indicators", {}).get("quote", [{}])[0].get("close", [])
                     latest = next((v for v in reversed(closes) if v is not None), None)
                     if latest is not None:
                         _cached(cache_key, ttl=ttl, value=float(latest))
@@ -364,7 +359,7 @@ async def _fetch_fred_series(
     cache_key = f"fred_{series_id}"
     cached = _cached(cache_key, ttl=ttl)
     if cached is not None:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     try:
         async with session.get(
@@ -374,7 +369,7 @@ async def _fetch_fred_series(
                 "api_key": FRED_API_KEY,
                 "file_type": "json",
                 "sort_order": "desc",
-                "limit": "2",       # Latest 2 for YoY calculation
+                "limit": "2",  # Latest 2 for YoY calculation
             },
             timeout=aiohttp.ClientTimeout(total=10),
         ) as resp:
@@ -408,7 +403,7 @@ async def _fetch_fred_cpi_yoy(session: aiohttp.ClientSession) -> Optional[float]
     cache_key = "fred_cpi_yoy"
     cached = _cached(cache_key, ttl=7200)
     if cached is not None:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     try:
         async with session.get(
@@ -424,11 +419,7 @@ async def _fetch_fred_cpi_yoy(session: aiohttp.ClientSession) -> Optional[float]
         ) as resp:
             if resp.status == 200:
                 data = await resp.json(content_type=None)
-                obs = [
-                    float(o["value"])
-                    for o in data.get("observations", [])
-                    if o.get("value") not in (".", "")
-                ]
+                obs = [float(o["value"]) for o in data.get("observations", []) if o.get("value") not in (".", "")]
                 if len(obs) >= 13:
                     yoy = round((obs[0] / obs[12] - 1) * 100, 2)
                     _cached(cache_key, ttl=7200, value=yoy)
@@ -454,16 +445,16 @@ async def _fetch_macro_signals(session: aiohttp.ClientSession) -> Optional[Macro
 
     Yield spread = TNX - IRX (approximate 10Y-3M; close enough for recession signal).
     """
-    cached = _cached("macro_signals", ttl=1800)   # 30 min TTL
+    cached = _cached("macro_signals", ttl=1800)  # 30 min TTL
     if cached:
-        return cached
+        return cached  # type: ignore[no-any-return]
 
     # Fetch Yahoo Finance (no key) and FRED (key optional) in parallel
     tnx, irx, vix, fed_rate, cpi_yoy, unemployment = await asyncio.gather(
         _fetch_yahoo_finance("^TNX", session),
         _fetch_yahoo_finance("^IRX", session),
-        _fetch_yahoo_finance("^VIX", session, ttl=900),   # 15 min TTL for VIX
-        _fetch_fred_series("FEDFUNDS", session, ttl=86400),    # Daily update
+        _fetch_yahoo_finance("^VIX", session, ttl=900),  # 15 min TTL for VIX
+        _fetch_fred_series("FEDFUNDS", session, ttl=86400),  # Daily update
         _fetch_fred_cpi_yoy(session),
         _fetch_fred_series("UNRATE", session, ttl=86400),
         return_exceptions=True,
@@ -486,7 +477,9 @@ async def _fetch_macro_signals(session: aiohttp.ClientSession) -> Optional[Macro
     if FRED_API_KEY and any(v is not None for v in [fed_rate_val, cpi_yoy_val, unemployment_val]):
         logger.info(
             "FRED macro loaded: FFR=%.2f%% CPI=%.1f%% UNRATE=%.1f%%",
-            fed_rate_val or 0, cpi_yoy_val or 0, unemployment_val or 0,
+            fed_rate_val or 0,
+            cpi_yoy_val or 0,
+            unemployment_val or 0,
         )
 
     result = MacroSignals(
@@ -497,12 +490,13 @@ async def _fetch_macro_signals(session: aiohttp.ClientSession) -> Optional[Macro
         vix=round(vix_val, 2) if vix_val is not None else None,
         retrieved_at=datetime.now(timezone.utc).isoformat(),
     )
-    return _cached("macro_signals", ttl=1800, value=result)
+    return _cached("macro_signals", ttl=1800, value=result)  # type: ignore[no-any-return]
 
 
 # ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
+
 
 async def fetch_all_signals() -> MarketContext:
     """
@@ -531,9 +525,9 @@ async def fetch_all_signals() -> MarketContext:
         errors.append("macro_fred")
 
     return MarketContext(
-        fear_greed=fear_greed,
-        macro=macro,
-        crypto_macro=crypto_macro,
+        fear_greed=fear_greed,  # type: ignore[arg-type]
+        macro=macro,  # type: ignore[arg-type]
+        crypto_macro=crypto_macro,  # type: ignore[arg-type]
         retrieved_at=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         errors=errors,
     )

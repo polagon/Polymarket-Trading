@@ -9,10 +9,12 @@ Proves that execution.mid.compute_mid() is used consistently across:
 - Market maker
 - Inventory valuation
 """
+
 import pytest
+
+from config import MID_FALLBACK_ONE_SIDED_OFFSET, MID_FALLBACK_STALE_AGE_MS
 from execution.mid import compute_mid, is_mid_reliable
 from models.types import OrderBook
-from config import MID_FALLBACK_STALE_AGE_MS, MID_FALLBACK_ONE_SIDED_OFFSET
 
 
 class TestCanonicalMid:
@@ -126,7 +128,7 @@ class TestMarkoutIntegration:
 
         # Check docstring contains canonical mid requirement
         compute_method = tracker.compute_markout
-        assert "execution.mid.compute_mid" in compute_method.__doc__
+        assert "execution.mid.compute_mid" in compute_method.__doc__  # type: ignore[operator]
 
 
 class TestInventoryValuation:
@@ -137,7 +139,7 @@ class TestInventoryValuation:
         from execution.units import aggregate_exposure_usd
 
         # Check docstring contains canonical mid requirement
-        assert "execution.mid.compute_mid" in aggregate_exposure_usd.__doc__
+        assert "execution.mid.compute_mid" in aggregate_exposure_usd.__doc__  # type: ignore[operator]
 
 
 class TestPaperSimulator:
@@ -174,8 +176,8 @@ class TestMarketMaker:
 
     def test_compute_fair_value_band_uses_canonical(self):
         """Fair value band computation must use canonical mid."""
-        from strategy.market_maker import compute_fair_value_band
         from models.types import Market
+        from strategy.market_maker import compute_fair_value_band
 
         market = Market(
             condition_id="test",

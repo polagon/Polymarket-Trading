@@ -3,8 +3,10 @@ Wallet model and preflight checks.
 
 CRITICAL FIX #19: Signer vs funder address, allowances, inventory checks.
 """
+
 import logging
-from config import TRADING_ADDRESS, SIGNATURE_TYPE, FUNDER_ADDRESS, MIN_USDC_BALANCE
+
+from config import FUNDER_ADDRESS, MIN_USDC_BALANCE, SIGNATURE_TYPE, TRADING_ADDRESS
 
 logger = logging.getLogger(__name__)
 
@@ -39,10 +41,7 @@ def preflight_checks(clob_client):
         logger.info(f"USDC balance: ${usdc_balance:.2f}")
 
         if usdc_balance < MIN_USDC_BALANCE:
-            raise ValueError(
-                f"Insufficient USDC balance: ${usdc_balance:.2f} "
-                f"(minimum: ${MIN_USDC_BALANCE:.2f})"
-            )
+            raise ValueError(f"Insufficient USDC balance: ${usdc_balance:.2f} (minimum: ${MIN_USDC_BALANCE:.2f})")
     except Exception as e:
         logger.error(f"Failed to check USDC balance: {e}")
         raise ValueError(f"USDC balance check failed: {e}")
@@ -67,10 +66,7 @@ def preflight_checks(clob_client):
         logger.info(f"Resolved funder address: {resolved_funder}")
 
         if FUNDER_ADDRESS and resolved_funder != FUNDER_ADDRESS:
-            raise ValueError(
-                f"Funder address mismatch: "
-                f"expected {FUNDER_ADDRESS}, got {resolved_funder}"
-            )
+            raise ValueError(f"Funder address mismatch: expected {FUNDER_ADDRESS}, got {resolved_funder}")
     except Exception as e:
         logger.error(f"Failed to resolve funder address: {e}")
         # Don't hard fail if FUNDER_ADDRESS not configured
@@ -110,12 +106,10 @@ def get_available_usdc(clob_client, market_id: str, reserved_by_market: dict[str
     wallet_balance = clob_client.get_balance("USDC", TRADING_ADDRESS)
     reserved = reserved_by_market.get(market_id, 0.0)
     available = wallet_balance - reserved
-    return max(0.0, available)
+    return max(0.0, available)  # type: ignore[no-any-return]
 
 
-def get_available_tokens(
-    clob_client, token_id: str, reserved_by_token: dict[str, float]
-) -> float:
+def get_available_tokens(clob_client, token_id: str, reserved_by_token: dict[str, float]) -> float:
     """
     Get available tokens for new SELL orders.
 
@@ -133,7 +127,7 @@ def get_available_tokens(
         wallet_balance = clob_client.get_balance(token_id, TRADING_ADDRESS)
         reserved = reserved_by_token.get(token_id, 0.0)
         available = wallet_balance - reserved
-        return max(0.0, available)
+        return max(0.0, available)  # type: ignore[no-any-return]
     except Exception as e:
         logger.error(f"Failed to get token balance for {token_id}: {e}")
         return 0.0

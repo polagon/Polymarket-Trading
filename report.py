@@ -2,14 +2,16 @@
 Astra V2 — Terminal Reporting
 Displays opportunities, Astra's reasoning, and portfolio stats.
 """
-from datetime import datetime, timezone
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich import box
 
-from scanner.mispricing_detector import Opportunity
+from datetime import datetime, timezone
+
+from rich import box
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+
 from config import BANKROLL
+from scanner.mispricing_detector import Opportunity
 
 console = Console()
 
@@ -60,7 +62,9 @@ def print_scan_header(scan_number: int, markets_scanned: int, stats: dict):
 
 def print_opportunities(opportunities: list[Opportunity]):
     if not opportunities:
-        console.print("[dim]Astra: No trades meet minimum bar this scan. (EV > 0, robustness ≥ 3, confidence ≥ 60%)[/dim]\n")
+        console.print(
+            "[dim]Astra: No trades meet minimum bar this scan. (EV > 0, robustness ≥ 3, confidence ≥ 60%)[/dim]\n"
+        )
         return
 
     table = Table(
@@ -125,11 +129,16 @@ def print_opportunities(opportunities: list[Opportunity]):
         q = q[:52] + "..." if len(q) > 55 else q
 
         table.add_row(
-            str(i), q,
+            str(i),
+            q,
             f"{opp.market_price:.3f}",
             f"{opp.our_estimate:.3f}",
-            edge_str, ev_str, rob_str,
-            dir_str, size_str, ts_str,
+            edge_str,
+            ev_str,
+            rob_str,
+            dir_str,
+            size_str,
+            ts_str,
         )
 
     console.print(table)
@@ -146,14 +155,9 @@ def print_opportunities(opportunities: list[Opportunity]):
                 collapses = getattr(est, "correlation_collapses", 0)
                 mode_tag = (
                     f" [bold magenta]⚔ADV[/bold magenta]"
-                    f"[dim] tier:{tier}"
-                    + (f" collapse:{collapses}" if collapses else "")
-                    + "[/dim]"
+                    f"[dim] tier:{tier}" + (f" collapse:{collapses}" if collapses else "") + "[/dim]"
                 )
-            console.print(
-                f"  [dim]#{i}[/dim] [{ts_color}][{est.truth_state}][/{ts_color}]"
-                f"{mode_tag} {est.reasoning}"
-            )
+            console.print(f"  [dim]#{i}[/dim] [{ts_color}][{est.truth_state}][/{ts_color}]{mode_tag} {est.reasoning}")
             # Show PRO/CON summaries for adversarial estimates
             if getattr(est, "adversarial_mode", False):
                 if getattr(est, "pro_summary", ""):
@@ -165,8 +169,7 @@ def print_opportunities(opportunities: list[Opportunity]):
                 if p_neutral:
                     edge_sig = abs(p_neutral - opp.market_price)
                     console.print(
-                        f"       [dim]pNeutral={p_neutral:.3f} pAware={p_aware:.3f} "
-                        f"edge_signal={edge_sig:.3f}[/dim]"
+                        f"       [dim]pNeutral={p_neutral:.3f} pAware={p_aware:.3f} edge_signal={edge_sig:.3f}[/dim]"
                     )
             if est.key_evidence_needed:
                 console.print(f"       [dim]↳ Needs: {est.key_evidence_needed}[/dim]")
@@ -176,21 +179,24 @@ def print_opportunities(opportunities: list[Opportunity]):
 
 
 def print_no_credentials_warning():
-    console.print(Panel(
-        "[yellow]LIVE-REVIEW MODE[/yellow] — Trade proposals shown for human approval.\n"
-        "No orders will execute until Polymarket CLOB credentials are configured.\n\n"
-        "To enable execution:\n"
-        "  1. Create a Polygon wallet with USDC\n"
-        "  2. Generate Polymarket CLOB API key\n"
-        "  3. Add to .env: POLY_API_KEY, POLY_API_SECRET, POLY_PASSPHRASE",
-        title="[dim]Astra V2: Scan + Propose Only[/dim]",
-        border_style="dim yellow",
-    ))
+    console.print(
+        Panel(
+            "[yellow]LIVE-REVIEW MODE[/yellow] — Trade proposals shown for human approval.\n"
+            "No orders will execute until Polymarket CLOB credentials are configured.\n\n"
+            "To enable execution:\n"
+            "  1. Create a Polygon wallet with USDC\n"
+            "  2. Generate Polymarket CLOB API key\n"
+            "  3. Add to .env: POLY_API_KEY, POLY_API_SECRET, POLY_PASSPHRASE",
+            title="[dim]Astra V2: Scan + Propose Only[/dim]",
+            border_style="dim yellow",
+        )
+    )
     console.print()
 
 
-def print_summary(n_markets: int, n_crypto: int, n_weather: int, n_other: int,
-                  n_algo: int, n_astra: int, elapsed: float):
+def print_summary(
+    n_markets: int, n_crypto: int, n_weather: int, n_other: int, n_algo: int, n_astra: int, elapsed: float
+):
     console.print(
         f"[dim]Scanned [white]{n_markets}[/white] markets "
         f"([cyan]{n_crypto}[/cyan] crypto, [blue]{n_weather}[/blue] weather, "

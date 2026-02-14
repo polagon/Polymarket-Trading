@@ -3,8 +3,10 @@ Canonical mid price calculation with fallback rules.
 
 CRITICAL FIX (ChatGPT Final): Must handle one-sided books, stale books, and log fallbacks.
 """
+
 import logging
 from typing import Optional
+
 from config import MID_FALLBACK_ONE_SIDED_OFFSET, MID_FALLBACK_STALE_AGE_MS
 
 logger = logging.getLogger(__name__)
@@ -43,15 +45,11 @@ def compute_mid(
     if book_age_ms > MID_FALLBACK_STALE_AGE_MS:
         if last_mid is not None:
             logger.warning(
-                f"Book stale ({book_age_ms}ms > {MID_FALLBACK_STALE_AGE_MS}ms), "
-                f"using last_mid={last_mid:.4f}"
+                f"Book stale ({book_age_ms}ms > {MID_FALLBACK_STALE_AGE_MS}ms), using last_mid={last_mid:.4f}"
             )
             return last_mid
         else:
-            logger.error(
-                f"Book stale ({book_age_ms}ms) and no last_mid available. "
-                "Refusing to compute mid."
-            )
+            logger.error(f"Book stale ({book_age_ms}ms) and no last_mid available. Refusing to compute mid.")
             return None
 
     # Standard case: both bid and ask
@@ -68,8 +66,7 @@ def compute_mid(
         mid = bid + MID_FALLBACK_ONE_SIDED_OFFSET
         mid = min(0.99, mid)  # Clamp to valid range
         logger.warning(
-            f"One-sided book (bid only): bid={bid:.4f}, "
-            f"using mid={mid:.4f} (offset +{MID_FALLBACK_ONE_SIDED_OFFSET})"
+            f"One-sided book (bid only): bid={bid:.4f}, using mid={mid:.4f} (offset +{MID_FALLBACK_ONE_SIDED_OFFSET})"
         )
         return mid
 
@@ -78,8 +75,7 @@ def compute_mid(
         mid = ask - MID_FALLBACK_ONE_SIDED_OFFSET
         mid = max(0.01, mid)  # Clamp to valid range
         logger.warning(
-            f"One-sided book (ask only): ask={ask:.4f}, "
-            f"using mid={mid:.4f} (offset -{MID_FALLBACK_ONE_SIDED_OFFSET})"
+            f"One-sided book (ask only): ask={ask:.4f}, using mid={mid:.4f} (offset -{MID_FALLBACK_ONE_SIDED_OFFSET})"
         )
         return mid
 

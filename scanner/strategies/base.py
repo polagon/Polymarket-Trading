@@ -26,18 +26,19 @@ New strategies can be added by:
 
 Confidence gate: signals with confidence < 0.5 are ignored by the engine.
 """
+
+import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
-import math
 
 from scanner.market_fetcher import Market
-
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Trade Signal — the standard output of every strategy
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 @dataclass
 class TradeSignal:
@@ -45,16 +46,17 @@ class TradeSignal:
     A trading signal produced by a strategy.
     confidence must be > 0.5 for the engine to act on it.
     """
+
     condition_id: str
     question: str
-    direction: str              # "BUY YES" | "BUY NO"
-    confidence: float           # 0.0–1.0 — must be >0.5 to execute
-    target_price: float         # Price we expect to pay
-    kelly_pct: float            # Suggested position size as % of bankroll
-    edge: float                 # Our estimate - market price (signed)
-    ev_after_costs: float       # Expected value after fees
-    source: str                 # Strategy name
-    reasoning: str              # Brief explanation
+    direction: str  # "BUY YES" | "BUY NO"
+    confidence: float  # 0.0–1.0 — must be >0.5 to execute
+    target_price: float  # Price we expect to pay
+    kelly_pct: float  # Suggested position size as % of bankroll
+    edge: float  # Our estimate - market price (signed)
+    ev_after_costs: float  # Expected value after fees
+    source: str  # Strategy name
+    reasoning: str  # Brief explanation
     timestamp: str = ""
 
     def __post_init__(self):
@@ -64,16 +66,13 @@ class TradeSignal:
     @property
     def is_actionable(self) -> bool:
         """True if this signal meets minimum quality bar."""
-        return (
-            self.confidence > 0.5
-            and self.ev_after_costs > 0
-            and self.kelly_pct > 0
-        )
+        return self.confidence > 0.5 and self.ev_after_costs > 0 and self.kelly_pct > 0
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Strategy Context — everything a strategy needs to evaluate a market
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 @dataclass
 class StrategyContext:
@@ -81,10 +80,11 @@ class StrategyContext:
     Passed to strategy.evaluate() on every call.
     Aggregates all available context: signals, prices, calendar events, whales.
     """
-    market_context: object = None          # MarketContext from signals.py
-    whale_signals: dict = field(default_factory=dict)   # {cid: WhaleSignal}
-    calendar_events: dict = field(default_factory=dict) # {cid: [(event, hours_delta)]}
-    price_data: dict = field(default_factory=dict)      # {coin_id: price}
+
+    market_context: object = None  # MarketContext from signals.py
+    whale_signals: dict = field(default_factory=dict)  # {cid: WhaleSignal}
+    calendar_events: dict = field(default_factory=dict)  # {cid: [(event, hours_delta)]}
+    price_data: dict = field(default_factory=dict)  # {coin_id: price}
     sports_estimates: dict = field(default_factory=dict)
     learning_context: str = ""
     vix_kelly_mult: float = 1.0
@@ -94,19 +94,21 @@ class StrategyContext:
 # Performance Metrics Tracker
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 @dataclass
 class StrategyMetrics:
     """
     Per-strategy performance tracking.
     Mirrors the metrics from WheelForge and jaredzwick BaseStrategy.
     """
+
     name: str
     total_signals: int = 0
     executed_signals: int = 0
     wins: int = 0
     losses: int = 0
     total_pnl: float = 0.0
-    pnl_history: list[float] = field(default_factory=list)   # per-trade returns
+    pnl_history: list[float] = field(default_factory=list)  # per-trade returns
     max_drawdown: float = 0.0
     peak_pnl: float = 0.0
 
@@ -162,6 +164,7 @@ class StrategyMetrics:
 # Abstract Base Strategy
 # ─────────────────────────────────────────────────────────────────────────────
 
+
 class BaseStrategy(ABC):
     """
     Abstract base class for all Astra trading strategies.
@@ -213,7 +216,7 @@ class BaseStrategy(ABC):
                     if signal.is_actionable:
                         signals.append(signal)
             except Exception:
-                pass   # Strategy errors never crash the scan loop
+                pass  # Strategy errors never crash the scan loop
 
         return signals
 
@@ -246,6 +249,7 @@ class BaseStrategy(ABC):
 # ─────────────────────────────────────────────────────────────────────────────
 # Strategy Registry
 # ─────────────────────────────────────────────────────────────────────────────
+
 
 class StrategyRegistry:
     """

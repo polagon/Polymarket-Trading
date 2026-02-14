@@ -7,11 +7,12 @@ Uses the structural edge from Polymarket microstructure research:
 
 Adapts LongshotSignal → TradeSignal for the unified strategy registry.
 """
+
 from typing import Optional
 
-from scanner.market_fetcher import Market
 from scanner.longshot_screener import screen_longshot_markets
-from scanner.strategies.base import BaseStrategy, TradeSignal, StrategyContext
+from scanner.market_fetcher import Market
+from scanner.strategies.base import BaseStrategy, StrategyContext, TradeSignal
 
 
 class LongshotStrategy(BaseStrategy):

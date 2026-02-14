@@ -5,13 +5,15 @@ CRITICAL: Periodic refresh of event metadata to catch negRisk flag changes.
 
 negRisk events break parity assumptions and must be detected early.
 """
-import logging
+
 import asyncio
+import logging
 from typing import Dict, List
+
 import aiohttp
 
-from models.types import Event, Market
 from config import GAMMA_API_URL
+from models.types import Event, Market
 
 logger = logging.getLogger(__name__)
 
@@ -84,9 +86,7 @@ class EventRefresher:
                                         f"MUST cancel all orders in this event!"
                                     )
                                 if not old_event.augmented_neg_risk and event.augmented_neg_risk:
-                                    logger.warning(
-                                        f"⚠️ augmentedNegRisk FLAG ADDED: Event {event_id} ({event.title})"
-                                    )
+                                    logger.warning(f"⚠️ augmentedNegRisk FLAG ADDED: Event {event_id} ({event.title})")
 
                 except Exception as e:
                     logger.warning(f"Failed to refresh event {event_id}: {e}")
@@ -126,9 +126,7 @@ class EventRefresher:
             get_markets_callback: Async function that returns current market list
         """
         self.running = True
-        logger.info(
-            f"Event refresher started (interval={self.refresh_interval}s)"
-        )
+        logger.info(f"Event refresher started (interval={self.refresh_interval}s)")
 
         while self.running:
             try:

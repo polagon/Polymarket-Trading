@@ -3,6 +3,7 @@ Truth Report - Daily JSON output with maker/taker separation.
 
 CRITICAL: Maker vs taker fill separation for accurate performance attribution.
 """
+
 import json
 import logging
 import os
@@ -96,7 +97,7 @@ class TruthReportBuilder:
             "side": fill.side,
             "price": fill.price,
             "size_tokens": fill.size_tokens,
-            "timestamp": fill.timestamp.isoformat() if hasattr(fill.timestamp, 'isoformat') else str(fill.timestamp),
+            "timestamp": fill.timestamp.isoformat() if hasattr(fill.timestamp, "isoformat") else str(fill.timestamp),
             "pnl": pnl,
             "cluster_id": cluster_id,
             "realized_spread": realized_spread,
@@ -114,10 +115,7 @@ class TruthReportBuilder:
         self.cluster_pnl[cluster_id] += pnl
         self.market_pnl[fill.condition_id] += pnl
 
-        logger.debug(
-            f"Fill recorded: {fill.fill_id} {'MAKER' if is_maker else 'TAKER'} "
-            f"pnl=${pnl:.2f}"
-        )
+        logger.debug(f"Fill recorded: {fill.fill_id} {'MAKER' if is_maker else 'TAKER'} pnl=${pnl:.2f}")
 
     def record_quote_event(self, event_type: str, count: int = 1):
         """
@@ -245,7 +243,9 @@ class TruthReportBuilder:
 
         # Per-quote metrics
         fill_rate = len(self.maker_fills) / self.quote_count if self.quote_count > 0 else 0.0
-        cancel_replace_rate = (self.cancel_count + self.replace_count) / self.quote_count if self.quote_count > 0 else 0.0
+        cancel_replace_rate = (
+            (self.cancel_count + self.replace_count) / self.quote_count if self.quote_count > 0 else 0.0
+        )
         realized_spread_per_quote_bps = realized_spread_bps * fill_rate if self.quote_count > 0 else 0.0
 
         return {
@@ -309,7 +309,7 @@ class TruthReportBuilder:
         return report
 
 
-def write_daily_report(report: Dict, reports_dir: Path = None) -> Path:
+def write_daily_report(report: Dict, reports_dir: Path = None) -> Path:  # type: ignore[assignment]
     """
     Write daily report to JSON file with atomic write.
 

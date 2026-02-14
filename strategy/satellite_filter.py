@@ -3,18 +3,19 @@ Satellite Filter - High-conviction info-edge trades (Astra V2 integration).
 
 10-20% of capital allocated to satellite trades with exceptional evidence.
 """
+
 import logging
 from typing import Optional
 
-from models.types import Market
 from config import (
+    BANKROLL,
     SATELLITE_MIN_EDGE,
-    SATELLITE_MIN_ROBUSTNESS,
     SATELLITE_MIN_LIQUIDITY,
+    SATELLITE_MIN_ROBUSTNESS,
     SATELLITE_REQUIRE_TIER_A_OR_B,
     SATELLITE_RISK_BUDGET_PCT,
-    BANKROLL,
 )
+from models.types import Market
 
 logger = logging.getLogger(__name__)
 
@@ -60,16 +61,12 @@ def evaluate_satellite_trade(
 
     # Gate 1: Minimum edge
     if edge < SATELLITE_MIN_EDGE:
-        logger.debug(
-            f"Satellite veto: {market.condition_id} edge={edge:.2%} < {SATELLITE_MIN_EDGE:.2%}"
-        )
+        logger.debug(f"Satellite veto: {market.condition_id} edge={edge:.2%} < {SATELLITE_MIN_EDGE:.2%}")
         return None
 
     # Gate 2: Minimum robustness
     if robustness < SATELLITE_MIN_ROBUSTNESS:
-        logger.debug(
-            f"Satellite veto: {market.condition_id} robustness={robustness} < {SATELLITE_MIN_ROBUSTNESS}"
-        )
+        logger.debug(f"Satellite veto: {market.condition_id} robustness={robustness} < {SATELLITE_MIN_ROBUSTNESS}")
         return None
 
     # Gate 3: Minimum liquidity
@@ -81,9 +78,7 @@ def evaluate_satellite_trade(
 
     # Gate 4: Tier A or B evidence required
     if SATELLITE_REQUIRE_TIER_A_OR_B and evidence_tier not in ["A", "B"]:
-        logger.debug(
-            f"Satellite veto: {market.condition_id} evidence_tier={evidence_tier} (need A or B)"
-        )
+        logger.debug(f"Satellite veto: {market.condition_id} evidence_tier={evidence_tier} (need A or B)")
         return None
 
     # Gate 5: Risk budget available
@@ -148,9 +143,7 @@ def load_astra_predictions(predictions_file: str) -> dict:
         # Convert list to dict keyed by market_condition_id
         if isinstance(data, list):
             predictions_dict = {
-                pred.get("market_condition_id"): pred
-                for pred in data
-                if pred.get("market_condition_id")
+                pred.get("market_condition_id"): pred for pred in data if pred.get("market_condition_id")
             }
             logger.info(f"Loaded {len(predictions_dict)} Astra predictions from {predictions_file}")
             return predictions_dict
@@ -189,9 +182,7 @@ def scan_satellite_opportunities(
         if not prediction:
             continue
 
-        recommendation = evaluate_satellite_trade(
-            market, prediction, current_satellite_exposure
-        )
+        recommendation = evaluate_satellite_trade(market, prediction, current_satellite_exposure)
 
         if recommendation:
             recommendations.append(recommendation)

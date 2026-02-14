@@ -3,17 +3,20 @@ Unit tests for strategy layer (QS, Market-Maker, Markout/Toxicity).
 
 CRITICAL: These tests lock strategy invariants.
 """
-import pytest
-import time
-from models.types import Market, OrderBook, MarketState, Fill
-from strategy import quoteability_scorer, market_maker
-from strategy.markout_tracker import MarkoutTracker
-from config import ACTIVE_QUOTE_COUNT
 
+import time
+
+import pytest
+
+from config import ACTIVE_QUOTE_COUNT
+from models.types import Fill, Market, MarketState, OrderBook
+from strategy import market_maker, quoteability_scorer
+from strategy.markout_tracker import MarkoutTracker
 
 # ============================================================================
 # QUOTEABILITY SCORE TESTS (CRITICAL FIX #4, #12)
 # ============================================================================
+
 
 def test_qs_veto_high_rrs():
     """Test that high RRS vetoes market."""
@@ -157,14 +160,14 @@ def test_active_set_cluster_diversity():
     from config import MAX_MARKETS_PER_CLUSTER_IN_ACTIVE_SET
 
     assert len(active_set) <= MAX_MARKETS_PER_CLUSTER_IN_ACTIVE_SET, (
-        f"Active set must respect cluster limit ({MAX_MARKETS_PER_CLUSTER_IN_ACTIVE_SET}), "
-        f"got {len(active_set)}"
+        f"Active set must respect cluster limit ({MAX_MARKETS_PER_CLUSTER_IN_ACTIVE_SET}), got {len(active_set)}"
     )
 
 
 # ============================================================================
 # MARKET-MAKER TESTS (CRITICAL FIX #4, #6)
 # ============================================================================
+
 
 def test_tick_rounding_in_quotes():
     """CRITICAL FIX #6: Tick rounding enforced in quote computation."""
@@ -243,6 +246,7 @@ def test_fv_band_uses_time_to_close():
 # MARKOUT/TOXICITY TESTS (CRITICAL FIX #4)
 # ============================================================================
 
+
 def test_markout_calculation():
     """Test markout calculation."""
     tracker = MarkoutTracker()
@@ -260,7 +264,7 @@ def test_markout_calculation():
 
     # Book snapshots: mid price moved UP after buy (good markout)
     book_snapshots = {
-        1000000 + 30000: 0.52,   # 30s after: +2¢
+        1000000 + 30000: 0.52,  # 30s after: +2¢
         1000000 + 120000: 0.53,  # 2m (120s) after: +3¢
         1000000 + 600000: 0.54,  # 10m (600s) after: +4¢
     }

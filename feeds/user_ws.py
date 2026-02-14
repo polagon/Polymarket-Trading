@@ -3,15 +3,17 @@ User WebSocket Feed - Order fills, updates, and balance changes.
 
 CRITICAL: Emits Fill events for markout tracking.
 """
+
 import asyncio
 import json
 import logging
 import time
-from typing import Optional, Callable, List
+from typing import Callable, List, Optional
+
 import websockets
 
-from models.types import Fill, OrderStatus
 from config import WS_RECONNECT_DELAY_SECONDS
+from models.types import Fill, OrderStatus
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +67,7 @@ class UserWebSocketFeed:
             if self.api_key:
                 headers["Authorization"] = f"Bearer {self.api_key}"
 
-            self.ws = await websockets.connect(self.ws_url, extra_headers=headers)
+            self.ws = await websockets.connect(self.ws_url, extra_headers=headers)  # type: ignore[assignment]
             self.running = True
             logger.info(f"Connected to user WebSocket: {self.ws_url}")
         except Exception as e:
@@ -185,11 +187,11 @@ class UserWebSocketFeed:
 
             # Create Fill object
             fill = Fill(
-                fill_id=fill_id,
-                order_id=order_id,
-                condition_id=market_id,
-                token_id=token_id,
-                side=side,
+                fill_id=fill_id,  # type: ignore[arg-type]
+                order_id=order_id,  # type: ignore[arg-type]
+                condition_id=market_id,  # type: ignore[arg-type]
+                token_id=token_id,  # type: ignore[arg-type]
+                side=side,  # type: ignore[arg-type]
                 price=price,
                 size_tokens=size,
                 timestamp=timestamp_ms,
@@ -205,8 +207,7 @@ class UserWebSocketFeed:
                 self.on_fill_callback(fill)
 
             logger.info(
-                f"Fill received: {fill_id} {side} {size:.2f} {token_id} @ {price:.4f} "
-                f"({'maker' if maker else 'taker'})"
+                f"Fill received: {fill_id} {side} {size:.2f} {token_id} @ {price:.4f} ({'maker' if maker else 'taker'})"
             )
 
         except Exception as e:
@@ -233,7 +234,7 @@ class UserWebSocketFeed:
                 "expired": OrderStatus.EXPIRED,
             }
 
-            status = status_map.get(status_str, OrderStatus.PENDING)
+            status = status_map.get(status_str, OrderStatus.PENDING)  # type: ignore[arg-type]
 
             timestamp = data.get("timestamp")
             if timestamp:

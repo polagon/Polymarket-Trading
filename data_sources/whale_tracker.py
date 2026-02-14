@@ -27,6 +27,7 @@ Integration:
   - Returns a dict: {condition_id: WhaleSignal}
   - Inject summary into learning_context before Astra calls
 """
+
 import json
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -35,12 +36,11 @@ from typing import Optional
 
 from scanner.market_fetcher import Market
 
-
 BASELINE_FILE = Path("memory/volume_baseline.json")
-SPIKE_MULTIPLIER = 3.0       # Volume must be 3× baseline to flag
+SPIKE_MULTIPLIER = 3.0  # Volume must be 3× baseline to flag
 MIN_VOLUME_FOR_SIGNAL = 500  # Don't flag markets with <$500 volume (noise)
-MIN_BASELINE_SCANS = 3       # Need at least 3 data points to establish baseline
-MAX_BASELINE_HISTORY = 20    # Rolling window of volume observations per market
+MIN_BASELINE_SCANS = 3  # Need at least 3 data points to establish baseline
+MAX_BASELINE_HISTORY = 20  # Rolling window of volume observations per market
 
 
 @dataclass
@@ -49,8 +49,8 @@ class WhaleSignal:
     question: str
     current_volume: float
     baseline_volume: float
-    spike_ratio: float         # current / baseline
-    evidence_tier: str = "B"   # Tier B: verified data, not primary source
+    spike_ratio: float  # current / baseline
+    evidence_tier: str = "B"  # Tier B: verified data, not primary source
     timestamp: str = ""
 
     @property
@@ -67,7 +67,7 @@ def _load_baseline() -> dict:
     """Load per-market volume history from disk."""
     if BASELINE_FILE.exists():
         try:
-            return json.loads(BASELINE_FILE.read_text())
+            return json.loads(BASELINE_FILE.read_text())  # type: ignore[no-any-return]
         except Exception:
             pass
     return {}

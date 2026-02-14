@@ -16,15 +16,17 @@ Usage:
   from data_sources.sports import match_sports_market, SportsEstimate
   estimate = await match_sports_market(market_question)
 """
+
+import asyncio
 import json
 import logging
 import re
-import asyncio
-import aiohttp
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
+
+import aiohttp
 
 from config import ODDS_API_KEY
 
@@ -62,14 +64,14 @@ CACHE_TTL_SECONDS = 300  # 5 minutes
 # ---------------------------------------------------------------------------
 _QUOTA_FILE = Path("memory/odds_api_usage.json")
 _MONTHLY_QUOTA = 500
-_QUOTA_WARN_THRESHOLD = 450   # Warn when < 50 remaining
+_QUOTA_WARN_THRESHOLD = 450  # Warn when < 50 remaining
 
 
 def _load_quota() -> dict:
     """Load quota usage from disk. Returns dict with 'month' and 'used' keys."""
     if _QUOTA_FILE.exists():
         try:
-            return json.loads(_QUOTA_FILE.read_text())
+            return json.loads(_QUOTA_FILE.read_text())  # type: ignore[no-any-return]
         except Exception:
             pass
     return {"month": "", "used": 0}
@@ -102,11 +104,8 @@ def _track_requests(count: int) -> int:
 
     remaining = _MONTHLY_QUOTA - data["used"]
     if remaining < (_MONTHLY_QUOTA - _QUOTA_WARN_THRESHOLD):
-        logger.warning(
-            "Odds API quota: %d/%d used this month (%d remaining)",
-            data["used"], _MONTHLY_QUOTA, remaining
-        )
-    return remaining
+        logger.warning("Odds API quota: %d/%d used this month (%d remaining)", data["used"], _MONTHLY_QUOTA, remaining)
+    return remaining  # type: ignore[no-any-return]
 
 
 def get_quota_status() -> dict:
@@ -130,34 +129,36 @@ def get_quota_status() -> dict:
 class TeamOdds:
     name: str
     bookmaker_count: int
-    avg_implied_prob: float   # Raw bookmaker implied probability (with vig)
-    devigged_prob: float      # Fair probability after removing vig
-    consensus_american: int   # American odds equivalent
+    avg_implied_prob: float  # Raw bookmaker implied probability (with vig)
+    devigged_prob: float  # Fair probability after removing vig
+    consensus_american: int  # American odds equivalent
 
 
 @dataclass
 class GameOdds:
     """Devigged fair-value odds for a single game."""
+
     sport: str
     home_team: str
     away_team: str
-    commence_time: str        # ISO8601 UTC
+    commence_time: str  # ISO8601 UTC
     hours_to_game: float
     home: TeamOdds
     away: TeamOdds
     draw: Optional[TeamOdds]  # Only for soccer/some sports
     bookmaker_count: int
-    market_type: str          # "h2h" (moneyline)
+    market_type: str  # "h2h" (moneyline)
 
 
 @dataclass
 class SportsEstimate:
     """Probability estimate for a Polymarket sports question."""
+
     market_question: str
-    matched_game: Optional[str]   # "TeamA vs TeamB"
-    probability: float            # Fair p(YES) for the Polymarket question
-    confidence: float             # 0-1 data quality score
-    source: str                   # "the_odds_api"
+    matched_game: Optional[str]  # "TeamA vs TeamB"
+    probability: float  # Fair p(YES) for the Polymarket question
+    confidence: float  # 0-1 data quality score
+    source: str  # "the_odds_api"
     reasoning: str
     hours_to_game: float
 
@@ -173,7 +174,7 @@ async def _fetch_sport_odds(sport_key: str, session: aiohttp.ClientSession) -> l
         async with session.get(
             f"{ODDS_API_BASE}/sports/{sport_key}/odds",
             params={
-                "apiKey": ODDS_API_KEY,
+                "apiKey": ODDS_API_KEY,  # type: ignore[dict-item]
                 "regions": "us,uk,eu",
                 "markets": "h2h",
                 "oddsFormat": "decimal",
@@ -201,7 +202,7 @@ async def _fetch_sport_odds(sport_key: str, session: aiohttp.ClientSession) -> l
                             logger.warning("Odds API quota critically low: %d requests remaining", api_remaining)
                     except ValueError:
                         pass
-                return data
+                return data  # type: ignore[no-any-return]
             elif resp.status == 401:
                 logger.error("Odds API: Bad API key (401) for sport %s", sport_key)
                 return []
@@ -355,10 +356,7 @@ def _parse_teams_from_question(question: str) -> tuple[str, str, str]:
     q = question.strip()
 
     # "Will [Team A] beat [Team B]?" or "Will [Team A] defeat [Team B]?"
-    m = re.search(
-        r"will\s+(.+?)\s+(?:beat|defeat|win (?:against|over|vs))\s+(.+?)(?:\?|$)",
-        q, re.IGNORECASE
-    )
+    m = re.search(r"will\s+(.+?)\s+(?:beat|defeat|win (?:against|over|vs))\s+(.+?)(?:\?|$)", q, re.IGNORECASE)
     if m:
         return m.group(1).strip(), m.group(2).strip(".?").strip(), "team_win"
 
@@ -452,10 +450,7 @@ def _find_best_game(
         )
     else:
         prob = team1_odds.devigged_prob
-        reasoning = (
-            f"Matched '{team1}' → {team1_odds.name} "
-            f"devigged win prob: {prob:.1%}."
-        )
+        reasoning = f"Matched '{team1}' → {team1_odds.name} devigged win prob: {prob:.1%}."
 
     return game, prob, reasoning
 
@@ -485,8 +480,7 @@ async def fetch_all_odds(sport_keys: Optional[list[str]] = None) -> list[GameOdd
     # Count only cache-misses against quota (cached fetches don't use credits)
     now = datetime.now(timezone.utc).timestamp()
     fresh_fetches = sum(
-        1 for sk in keys_to_fetch
-        if not (_odds_cache.get(sk) and now - _odds_cache[sk][0] < CACHE_TTL_SECONDS)
+        1 for sk in keys_to_fetch if not (_odds_cache.get(sk) and now - _odds_cache[sk][0] < CACHE_TTL_SECONDS)
     )
     if fresh_fetches > 0:
         _track_requests(fresh_fetches)
@@ -499,7 +493,7 @@ async def fetch_all_odds(sport_keys: Optional[list[str]] = None) -> list[GameOdd
     async def fetch_with_sem(sk: str, session: aiohttp.ClientSession) -> list:
         async with sem:
             result = await _fetch_sport_odds(sk, session)
-            if result:   # small delay after each successful fetch to avoid burst 429
+            if result:  # small delay after each successful fetch to avoid burst 429
                 await asyncio.sleep(0.1)
             return result
 
@@ -510,7 +504,7 @@ async def fetch_all_odds(sport_keys: Optional[list[str]] = None) -> list[GameOdd
         for events in results:
             if isinstance(events, Exception) or not events:
                 continue
-            for event in events:
+            for event in events:  # type: ignore[union-attr]
                 game = _devig_game(event)
                 if game:
                     all_games.append(game)
@@ -591,20 +585,81 @@ def _infer_sport_keys_from_questions(questions: list[str]) -> list[str]:
     relevant = []
 
     sport_signals = {
-        "americanfootball_nfl": ["nfl", "super bowl", "chiefs", "patriots", "eagles", "cowboys",
-                                  "49ers", "ravens", "bills", "bengals", "packers", "quarterback"],
+        "americanfootball_nfl": [
+            "nfl",
+            "super bowl",
+            "chiefs",
+            "patriots",
+            "eagles",
+            "cowboys",
+            "49ers",
+            "ravens",
+            "bills",
+            "bengals",
+            "packers",
+            "quarterback",
+        ],
         "americanfootball_ncaaf": ["ncaaf", "college football", "cfp", "ncaa football"],
-        "basketball_nba": ["nba", "celtics", "lakers", "warriors", "bucks", "heat", "knicks",
-                           "nuggets", "clippers", "nets", "playoff", "finals", "mvp"],
+        "basketball_nba": [
+            "nba",
+            "celtics",
+            "lakers",
+            "warriors",
+            "bucks",
+            "heat",
+            "knicks",
+            "nuggets",
+            "clippers",
+            "nets",
+            "playoff",
+            "finals",
+            "mvp",
+        ],
         "basketball_ncaab": ["ncaab", "march madness", "ncaa tournament", "college basketball"],
-        "baseball_mlb": ["mlb", "world series", "yankees", "dodgers", "red sox", "cubs",
-                         "mets", "astros", "braves", "pennant"],
-        "icehockey_nhl": ["nhl", "stanley cup", "maple leafs", "rangers", "bruins",
-                          "penguins", "oilers", "avalanche", "golden knights"],
-        "soccer_epl": ["premier league", "epl", "chelsea", "arsenal", "manchester", "liverpool",
-                       "tottenham", "everton", "leicester"],
-        "soccer_uefa_champs_league": ["champions league", "ucl", "real madrid", "barcelona",
-                                       "psg", "juventus", "bayern", "inter milan"],
+        "baseball_mlb": [
+            "mlb",
+            "world series",
+            "yankees",
+            "dodgers",
+            "red sox",
+            "cubs",
+            "mets",
+            "astros",
+            "braves",
+            "pennant",
+        ],
+        "icehockey_nhl": [
+            "nhl",
+            "stanley cup",
+            "maple leafs",
+            "rangers",
+            "bruins",
+            "penguins",
+            "oilers",
+            "avalanche",
+            "golden knights",
+        ],
+        "soccer_epl": [
+            "premier league",
+            "epl",
+            "chelsea",
+            "arsenal",
+            "manchester",
+            "liverpool",
+            "tottenham",
+            "everton",
+            "leicester",
+        ],
+        "soccer_uefa_champs_league": [
+            "champions league",
+            "ucl",
+            "real madrid",
+            "barcelona",
+            "psg",
+            "juventus",
+            "bayern",
+            "inter milan",
+        ],
         "soccer_usa_mls": ["mls", "lafc", "atlanta united", "seattle sounders", "galaxy"],
         "soccer_spain_la_liga": ["la liga", "laliga", "real madrid", "barcelona", "atletico"],
         "soccer_germany_bundesliga": ["bundesliga", "dortmund", "bayer leverkusen"],
@@ -612,8 +667,16 @@ def _infer_sport_keys_from_questions(questions: list[str]) -> list[str]:
         "soccer_france_ligue_one": ["ligue 1", "ligue one", "psg", "paris saint-germain"],
         "tennis_atp_us_open": ["tennis", "atp", "us open", "djokovic", "alcaraz", "sinner"],
         "tennis_wta_us_open": ["wta", "swiatek", "sabalenka", "gauff", "wimbledon"],
-        "mma_mixed_martial_arts": ["ufc", "mma", "conor mcgregor", "khabib", "jon jones",
-                                   "poirier", "adesanya", "izzy"],
+        "mma_mixed_martial_arts": [
+            "ufc",
+            "mma",
+            "conor mcgregor",
+            "khabib",
+            "jon jones",
+            "poirier",
+            "adesanya",
+            "izzy",
+        ],
     }
 
     for sport_key, signals in sport_signals.items():
@@ -625,8 +688,12 @@ def _infer_sport_keys_from_questions(questions: list[str]) -> list[str]:
         relevant = ["americanfootball_nfl", "basketball_nba", "baseball_mlb", "icehockey_nhl"]
         logger.debug("No sport keywords matched — fetching top 4 by default (%d questions)", len(questions))
     else:
-        logger.info("Precision sport fetch: %d leagues for %d questions (saved %d API calls)",
-                    len(relevant), len(questions), len(SPORT_KEYS) - len(relevant))
+        logger.info(
+            "Precision sport fetch: %d leagues for %d questions (saved %d API calls)",
+            len(relevant),
+            len(questions),
+            len(SPORT_KEYS) - len(relevant),
+        )
 
     return relevant
 

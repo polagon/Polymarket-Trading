@@ -6,30 +6,31 @@ CRITICAL FIXES:
 - #12: Uses time_to_close (NOT hours_to_expiry)
 - #14: Debounced refresh (separate scoring vs mutation)
 """
-import logging
-from typing import List, Dict, Optional
-from collections import defaultdict
 
-from models.types import Market, OrderBook, MarketState
-from risk import market_state
+import logging
+from collections import defaultdict
+from typing import Dict, List, Optional
+
 from config import (
     ACTIVE_QUOTE_COUNT,
     MAX_MARKETS_PER_CLUSTER_IN_ACTIVE_SET,
-    QS_WEIGHT_DEPTH,
-    QS_WEIGHT_CHURN,
-    QS_WEIGHT_JUMP,
-    QS_WEIGHT_RESOLUTION,
+    PAPER_MODE,
+    QS_BOOK_STALENESS_S_PAPER,
+    QS_BOOK_STALENESS_S_PROD,
     QS_MIN_LIQUIDITY,
     QS_RECENT_JUMP_THRESHOLD,
-    QS_BOOK_STALENESS_S_PROD,
-    QS_BOOK_STALENESS_S_PAPER,
-    PAPER_MODE,
+    QS_WEIGHT_CHURN,
+    QS_WEIGHT_DEPTH,
+    QS_WEIGHT_JUMP,
+    QS_WEIGHT_RESOLUTION,
 )
+from models.types import Market, MarketState, OrderBook
+from risk import market_state
 
 logger = logging.getLogger(__name__)
 
 # QS veto reason counters (reset per cycle)
-QS_VETO_COUNTERS = defaultdict(int)
+QS_VETO_COUNTERS = defaultdict(int)  # type: ignore[var-annotated]
 
 
 def reset_qs_veto_counters():
@@ -85,7 +86,7 @@ def compute_qs(
     """
     # Hard veto: RRS too high
     if rrs > 0.35:
-        QS_VETO_COUNTERS['veto_rrs'] += 1
+        QS_VETO_COUNTERS["veto_rrs"] += 1
         logger.debug(f"QS veto: {market.condition_id} RRS={rrs:.2f} > 0.35")
         return 0.0
 
@@ -97,13 +98,13 @@ def compute_qs(
         MarketState.CHALLENGE_WINDOW,
     }
     if state in unsafe_states:
-        QS_VETO_COUNTERS['veto_market_state'] += 1
+        QS_VETO_COUNTERS["veto_market_state"] += 1
         logger.debug(f"QS veto: {market.condition_id} state={state.value}")
         return 0.0
 
     # Hard veto: Near close + volatile
     if market.time_to_close and market.time_to_close < 48 and recent_jump_rate > QS_RECENT_JUMP_THRESHOLD:
-        QS_VETO_COUNTERS['veto_near_close_volatile'] += 1
+        QS_VETO_COUNTERS["veto_near_close_volatile"] += 1
         logger.debug(
             f"QS veto: {market.condition_id} near-close + jumpy "
             f"(ttc={market.time_to_close:.1f}h, jump={recent_jump_rate:.2%})"
@@ -113,22 +114,20 @@ def compute_qs(
     # Hard veto: Crossed/locked book (spread < tick)
     spread = book.best_ask - book.best_bid
     if spread < market.tick_size:
-        QS_VETO_COUNTERS['veto_crossed'] += 1
+        QS_VETO_COUNTERS["veto_crossed"] += 1
         logger.debug(f"QS veto: {market.condition_id} spread={spread:.4f} < tick={market.tick_size}")
         return 0.0
 
     # Hard veto: Stale book (mode-aware threshold)
     stale_threshold_ms = (QS_BOOK_STALENESS_S_PAPER if PAPER_MODE else QS_BOOK_STALENESS_S_PROD) * 1000
     if book.timestamp_age_ms > stale_threshold_ms:
-        QS_VETO_COUNTERS['veto_stale_book'] += 1
-        logger.debug(
-            f"QS veto: {market.condition_id} book age={book.timestamp_age_ms}ms > {stale_threshold_ms}ms"
-        )
+        QS_VETO_COUNTERS["veto_stale_book"] += 1
+        logger.debug(f"QS veto: {market.condition_id} book age={book.timestamp_age_ms}ms > {stale_threshold_ms}ms")
         return 0.0
 
     # Hard veto: Insufficient liquidity
     if market.liquidity < QS_MIN_LIQUIDITY:
-        QS_VETO_COUNTERS['veto_liquidity'] += 1
+        QS_VETO_COUNTERS["veto_liquidity"] += 1
         logger.debug(f"QS veto: {market.condition_id} liquidity=${market.liquidity:.0f} < ${QS_MIN_LIQUIDITY:.0f}")
         return 0.0
 
@@ -150,7 +149,7 @@ def compute_qs(
 
     # Track success
     if qs > 0:
-        QS_VETO_COUNTERS['qs_ok'] += 1
+        QS_VETO_COUNTERS["qs_ok"] += 1
 
     return qs
 
@@ -182,7 +181,7 @@ def compute_depth_score(book: OrderBook, levels: List[float] = [0.01, 0.02, 0.03
         bid_depth = sum(size for price, size in book.bids if price >= bid_threshold)
         ask_depth = sum(size for price, size in book.asks if price <= ask_threshold)
 
-        total_depth += (bid_depth + ask_depth)
+        total_depth += bid_depth + ask_depth
 
     # Normalize (assume 1000 tokens total is "good")
     depth_score = min(1.0, total_depth / 1000.0)
@@ -270,7 +269,7 @@ def select_active_set(
     candidates.sort(key=lambda m: qs_scores.get(m.condition_id, 0.0), reverse=True)
 
     active_set = []
-    cluster_counts = defaultdict(int)
+    cluster_counts = defaultdict(int)  # type: ignore[var-annotated]
 
     for market in candidates:
         cluster_id = cluster_assignments.get(market.condition_id, "unknown")
@@ -289,9 +288,7 @@ def select_active_set(
         if len(active_set) >= ACTIVE_QUOTE_COUNT:
             break
 
-    logger.info(
-        f"Active set selected: {len(active_set)} markets across {len(cluster_counts)} clusters"
-    )
+    logger.info(f"Active set selected: {len(active_set)} markets across {len(cluster_counts)} clusters")
 
     return active_set
 

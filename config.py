@@ -2,9 +2,10 @@
 # Allocator-Grade Polymarket Trading System
 # ChatGPT-Approved: All 21 fixes applied
 
-from pathlib import Path
-from dotenv import load_dotenv
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Load environment variables
 env_path = Path(__file__).resolve().parent / ".env"
@@ -262,18 +263,35 @@ PREFILTER_EXCLUDE_CLOSE_WINDOW = True  # Exclude markets with time_to_close < 24
 
 # Activity-aware selection (for burn-in stability)
 ACTIVITY_SCORE_WEIGHTS = {
-    "volume_24h": 0.50,      # 50% weight on recent trading volume
-    "liquidity": 0.30,        # 30% weight on current liquidity
-    "time_recency": 0.20,     # 20% weight on time until close (sooner = more active)
+    "volume_24h": 0.50,  # 50% weight on recent trading volume
+    "liquidity": 0.30,  # 30% weight on current liquidity
+    "time_recency": 0.20,  # 20% weight on time until close (sooner = more active)
 }
 
 # Reseed when universe goes stale
 RESEED_TRIGGER_ZERO_ACTIVE_CYCLES = 3  # Reseed if Active set = 0 for 3 consecutive cycles
-RESEED_MIN_INTERVAL_SECONDS = 300      # Min 5min between reseeds
+RESEED_MIN_INTERVAL_SECONDS = 300  # Min 5min between reseeds
 
 # WS warmup (Cycle 1 only)
 WS_WARMUP_TIMEOUT_S = 10  # Max warmup wait time
 WS_WARMUP_MIN_BOOKS = 25  # Minimum books required before first QS computation
+
+# ============================================================================
+# PAPER SIMULATOR REALISM (Loop 3: Activities 15-16)
+# ============================================================================
+
+# Latency simulation (Activity 15)
+PAPER_SIM_LATENCY_MEAN_MS = float(os.getenv("PAPER_SIM_LATENCY_MEAN_MS", "50"))
+
+# Market impact (Activity 16)
+MARKET_IMPACT_K = float(os.getenv("MARKET_IMPACT_K", "0.02"))
+
+# ============================================================================
+# BURN-IN / MONITOR-ONLY (Loop 3: Activity 17)
+# ============================================================================
+
+BURN_IN_MONITOR_CYCLES = int(os.getenv("BURN_IN_MONITOR_CYCLES", "3"))
+BURN_IN_MAX_FAILED_MONITORS = int(os.getenv("BURN_IN_MAX_FAILED_MONITORS", "10"))
 
 # Logging
 LOG_DIR = Path(__file__).resolve().parent / "logs"
@@ -353,3 +371,144 @@ MEMORY_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 TRUTH_REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+# ─── Provenance (Activity 1) ──────────────────────────────────────────────────
+import subprocess as _subprocess
+
+
+def get_git_sha() -> str | None:
+    """Return short git SHA, or None if not in a git repo."""
+    try:
+        result = _subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except Exception:
+        pass
+    return None
+
+
+_GIT_SHA = get_git_sha()  # cached at import time
+
+# ─── Ops Constants ────────────────────────────────────────────────────────────
+ALERT_WEBHOOK_URL = os.getenv("ALERT_WEBHOOK_URL", "")
+ALERT_COOLDOWN_SECONDS = int(os.getenv("ALERT_COOLDOWN_SECONDS", "300"))
+ASTRA_HEALTH_PATH = os.getenv("ASTRA_HEALTH_PATH", "/tmp/astra_health.json")
+JSON_LOGGING = os.getenv("JSON_LOGGING", "false").lower() == "true"
+ALLOW_NEW_DB = os.getenv("ALLOW_NEW_DB", "true").lower() == "true"
+
+# Gate engine thresholds (backward compat — still used for daily_loss and cumulative_dd)
+GATE_FEED_MAX_AGE_S = float(os.getenv("GATE_FEED_MAX_AGE_S", "60"))
+GATE_MAX_DAILY_LOSS_PCT = float(os.getenv("GATE_MAX_DAILY_LOSS_PCT", "0.05"))
+GATE_MAX_CUMULATIVE_DD_PCT = float(os.getenv("GATE_MAX_CUMULATIVE_DD_PCT", "0.15"))
+GATE_MAX_MEMORY_MB = float(os.getenv("GATE_MAX_MEMORY_MB", "500"))
+GATE_MIN_DISK_FREE_MB = float(os.getenv("GATE_MIN_DISK_FREE_MB", "100"))
+GATE_MAX_ERRORS_PER_CYCLE = int(os.getenv("GATE_MAX_ERRORS_PER_CYCLE", "5"))
+
+# Warn/fail split thresholds (Fix 5)
+# Memory thresholds (MB)
+MEMORY_WARN_MB = float(os.getenv("MEMORY_WARN_MB", "400"))
+MEMORY_FAIL_MB = float(os.getenv("MEMORY_FAIL_MB", "600"))
+
+# Disk thresholds (MB free)
+DISK_WARN_MB = float(os.getenv("DISK_WARN_MB", "200"))
+DISK_FAIL_MB = float(os.getenv("DISK_FAIL_MB", "50"))
+
+# Feed age thresholds (seconds)
+FEED_WARN_AGE_S = float(os.getenv("FEED_WARN_AGE_S", "30"))
+FEED_FAIL_AGE_S = float(os.getenv("FEED_FAIL_AGE_S", "120"))
+
+# Error count thresholds (per cycle)
+ERRORS_WARN = int(os.getenv("ERRORS_WARN", "3"))
+ERRORS_FAIL = int(os.getenv("ERRORS_FAIL", "10"))
+
+# ─── Config Hash (Activity 2) ─────────────────────────────────────────────────
+import hashlib as _hashlib
+import json as _json
+
+_CONFIG_ALLOWLIST = frozenset(
+    {
+        "BANKROLL",
+        "PAPER_MODE",
+        "SCAN_INTERVAL_SECONDS",
+        "MAX_DAILY_LOSS_PCT",
+        "KELLY_FRACTION",
+        "KELLY_CAP",
+        "KELLY_FLOOR",
+        "MIN_EDGE",
+        "MIN_CONFIDENCE",
+        "MIN_KELLY",
+        "MAX_POSITION_SIZE_USD",
+        "MAX_POSITION_SIZE_PCT",
+        "POSITION_COUNT_SOFT_CAP",
+        "POSITION_COUNT_HARD_CAP",
+        "CLUSTER_EXPOSURE_LIMIT_USD",
+        "AGGREGATE_EXPOSURE_LIMIT_PCT",
+        "MARKET_EXPOSURE_LIMIT_PCT",
+        "MAX_CORRELATED_POSITIONS",
+        "CORRELATION_THRESHOLD",
+        "CLAUDE_MODEL",
+        "ACTIVE_QUOTE_COUNT",
+        "RECONCILE_INTERVAL_SECONDS",
+        "WS_STALENESS_THRESHOLD_MS",
+        "QS_BOOK_STALENESS_S_PROD",
+        "QS_BOOK_STALENESS_S_PAPER",
+        "QS_MIN_LIQUIDITY",
+        "MARKET_FETCH_LIMIT_PROD",
+        "MARKET_FETCH_LIMIT_PAPER",
+        "MAX_SUBSCRIBE_MARKETS",
+        "PREFILTER_EXCLUDE_CLOSE_WINDOW",
+        "STATE_CLOSE_WINDOW_THRESHOLD_HOURS",
+        "WS_WARMUP_TIMEOUT_S",
+        "WS_WARMUP_MIN_BOOKS",
+        "RESEED_TRIGGER_ZERO_ACTIVE_CYCLES",
+        "RESEED_MIN_INTERVAL_SECONDS",
+        "GATE_FEED_MAX_AGE_S",
+        "GATE_MAX_DAILY_LOSS_PCT",
+        "GATE_MAX_CUMULATIVE_DD_PCT",
+        "GATE_MAX_MEMORY_MB",
+        "GATE_MIN_DISK_FREE_MB",
+        "GATE_MAX_ERRORS_PER_CYCLE",
+        "MEMORY_WARN_MB",
+        "MEMORY_FAIL_MB",
+        "DISK_WARN_MB",
+        "DISK_FAIL_MB",
+        "FEED_WARN_AGE_S",
+        "FEED_FAIL_AGE_S",
+        "ERRORS_WARN",
+        "ERRORS_FAIL",
+        "ALERT_COOLDOWN_SECONDS",
+        "PAPER_SIM_LATENCY_MEAN_MS",
+        "MARKET_IMPACT_K",
+        "BURN_IN_MONITOR_CYCLES",
+        "BURN_IN_MAX_FAILED_MONITORS",
+    }
+)
+
+
+def get_canonical_config_dict() -> dict:
+    """Return ordered dict of allowlisted, non-secret config constants."""
+    import config as _self
+
+    result = {}
+    for key in sorted(_CONFIG_ALLOWLIST):
+        if hasattr(_self, key):
+            val = getattr(_self, key)
+            # Convert non-JSON-serializable types
+            if isinstance(val, (int, float, bool, str, type(None))):
+                result[key] = val
+            else:
+                result[key] = str(val)
+    return result
+
+
+def compute_config_hash(config_dict: dict | None = None) -> str:
+    """SHA-256 hex digest of canonical config JSON."""
+    if config_dict is None:
+        config_dict = get_canonical_config_dict()
+    canonical = _json.dumps(config_dict, sort_keys=True, default=str)
+    return _hashlib.sha256(canonical.encode()).hexdigest()
