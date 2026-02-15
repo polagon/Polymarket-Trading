@@ -1,0 +1,68 @@
+{
+  "status": "ok",
+  "gates": [
+    {
+      "name": "ws_feed",
+      "status": "pass",
+      "message": "Feed connected and fresh",
+      "value": 0.514062
+    },
+    {
+      "name": "kill_switch",
+      "status": "pass",
+      "message": "Kill switch inactive",
+      "value": null
+    },
+    {
+      "name": "daily_loss",
+      "status": "pass",
+      "message": "Daily P&L: 0.00%",
+      "value": 0.0
+    },
+    {
+      "name": "cumulative_dd",
+      "status": "pass",
+      "message": "Drawdown: 0.00%",
+      "value": 0.0
+    },
+    {
+      "name": "db_integrity",
+      "status": "pass",
+      "message": "Database integrity OK",
+      "value": null
+    },
+    {
+      "name": "artifacts",
+      "status": "pass",
+      "message": "Artifacts directory writable",
+      "value": null
+    },
+    {
+      "name": "error_rate",
+      "status": "pass",
+      "message": "Errors: 0",
+      "value": 0
+    },
+    {
+      "name": "memory",
+      "status": "pass",
+      "message": "Memory: 84MB",
+      "value": 84.265625
+    },
+    {
+      "name": "disk",
+      "status": "pass",
+      "message": "Disk free: 94720MB",
+      "value": 94719.58203125
+    }
+  ],
+  "run_id": "1461a64e-bd14-41a3-afeb-c6ed1584da1f",
+  "cycle_id": 2,
+  "timestamp": "2026-02-14T23:17:12.666142+00:00",
+  "previous_status": "ok",
+  "transitions": [],
+  "blockers": [],
+  "monitor_only": true,
+  "monitor_remaining": 1,
+  "monitor_failures": 0
+}

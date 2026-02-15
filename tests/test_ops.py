@@ -272,6 +272,19 @@ class TestHeartbeat:
             assert result > 0, f"Memory should not be 0.0: {result}"
 
 
+class FakeClock:
+    """Deterministic clock for testing time-dependent code."""
+
+    def __init__(self, start: float = 0.0):
+        self._now = start
+
+    def now(self) -> float:
+        return self._now
+
+    def advance(self, dt: float) -> None:
+        self._now += dt
+
+
 class TestAlerts:
     """Activity 10: Alerting with rate limits."""
 
@@ -285,16 +298,19 @@ class TestAlerts:
     def test_alert_rate_limit(self):
         from ops.alerts import AlertManager
 
-        mgr = AlertManager(webhook_url="", cooldown_seconds=300)
+        clock = FakeClock(start=0.0)
+        mgr = AlertManager(webhook_url="", cooldown_seconds=300, now_fn=clock.now)
         r1 = mgr.send_alert("Test", "Msg1", "info", "same_type")
         assert r1 is True
+        # Same type, within cooldown window → rate limited
         r2 = mgr.send_alert("Test", "Msg2", "info", "same_type")
         assert r2 is False  # Rate limited
 
     def test_alert_different_types_not_limited(self):
         from ops.alerts import AlertManager
 
-        mgr = AlertManager(webhook_url="", cooldown_seconds=300)
+        clock = FakeClock(start=0.0)
+        mgr = AlertManager(webhook_url="", cooldown_seconds=300, now_fn=clock.now)
         r1 = mgr.send_alert("Test", "Msg1", "info", "type_a")
         r2 = mgr.send_alert("Test", "Msg2", "info", "type_b")
         assert r1 is True

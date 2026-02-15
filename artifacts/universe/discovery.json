@@ -1,0 +1,17 @@
+{
+  "btc_count": 3,
+  "counts_by_underlying": {
+    "BTC": 3,
+    "ETH": 2
+  },
+  "discovered_at": "2026-02-15T08:50:38Z",
+  "discovery_mode": "fixture",
+  "discovery_reason": "discovery_ok",
+  "eth_count": 2,
+  "pages_fetched": 1,
+  "schema_version": "1.0",
+  "tag_ids_used": [
+    "crypto_fixture"
+  ],
+  "total_count": 10
+}

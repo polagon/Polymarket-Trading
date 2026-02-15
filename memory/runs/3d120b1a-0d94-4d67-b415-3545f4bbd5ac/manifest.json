@@ -1,0 +1,13 @@
+{
+  "manifest_schema_version": 1,
+  "run_id": "3d120b1a-0d94-4d67-b415-3545f4bbd5ac",
+  "git_sha": "012c635",
+  "started_at": "2026-02-14T22:35:14.000551+00:00",
+  "ended_at": null,
+  "exit_reason": null,
+  "python_version": "3.12.12",
+  "config_hash": "3d23f4bb3ca831713ecdfe7928633baa3390c8687f1aab19c24d12d0c3863848",
+  "prompt_bundle_hash": "d56fed916d29a0f2f34c46ca694ce507cdaf55f10a4e7cfda8930982754b587f",
+  "schema_version": 2,
+  "paper_mode": true
+}

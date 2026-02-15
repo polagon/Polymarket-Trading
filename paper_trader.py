@@ -92,10 +92,11 @@ from data_sources.sports import get_sports_estimates
 from data_sources.weather import fetch_forecast, parse_weather_question
 from data_sources.whale_tracker import format_whale_context, track_volume_and_detect_whales
 
-# ── Loop 4: Allocator-grade modules ──────────────────────────────────────────
+# ── Loop 4/5: Allocator-grade modules ────────────────────────────────────────
 from definitions.loader import dump_definitions, load_definitions
 from definitions.registry import DefinitionRegistry
 from execution.order_manager import OrderManager
+from feeds.clob_book import CLOBBookFetcher
 from metrics.drawdown import DrawdownTracker
 from metrics.performance import PerformanceEngine, trade_record_from_paper_position
 from ops.alerts import AlertManager
@@ -114,6 +115,7 @@ from scanner.mispricing_detector import find_opportunities
 from scanner.probability_estimator import PROMPT_BUNDLE_HASH, PROMPT_REGISTRY, estimate_markets
 from scanner.semantic_clusters import SemanticClusterEngine
 from scanner.trade_logger import CURRENT_SCHEMA_VERSION, backup_db, init_db
+from signals.crypto_estimator import estimate_probability, get_default_vol, time_to_cutoff_years
 from signals.flow_toxicity import FlowToxicityAnalyzer
 from strategies.crypto_threshold import CryptoThresholdStrategy
 from telemetry.trade_telemetry import TradeTelemetry
@@ -383,6 +385,8 @@ async def run_paper_scan(
     scan_number: int,
     allow_new_positions: bool = True,
     crypto_strategy: Optional["CryptoThresholdStrategy"] = None,
+    book_fetcher: Optional["CLOBBookFetcher"] = None,
+    definition_registry: Optional["DefinitionRegistry"] = None,
 ):
     global _last_successful_fetch
     t_start = time.time()
@@ -523,21 +527,79 @@ async def run_paper_scan(
     # Find opportunities (Astra V2 core) — pass whale signals for score boosting
     opportunities = find_opportunities(markets, estimates, whale_signals=whale_signals if whale_signals else [])  # type: ignore[arg-type]
 
-    # ── Loop 4: Evaluate crypto markets through gate chain ──────────────────
-    if crypto_strategy:
+    # ── Loop 5: Evaluate crypto markets with real CLOB books + estimator ─────
+    if crypto_strategy and book_fetcher and definition_registry:
+        from scanner.strategies.base import StrategyContext
+
+        crypto_strategy.cycle_id = scan_number
+        l5_evaluated = 0
+        l5_with_book = 0
+        for m in crypto_markets:
+            try:
+                # Fetch real CLOB orderbook
+                market_book = None
+                if m.yes_token_id:
+                    market_book = await book_fetcher.fetch_market_book(m.condition_id, m.yes_token_id, m.no_token_id)
+
+                # Build price_data with real book + estimator output
+                pd: dict = {}
+                if market_book and market_book.yes and market_book.yes.is_valid:
+                    pd["best_bid"] = market_book.yes.best_bid
+                    pd["best_ask"] = market_book.yes.best_ask
+                    pd["mid"] = market_book.yes.mid
+                    pd["spread_frac"] = market_book.yes.spread_frac
+                    pd["depth_proxy_usd"] = market_book.yes.depth_proxy_usd
+                    l5_with_book += 1
+
+                # Run estimator if definition exists
+                contract = definition_registry.get(m.condition_id)
+                if contract and pd.get("mid", 0) > 0:
+                    underlying = contract.underlying
+                    # price_data is dict[str, CryptoContext] keyed by CoinGecko ID
+                    # DefinitionContract.underlying is ticker ("BTC") — need to map
+                    from data_sources.crypto import COINGECKO_ID_MAP
+
+                    coingecko_id = COINGECKO_ID_MAP.get(underlying.lower(), underlying.lower())
+                    spot = 0.0
+                    if price_data:
+                        crypto_ctx = price_data.get(coingecko_id)
+                        if crypto_ctx and hasattr(crypto_ctx, "current_price"):
+                            spot = crypto_ctx.current_price
+                    if spot <= 0:
+                        # No CoinGecko price available — skip estimator
+                        spot = 0.0
+
+                    strike = contract.condition.get("level", 0)
+                    t_years = time_to_cutoff_years(contract.cutoff_ts_utc)
+                    vol = get_default_vol(underlying)
+                    op = contract.condition.get("op", ">=")
+
+                    if spot > 0 and strike > 0 and t_years > 0:
+                        est = estimate_probability(spot, strike, t_years, vol, contract.resolution_type, op)
+                        pd["p_hat"] = est.p_hat
+                        pd["p_low"] = est.p_low
+                        pd["p_high"] = est.p_high
+
+                ctx = StrategyContext(price_data=pd)
+                crypto_strategy.evaluate(m, ctx)
+                l5_evaluated += 1
+            except Exception as e:
+                logger.warning("L5 strategy eval failed for %s: %s", m.condition_id[:16], e)
+        if l5_evaluated > 0:
+            report.console.print(
+                f"[dim]Loop 5: {l5_evaluated} crypto markets evaluated ({l5_with_book} with real CLOB book)[/dim]"
+            )
+    elif crypto_strategy:
+        # Fallback: Loop 4 mode (no book fetcher)
         from scanner.strategies.base import StrategyContext
 
         crypto_strategy.cycle_id = scan_number
         ctx = StrategyContext(price_data=price_data)
-        l4_evaluated = 0
         for m in crypto_markets:
             try:
                 crypto_strategy.evaluate(m, ctx)
-                l4_evaluated += 1
             except Exception as e:
                 logger.warning("L4 strategy eval failed for %s: %s", m.condition_id[:16], e)
-        if l4_evaluated > 0:
-            report.console.print(f"[dim]Loop 4: {l4_evaluated} crypto markets evaluated through gate chain[/dim]")
 
     # Longshot bias screener (structural edge, no Astra call needed)
     longshot_signals = screen_longshot_markets(markets)
@@ -952,11 +1014,15 @@ async def main():
         toxicity_analyzer=toxicity_analyzer,
         telemetry=trade_telemetry,
     )
+    # Loop 5: CLOB orderbook fetcher
+    book_fetcher = CLOBBookFetcher()
     logger.info(
-        "Loop 4 components initialized: registry=%s, risk=%s, strategy=%s",
+        "Loop 4/5 components initialized: registry=%s (%d defs), risk=%s, strategy=%s, book_fetcher=%s",
         type(definition_registry).__name__,
+        len(definition_registry),
         type(risk_engine).__name__,
         crypto_strategy.name,
+        type(book_fetcher).__name__,
     )
 
     report.console.print()
@@ -1054,6 +1120,8 @@ async def main():
                 cycle_id,
                 allow_new_positions=not in_monitor_only,
                 crypto_strategy=crypto_strategy,
+                book_fetcher=book_fetcher,
+                definition_registry=definition_registry,
             )
         except KeyboardInterrupt:
             shutdown_requested = True
