@@ -231,8 +231,8 @@ class TestFixtureIntegration:
         """BTC fixture markets should parse with underlying='BTC'."""
         from discover_crypto_gamma import discover_crypto_markets_fixture
 
-        markets, _metadata = discover_crypto_markets_fixture()
-        btc_markets = [m for m in markets if "BTC" in m["question"] or "Bitcoin" in m["question"]]
+        result = discover_crypto_markets_fixture()
+        btc_markets = [m for m in result.markets if "BTC" in m["question"] or "Bitcoin" in m["question"]]
 
         parsed_count = 0
         for market in btc_markets:
@@ -247,8 +247,8 @@ class TestFixtureIntegration:
         """Ethena fixture markets should ALL be rejected."""
         from discover_crypto_gamma import discover_crypto_markets_fixture
 
-        markets, _metadata = discover_crypto_markets_fixture()
-        ethena_markets = [m for m in markets if "Ethena" in m.get("question", "")]
+        result = discover_crypto_markets_fixture()
+        ethena_markets = [m for m in result.markets if "Ethena" in m.get("question", "")]
 
         for market in ethena_markets:
             parsed = parse_threshold_market(market)
@@ -258,8 +258,8 @@ class TestFixtureIntegration:
         """WBTC fixture market should be rejected."""
         from discover_crypto_gamma import discover_crypto_markets_fixture
 
-        markets, _metadata = discover_crypto_markets_fixture()
-        wbtc_markets = [m for m in markets if "WBTC" in m.get("question", "")]
+        result = discover_crypto_markets_fixture()
+        wbtc_markets = [m for m in result.markets if "WBTC" in m.get("question", "")]
 
         for market in wbtc_markets:
             parsed = parse_threshold_market(market)
@@ -269,8 +269,8 @@ class TestFixtureIntegration:
         """stETH fixture market should be rejected."""
         from discover_crypto_gamma import discover_crypto_markets_fixture
 
-        markets, _metadata = discover_crypto_markets_fixture()
-        steth_markets = [m for m in markets if "stETH" in m.get("question", "")]
+        result = discover_crypto_markets_fixture()
+        steth_markets = [m for m in result.markets if "stETH" in m.get("question", "")]
 
         for market in steth_markets:
             parsed = parse_threshold_market(market)

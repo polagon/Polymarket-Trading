@@ -30,7 +30,7 @@ from collections import Counter
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -40,8 +40,8 @@ tools_path = Path(__file__).resolve().parent
 if str(tools_path) not in sys.path:
     sys.path.insert(0, str(tools_path))
 
-# Loop 5.1: Import new discovery and parser
-from discover_crypto_gamma import discover_crypto_markets_fixture
+# Loop 6.0: Import new discovery with mode switching
+from discover_crypto_gamma import discover_crypto_markets
 from parse_crypto_threshold import parse_threshold_market as parse_strict
 
 from config import (
@@ -127,18 +127,26 @@ class ScoredMarket:
     definition_hash: Optional[str] = None
 
 
-async def discover_markets(underlyings: list[str]) -> tuple[list[dict], dict]:
-    """Discover all crypto threshold markets using Loop 5.1 tag-based discovery.
+async def discover_markets(mode: str, underlyings: list[str]) -> tuple[list[dict[str, Any]], dict[str, int], Any]:
+    """Discover all crypto threshold markets using tag-based discovery.
 
-    Loop 5.1: Uses fixture-based discovery (live API in Loop 6).
-    Returns (markets, metadata) where metadata includes counts_by_underlying.
+    Loop 6.0: Mode-switched discovery (fixture or live).
+    Returns (markets, metadata, discovery_result) where:
+        - markets: list of raw market dicts
+        - metadata: counts_by_underlying
+        - discovery_result: full DiscoveryResult for artifact writing
 
-    underlyings parameter is IGNORED in Loop 5.1 (fixture returns all).
+    underlyings parameter is IGNORED (discovery returns all crypto markets).
     """
-    # Loop 5.1: Use fixture-based discovery
-    markets, metadata = discover_crypto_markets_fixture()
-    logger.info(f"Discovered {len(markets)} markets (BTC: {metadata['btc_count']}, ETH: {metadata['eth_count']})")
-    return markets, metadata
+    from discover_crypto_gamma import DiscoveryResult
+
+    result: DiscoveryResult = discover_crypto_markets(mode=mode)
+    logger.info(
+        f"Discovered {len(result.markets)} markets "
+        f"(BTC: {result.metadata['btc_count']}, ETH: {result.metadata['eth_count']}) "
+        f"via {mode} mode, reason: {result.reason}"
+    )
+    return result.markets, result.metadata, result
 
 
 def parse_threshold_market(market: dict) -> Optional[dict]:
@@ -666,6 +674,7 @@ async def score_market(
 
 async def main():
     parser = argparse.ArgumentParser(description="Generate crypto threshold contracts")
+    parser.add_argument("--mode", choices=["fixture", "live"], default="fixture", help="Discovery mode")
     parser.add_argument("--underlyings", default="BTC,ETH", help="Comma-separated underlyings")
     parser.add_argument("--max_out", type=int, default=15, help="Max passers to output")
     parser.add_argument("--min_depth_usd", type=float, default=3000.0, help="Min depth proxy USD")
@@ -678,10 +687,10 @@ async def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
     underlyings = [u.strip().upper() for u in args.underlyings.split(",")]
-    logger.info(f"Discovering markets for underlyings: {underlyings}")
+    logger.info(f"Discovering markets for underlyings: {underlyings} (mode: {args.mode})")
 
-    # Discover markets (Loop 5.1: returns metadata with counts_by_underlying)
-    markets, discovery_metadata = await discover_markets(underlyings)
+    # Discover markets (Loop 6.0: mode-switched discovery)
+    markets, discovery_metadata, discovery_result = await discover_markets(args.mode, underlyings)
     logger.info(f"Discovered {len(markets)} candidate markets")
     logger.info(f"Discovery metadata: {discovery_metadata}")
 
@@ -757,6 +766,28 @@ async def main():
             sort_keys=True,
         )
     logger.info(f"Wrote {summary_path}")
+
+    # Write discovery artifact (Loop 6.0)
+    discovery_path = Path("artifacts/universe/discovery.json")
+    with open(discovery_path, "w") as f:
+        json.dump(
+            {
+                "schema_version": SCHEMA_VERSION,
+                "discovery_mode": args.mode,
+                "discovered_at": discovery_result.discovered_at,
+                "discovery_reason": discovery_result.reason,
+                "tag_ids_used": discovery_result.tag_ids_used,
+                "pages_fetched": discovery_result.pages_fetched,
+                "total_count": discovery_result.metadata["total_count"],
+                "btc_count": discovery_result.metadata["btc_count"],
+                "eth_count": discovery_result.metadata["eth_count"],
+                "counts_by_underlying": dict(counts_by_underlying),
+            },
+            f,
+            indent=2,
+            sort_keys=True,
+        )
+    logger.info(f"Wrote {discovery_path}")
 
     # Build contracts output
     contracts = []

@@ -53,3 +53,11 @@ REASON_ORDER_CHASE_EXCEEDED = "order_rejected: chase_exceeded"
 REASON_ORDER_TOXIC_NO_IMPROVE = "order_rejected: toxic_no_improve"
 REASON_ORDER_TTL_EXPIRED = "order_cancel: ttl_expired"
 REASON_ORDER_STALE = "order_cancel: stale"
+
+# ── Discovery (Loop 6.0) ──
+REASON_DISCOVERY_OK = "discovery_ok"
+REASON_DISCOVERY_TAG_NOT_FOUND = "discovery_veto: tag_not_found"
+REASON_DISCOVERY_GAMMA_HTTP_ERROR = "discovery_veto: gamma_http_error"
+REASON_DISCOVERY_GAMMA_TIMEOUT = "discovery_veto: gamma_timeout"
+REASON_DISCOVERY_PAGINATION_EXHAUSTED = "discovery_veto: pagination_exhausted"
+REASON_DISCOVERY_INVALID_RESPONSE = "discovery_veto: invalid_response"
