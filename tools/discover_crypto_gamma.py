@@ -58,6 +58,9 @@ class DiscoveryResult:
     discovered_at: str = ""
     """ISO8601 timestamp of discovery."""
 
+    pagination_exhausted: bool = False
+    """True if max_pages cap was hit while next_cursor was still present (universe incomplete)."""
+
 
 # ── Pytest guard ─────────────────────────────────────────────────────
 
@@ -284,11 +287,12 @@ class GammaClient:
                 return tag.get("id")
         return None  # Tag not found (legitimate case, not an error)
 
-    def fetch_markets_for_tag(self, tag_id: str, max_pages: int = 10) -> list[dict[str, Any]]:
+    def fetch_markets_for_tag(self, tag_id: str, max_pages: int = 10) -> tuple[list[dict[str, Any]], bool]:
         """Fetch all markets for a tag with pagination.
 
-        Returns list of market dicts. Each market has:
-            - id, question, end_date_iso (or endDate), condition_id, clobTokenIds
+        Returns tuple (markets, pagination_exhausted) where:
+            - markets: list of normalized market dicts
+            - pagination_exhausted: True if max_pages reached with next_cursor still present
 
         Pagination: follows next_cursor until exhausted or max_pages reached.
         """
@@ -296,6 +300,7 @@ class GammaClient:
         url = f"{self.base_url}/markets"
         params = {"tag_id": tag_id, "limit": 100}
         page = 0
+        pagination_exhausted = False
 
         while page < max_pages:
             try:
@@ -321,14 +326,22 @@ class GammaClient:
                 # Check for next page
                 next_cursor = data.get("next_cursor")
                 if not next_cursor:
+                    # Normal completion: cursor exhausted
                     break
+
+                # Hit max_pages limit while cursor still present → truncated
+                if page >= max_pages:
+                    logger.warning(f"Pagination limit reached at {max_pages} pages with cursor still present")
+                    pagination_exhausted = True
+                    break
+
                 params["cursor"] = next_cursor
 
             except Exception as e:
                 logger.error(f"Failed to fetch markets page {page}: {e}")
                 break
 
-        return markets
+        return markets, pagination_exhausted
 
     def _normalize_market(self, raw: dict) -> Optional[dict[str, Any]]:
         """Normalize Gamma market shape to internal format.
@@ -444,8 +457,21 @@ def discover_crypto_markets_live(
 
     # Step 2: Fetch markets for tag
     try:
-        markets = client.fetch_markets_for_tag(tag_id, max_pages=10)
+        markets, pagination_exhausted = client.fetch_markets_for_tag(tag_id, max_pages=10)
         pages_fetched = min(len(markets) // 100 + 1, 10)  # Estimate
+
+        # If pagination was exhausted, universe is incomplete
+        if pagination_exhausted:
+            logger.warning(f"Pagination exhausted: discovered {len(markets)} markets but more remain")
+            return DiscoveryResult(
+                markets=markets,
+                metadata={"total_count": len(markets), "btc_count": 0, "eth_count": 0},
+                reason=REASON_DISCOVERY_PAGINATION_EXHAUSTED,
+                tag_ids_used=[tag_id],
+                pages_fetched=pages_fetched,
+                discovered_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                pagination_exhausted=True,
+            )
     except TimeoutError:
         logger.error("Timeout while fetching /markets")
         return DiscoveryResult(
