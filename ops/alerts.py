@@ -11,7 +11,7 @@ import logging
 import time
 import urllib.error
 import urllib.request
-from typing import Optional
+from typing import Callable, Optional
 
 logger = logging.getLogger("astra.alerts")
 
@@ -19,9 +19,15 @@ logger = logging.getLogger("astra.alerts")
 class AlertManager:
     """Rate-limited alert sender."""
 
-    def __init__(self, webhook_url: str = "", cooldown_seconds: int = 300):
+    def __init__(
+        self,
+        webhook_url: str = "",
+        cooldown_seconds: int = 300,
+        now_fn: Optional[Callable[[], float]] = None,
+    ):
         self.webhook_url = webhook_url
         self.cooldown_seconds = cooldown_seconds
+        self._now_fn = now_fn or time.monotonic
         self._last_sent: dict[str, float] = {}  # alert_type -> monotonic time
 
     def send_alert(
@@ -44,8 +50,8 @@ class AlertManager:
             True if alert was sent (or would have been sent if no webhook), False if rate-limited
         """
         # Rate limiting check
-        now = time.monotonic()
-        last = self._last_sent.get(alert_type, 0.0)
+        now = self._now_fn()
+        last = self._last_sent.get(alert_type, -float("inf"))  # First alert always allowed
         if now - last < self.cooldown_seconds:
             logger.debug(f"Alert rate-limited: {alert_type} (cooldown {self.cooldown_seconds}s)")
             return False

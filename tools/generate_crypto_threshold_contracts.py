@@ -127,7 +127,9 @@ class ScoredMarket:
     definition_hash: Optional[str] = None
 
 
-async def discover_markets(mode: str, underlyings: list[str]) -> tuple[list[dict[str, Any]], dict[str, int], Any]:
+async def discover_markets(
+    mode: str, underlyings: list[str], write_artifact: bool = True
+) -> tuple[list[dict[str, Any]], dict[str, int], Any]:
     """Discover all crypto threshold markets using tag-based discovery.
 
     Loop 6.0: Mode-switched discovery (fixture or live).
@@ -137,8 +139,18 @@ async def discover_markets(mode: str, underlyings: list[str]) -> tuple[list[dict
         - discovery_result: full DiscoveryResult for artifact writing
 
     underlyings parameter is IGNORED (discovery returns all crypto markets).
+
+    Args:
+        mode: "fixture" or "live"
+        underlyings: ignored (kept for signature compat)
+        write_artifact: if True, writes discovery.json immediately
+
+    Raises:
+        SystemExit: If discovery fails (reason != REASON_DISCOVERY_OK), refuses to proceed
     """
     from discover_crypto_gamma import DiscoveryResult
+
+    from models.reasons import REASON_DISCOVERY_OK
 
     result: DiscoveryResult = discover_crypto_markets(mode=mode)
     logger.info(
@@ -146,6 +158,47 @@ async def discover_markets(mode: str, underlyings: list[str]) -> tuple[list[dict
         f"(BTC: {result.metadata['btc_count']}, ETH: {result.metadata['eth_count']}) "
         f"via {mode} mode, reason: {result.reason}"
     )
+
+    # Write discovery artifact immediately (even on failure) if requested
+    if write_artifact:
+        discovery_path = Path("artifacts/universe/discovery.json")
+        discovery_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Compute counts_by_underlying from result
+        from collections import Counter
+
+        counts_by_underlying: Counter[str] = Counter()
+        # Will compute after scoring, but for now just use metadata counts
+        if result.metadata.get("btc_count", 0) > 0:
+            counts_by_underlying["BTC"] = result.metadata["btc_count"]
+        if result.metadata.get("eth_count", 0) > 0:
+            counts_by_underlying["ETH"] = result.metadata["eth_count"]
+
+        with open(discovery_path, "w") as f:
+            json.dump(
+                {
+                    "schema_version": SCHEMA_VERSION,
+                    "discovery_mode": mode,
+                    "discovered_at": result.discovered_at,
+                    "discovery_reason": result.reason,
+                    "tag_ids_used": result.tag_ids_used,
+                    "pages_fetched": result.pages_fetched,
+                    "total_count": result.metadata["total_count"],
+                    "btc_count": result.metadata["btc_count"],
+                    "eth_count": result.metadata["eth_count"],
+                    "counts_by_underlying": dict(counts_by_underlying),
+                },
+                f,
+                indent=2,
+                sort_keys=True,
+            )
+        logger.info(f"Wrote {discovery_path} (reason: {result.reason})")
+
+    # Fail-closed: refuse to proceed unless discovery succeeded
+    if result.reason != REASON_DISCOVERY_OK:
+        logger.critical(f"Discovery failed: {result.reason}")
+        raise SystemExit(f"Discovery veto: {result.reason} (refusing to generate contracts from degraded universe)")
+
     return result.markets, result.metadata, result
 
 
@@ -690,9 +743,14 @@ async def main():
     logger.info(f"Discovering markets for underlyings: {underlyings} (mode: {args.mode})")
 
     # Discover markets (Loop 6.0: mode-switched discovery)
-    markets, discovery_metadata, discovery_result = await discover_markets(args.mode, underlyings)
-    logger.info(f"Discovered {len(markets)} candidate markets")
-    logger.info(f"Discovery metadata: {discovery_metadata}")
+    # Note: discover_markets raises SystemExit if reason != REASON_DISCOVERY_OK
+    try:
+        markets, discovery_metadata, discovery_result = await discover_markets(args.mode, underlyings)
+        logger.info(f"Discovered {len(markets)} candidate markets")
+        logger.info(f"Discovery metadata: {discovery_metadata}")
+    except SystemExit:
+        # Re-raise to exit nonzero, but discovery artifact was already logged
+        raise
 
     # Fetch price data
     coin_ids = [u.lower() for u in underlyings]  # BTC → btc, ETH → eth
@@ -767,27 +825,7 @@ async def main():
         )
     logger.info(f"Wrote {summary_path}")
 
-    # Write discovery artifact (Loop 6.0)
-    discovery_path = Path("artifacts/universe/discovery.json")
-    with open(discovery_path, "w") as f:
-        json.dump(
-            {
-                "schema_version": SCHEMA_VERSION,
-                "discovery_mode": args.mode,
-                "discovered_at": discovery_result.discovered_at,
-                "discovery_reason": discovery_result.reason,
-                "tag_ids_used": discovery_result.tag_ids_used,
-                "pages_fetched": discovery_result.pages_fetched,
-                "total_count": discovery_result.metadata["total_count"],
-                "btc_count": discovery_result.metadata["btc_count"],
-                "eth_count": discovery_result.metadata["eth_count"],
-                "counts_by_underlying": dict(counts_by_underlying),
-            },
-            f,
-            indent=2,
-            sort_keys=True,
-        )
-    logger.info(f"Wrote {discovery_path}")
+    # Discovery artifact already written by discover_markets()
 
     # Build contracts output
     contracts = []
