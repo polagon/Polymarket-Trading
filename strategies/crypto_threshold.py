@@ -97,11 +97,13 @@ class CryptoThresholdStrategy(BaseStrategy):
         order_params = None
 
         # Default inputs/frictions for artifact
-        best_bid = getattr(market, "yes_bid", 0.0) or 0.0
-        best_ask = getattr(market, "yes_ask", 0.0) or 0.0
-        mid = (best_bid + best_ask) / 2.0 if (best_bid > 0 and best_ask > 0) else 0.0
-        spread_frac = (best_ask - best_bid) / max(mid, _EPS) if mid > 0 else 0.0
-        depth_proxy_usd = getattr(market, "liquidity", 0.0) or 5000.0
+        # Priority: context.price_data (from CLOB book) > market attributes > defaults
+        pd = context.price_data if context.price_data else {}
+        best_bid = pd.get("best_bid", 0.0) or getattr(market, "yes_bid", 0.0) or 0.0
+        best_ask = pd.get("best_ask", 0.0) or getattr(market, "yes_ask", 0.0) or 0.0
+        mid = pd.get("mid", 0.0) or ((best_bid + best_ask) / 2.0 if (best_bid > 0 and best_ask > 0) else 0.0)
+        spread_frac = pd.get("spread_frac", 0.0) or ((best_ask - best_bid) / max(mid, _EPS) if mid > 0 else 0.0)
+        depth_proxy_usd = pd.get("depth_proxy_usd", 0.0) or getattr(market, "liquidity", 0.0) or 5000.0
 
         inputs = {
             "best_bid": best_bid,
@@ -158,15 +160,12 @@ class CryptoThresholdStrategy(BaseStrategy):
             return None
 
         # ── Extract estimator values ──
-        # Use price data from context if available
-        price_data = context.price_data if context.price_data else {}
-
         # For crypto threshold: use lognormal model estimate from context
         # or fallback to market price as p_hat
         market_price = best_ask  # Use ask for BUY_YES evaluation
-        p_hat = price_data.get("p_hat", market_price)
-        p_low = price_data.get("p_low", p_hat * 0.9)
-        p_high = price_data.get("p_high", min(p_hat * 1.1, 1.0))
+        p_hat = pd.get("p_hat", market_price)
+        p_low = pd.get("p_low", p_hat * 0.9)
+        p_high = pd.get("p_high", min(p_hat * 1.1, 1.0))
 
         estimator_info = {
             "p_hat": p_hat,

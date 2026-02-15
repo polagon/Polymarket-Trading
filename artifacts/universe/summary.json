@@ -1,0 +1,12 @@
+{
+  "discovered_count": 135,
+  "generated_at": "2026-02-15T07:31:09.222434Z",
+  "passed_count": 0,
+  "schema_version": "1.0",
+  "scored_count": 135,
+  "top_veto_reasons": {
+    "book_veto: depth_too_thin": 3,
+    "book_veto: spread_too_wide": 8,
+    "parse_veto: failed_to_parse": 124
+  }
+}

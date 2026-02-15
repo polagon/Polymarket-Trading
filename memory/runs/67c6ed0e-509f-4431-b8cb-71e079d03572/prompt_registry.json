@@ -1,0 +1,23 @@
+{
+  "run_id": "67c6ed0e-509f-4431-b8cb-71e079d03572",
+  "timestamp": "2026-02-14T22:35:01.901022+00:00",
+  "prompts": {
+    "prompt_bundle_hash": "d56fed916d29a0f2f34c46ca694ce507cdaf55f10a4e7cfda8930982754b587f",
+    "384eb0decdf777746bb4ccb7aa98b897147681f2925fd1132e8a993346440ca9": {
+      "name": "ASTRA_V2_SYSTEM",
+      "intent": "Main estimation system prompt"
+    },
+    "94fe7d6d39244cc89ba146a713ac41ae882e1e8eee2e2912fa870e1d2fb370cf": {
+      "name": "ASTRA_PRO_SYSTEM",
+      "intent": "Pro-side adversarial analyst"
+    },
+    "2bb020b5c22b637925a6f8cd29df595d12807ee1b89246b4ab02f57cdb9450be": {
+      "name": "ASTRA_CON_SYSTEM",
+      "intent": "Con-side adversarial analyst"
+    },
+    "5a7ea2d53b8d297821d012dad095b717e4258ee161a90e070e62a7fb2809d615": {
+      "name": "ASTRA_SYNTHESIZER_SYSTEM",
+      "intent": "Adversarial synthesizer"
+    }
+  }
+}
