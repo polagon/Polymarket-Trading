@@ -181,6 +181,7 @@ async def discover_markets(
                     "discovery_mode": mode,
                     "discovered_at": result.discovered_at,
                     "discovery_reason": result.reason,
+                    "pagination_exhausted": result.pagination_exhausted,
                     "tag_ids_used": result.tag_ids_used,
                     "pages_fetched": result.pages_fetched,
                     "total_count": result.metadata["total_count"],
@@ -192,12 +193,18 @@ async def discover_markets(
                 indent=2,
                 sort_keys=True,
             )
-        logger.info(f"Wrote {discovery_path} (reason: {result.reason})")
+        logger.info(
+            f"Wrote {discovery_path} (reason: {result.reason}, pagination_exhausted: {result.pagination_exhausted})"
+        )
 
-    # Fail-closed: refuse to proceed unless discovery succeeded
+    # PHASE 4: Fail-closed — refuse to proceed unless discovery succeeded AND pagination NOT exhausted
     if result.reason != REASON_DISCOVERY_OK:
         logger.critical(f"Discovery failed: {result.reason}")
         raise SystemExit(f"Discovery veto: {result.reason} (refusing to generate contracts from degraded universe)")
+
+    if result.pagination_exhausted:
+        logger.critical("Pagination exhausted: universe is incomplete")
+        raise SystemExit("Discovery veto: pagination_exhausted (refusing to generate contracts from partial universe)")
 
     return result.markets, result.metadata, result
 
@@ -290,6 +297,38 @@ def compute_maker_entry_price(best_bid: float, best_ask: float, side: str, tick:
         if entry >= no_best_ask or entry <= no_best_bid:
             return None
         return max(0.01, min(0.99, entry))
+
+
+def classify_market_bucket(market: dict) -> str:
+    """Deterministic bucketing for inventory mode.
+
+    Returns one of:
+    - "threshold_like": Markets that parse_crypto_threshold accepts
+    - "directional_5m_like": 5-minute up/down directional markets
+    - "other_crypto_like": BTC/ETH markets not matching above patterns
+    """
+    question = market.get("question", "").lower()
+
+    # First check if it parses as threshold market
+    parsed = parse_threshold_market(market)
+    if parsed:
+        return "threshold_like"
+
+    # Check for 5-minute directional patterns
+    if any(pattern in question for pattern in ["5 min", "5-minute", "5min", "next 5 minutes"]):
+        if any(kw in question for kw in ["up", "down", "higher", "lower", "increase", "decrease"]):
+            return "directional_5m_like"
+
+    # Check if it's BTC/ETH related
+    if any(token in question for token in ["btc", "bitcoin", "eth", "ethereum"]):
+        # Exclude false positives
+        if not any(
+            fp in question for fp in ["ethena", "susde", "usde", "wbtc", "renbtc", "steth", "seth", "reth", "cbeth"]
+        ):
+            return "other_crypto_like"
+
+    # Fallback
+    return "other_crypto_like"
 
 
 async def score_market(
@@ -735,6 +774,11 @@ async def main():
     parser.add_argument("--min_days", type=float, default=1.0, help="Min days to cutoff")
     parser.add_argument("--max_days", type=float, default=90.0, help="Max days to cutoff")
     parser.add_argument("--selection_margin_frac", type=float, default=0.01, help="Extra EV margin for selection")
+    parser.add_argument(
+        "--inventory",
+        action="store_true",
+        help="Inventory-only mode: bucket markets, write inventory.json, skip contract output",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -756,6 +800,120 @@ async def main():
     coin_ids = [u.lower() for u in underlyings]  # BTC → btc, ETH → eth
     price_data = await fetch_prices(coin_ids)
     logger.info(f"Fetched spot prices for {len(price_data)} underlyings")
+
+    # Write spot price provenance (Loop 6.1)
+    spot_artifact: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "fetched_at": datetime.utcnow().isoformat() + "Z",
+        "source": "coingecko_v3",
+        "prices": [],
+    }
+    for underlying in underlyings:
+        coin_id = underlying.lower()
+        ctx = price_data.get(coin_id)
+        if ctx:
+            spot_artifact["prices"].append(
+                {
+                    "underlying": underlying,
+                    "spot_usd": ctx.current_price,
+                    "price_change_24h": ctx.price_change_24h,
+                    "market_cap": ctx.market_cap,
+                }
+            )
+    spot_path = Path("artifacts/universe/spot.json")
+    spot_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(spot_path, "w") as f:
+        json.dump(spot_artifact, f, indent=2, sort_keys=True)
+    logger.info(f"Wrote spot price provenance to {spot_path}")
+
+    # PHASE 2: Inventory-only mode (Loop 6.1)
+    if args.inventory:
+        logger.info("Inventory mode: bucketing markets without scoring")
+
+        # Bucket all markets
+        bucketed: dict[str, list[dict]] = {"threshold_like": [], "directional_5m_like": [], "other_crypto_like": []}
+        parse_vetos: Counter[str] = Counter()
+        book_vetos: Counter[str] = Counter()
+
+        for m in markets:
+            bucket = classify_market_bucket(m)
+            bucketed[bucket].append(m)
+
+            # Track parse veto reasons for threshold_like bucket
+            if bucket == "threshold_like":
+                parsed = parse_threshold_market(m)
+                if not parsed:
+                    # Infer parse veto (same logic as score_market)
+                    q = m.get("question", "").lower()
+                    if any(
+                        token in q
+                        for token in ["ethena", "susde", "usde", "wbtc", "renbtc", "steth", "seth", "reth", "cbeth"]
+                    ):
+                        parse_vetos[VETO_PARSE_FALSE_POSITIVE] += 1
+                    elif not m.get("question") or not m.get("end_date_iso"):
+                        parse_vetos[VETO_PARSE_MISSING_FIELDS] += 1
+                    elif any(token in q for token in ["sol", "solana", "link", "ada", "dot"]):
+                        parse_vetos[VETO_PARSE_UNSUPPORTED_UNDERLYING] += 1
+                    elif not any(char in q for char in ["$", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]):
+                        parse_vetos[VETO_PARSE_NO_STRIKE] += 1
+                    elif not any(kw in q for kw in ["hit", "reach", "touch", "above", "below", "close"]):
+                        parse_vetos[VETO_PARSE_NO_RESOLUTION_TYPE] += 1
+                    else:
+                        parse_vetos[VETO_PARSE_AMBIGUOUS] += 1
+
+        # Prepare samples (max 25 per category)
+        MAX_SAMPLES = 25
+        excluded_samples = []
+        included_samples = []
+
+        for bucket_name, bucket_markets in bucketed.items():
+            for m in bucket_markets[:MAX_SAMPLES]:
+                sample = {
+                    "market_id": m["id"],
+                    "question": m["question"],
+                    "bucket": bucket_name,
+                    "end_date_iso": m.get("end_date_iso", ""),
+                }
+                if bucket_name == "threshold_like":
+                    included_samples.append(sample)
+                else:
+                    excluded_samples.append(sample)
+
+        # Limit samples
+        excluded_samples = excluded_samples[:MAX_SAMPLES]
+        included_samples = included_samples[:MAX_SAMPLES]
+
+        # Write inventory.json
+        inventory_data = {
+            "schema_version": SCHEMA_VERSION,
+            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "discovery_mode": args.mode,
+            "total_discovered": len(markets),
+            "counts_by_bucket": {
+                "threshold_like": len(bucketed["threshold_like"]),
+                "directional_5m_like": len(bucketed["directional_5m_like"]),
+                "other_crypto_like": len(bucketed["other_crypto_like"]),
+            },
+            "top_parse_veto_reasons": dict(parse_vetos.most_common(10)),
+            "top_book_veto_reasons": {},  # Empty in inventory mode (no book fetching)
+            "excluded_samples": excluded_samples,
+            "included_samples": included_samples,
+        }
+
+        inventory_path = Path("artifacts/universe/inventory.json")
+        inventory_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(inventory_path, "w") as f:
+            json.dump(inventory_data, f, indent=2, sort_keys=True)
+
+        logger.info(f"Wrote {inventory_path}")
+        logger.info(
+            f"Inventory: threshold_like={len(bucketed['threshold_like'])}, "
+            f"directional_5m_like={len(bucketed['directional_5m_like'])}, "
+            f"other_crypto_like={len(bucketed['other_crypto_like'])}"
+        )
+
+        # Exit without writing contracts
+        return
 
     # Score all markets
     book_fetcher = CLOBBookFetcher()
