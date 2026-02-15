@@ -268,7 +268,7 @@ class GammaClient:
         raise requests.HTTPError("Unreachable")
 
     def find_crypto_tag(self) -> Optional[str]:
-        """Find tag ID for 'Crypto' (case-insensitive).
+        """Find tag ID for 'cryptocurrency' or 'crypto' (case-insensitive, prefers 'cryptocurrency').
 
         Returns tag ID or None if not found.
 
@@ -282,9 +282,24 @@ class GammaClient:
         if not isinstance(data, list):
             logger.error(f"Invalid /tags response shape: expected list, got {type(data)}")
             raise ValueError(f"Invalid /tags response shape: expected list, got {type(data)}")
+
+        # Build label -> id mapping
+        labels_to_ids: dict[str, str] = {}
         for tag in data:
-            if isinstance(tag, dict) and tag.get("label", "").lower() == "crypto":
-                return tag.get("id")
+            if not isinstance(tag, dict):
+                continue
+            tag_id = tag.get("id")
+            label = tag.get("label")
+            if not tag_id or not isinstance(label, str):
+                continue
+            labels_to_ids[label.strip().lower()] = str(tag_id)
+
+        # Prefer 'cryptocurrency', fallback to 'crypto'
+        for preferred in ("cryptocurrency", "crypto"):
+            if preferred in labels_to_ids:
+                logger.info(f"Found crypto tag: '{preferred}' (id={labels_to_ids[preferred]})")
+                return labels_to_ids[preferred]
+
         return None  # Tag not found (legitimate case, not an error)
 
     def fetch_markets_for_tag(self, tag_id: str, max_pages: int = 10) -> tuple[list[dict[str, Any]], bool]:
@@ -305,12 +320,23 @@ class GammaClient:
         while page < max_pages:
             try:
                 data = self._request_with_backoff(url, params=params)
-                if not isinstance(data, dict):
-                    logger.error(f"Invalid /markets response shape: expected dict, got {type(data)}")
+
+                # Handle both dict ({"data": [...]}) and list ([...]) responses
+                batch: list[dict] = []
+                next_cursor: Optional[str] = None
+
+                if isinstance(data, dict):
+                    # Wrapped response: {"data": [...], "next_cursor": "..."}
+                    batch = data.get("data") or data.get("markets") or []
+                    next_cursor = data.get("next_cursor")
+                elif isinstance(data, list):
+                    # Direct list response: [...]
+                    batch = data
+                    next_cursor = None  # No pagination in direct list responses
+                else:
+                    logger.error(f"Invalid /markets response shape: expected dict or list, got {type(data)}")
                     break
 
-                # Extract markets (handle both "data" and "markets" keys)
-                batch = data.get("data") or data.get("markets") or []
                 if not isinstance(batch, list):
                     logger.error(f"Invalid markets batch: expected list, got {type(batch)}")
                     break
@@ -324,9 +350,8 @@ class GammaClient:
                 page += 1
 
                 # Check for next page
-                next_cursor = data.get("next_cursor")
                 if not next_cursor:
-                    # Normal completion: cursor exhausted
+                    # Normal completion: cursor exhausted or no pagination
                     break
 
                 # Hit max_pages limit while cursor still present → truncated
