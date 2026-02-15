@@ -1,8 +1,107 @@
 # Astra Session State — Development Notes
 
 **Last updated:** 2026-02-15
-**Status:** Loop 6.1 complete — Live universe reconciliation + pagination exhaustion detection
+**Status:** Loop 6.2 complete — Live crypto universe validation (zero tradable surface confirmed)
 **Test count:** 602 passed, 2 skipped
+
+---
+
+## Loop 6.2: Live Universe Tradability Validation (COMPLETE)
+
+**Goal:** Prove whether Polymarket crypto threshold markets are genuinely non-tradable or if we have an ID mapping bug.
+
+### Discovery Findings (Live Mode - tag_id=744 "cryptocurrency")
+
+**Universe Stats:**
+- Total discovered: 100 markets
+- BTC markets: 26
+- ETH markets: 18
+- Pages fetched: 2 (pagination complete, no exhaustion)
+
+**Market Bucketing:**
+- `threshold_like`: **7 markets (7%)** — Price-based threshold markets
+- `directional_5m_like`: **0 markets (0%)** — No intraday directional markets exist
+- `other_crypto_like`: **93 markets (93%)** — Event-driven (ETF approvals, FTX claims, regulation)
+
+### Tradability Validation Results
+
+**All 7 threshold markets failed with `book_veto: no_book`**
+
+Validated via direct CLOB API testing:
+```
+Token ID: 79973951962333251705... (from market 253518)
+CLOB Response: 404 "No orderbook exists for the requested token id"
+```
+
+**Root Cause Confirmed:**
+- Token IDs are correctly extracted from Gamma API (`clobTokenIds` field)
+- CLOB API correctly receives these token IDs
+- Markets exist in Gamma but **have no CLOB orderbooks** (inactive/zero liquidity)
+- This is NOT an ID mapping bug — it's real market state
+
+### The 7 Threshold Markets (All Non-Tradable)
+
+| Market | Underlying | Strike | Type | CLOB Status |
+|--------|------------|--------|------|-------------|
+| Will ETH hit $2,500 by Jan 31? | ETH | $2,500 | touch | ❌ No orderbook (404) |
+| Will BTC hit $50,000 by Jan 31? | BTC | $50,000 | touch | ❌ No orderbook (404) |
+| Will ETH hit $3,000 in January? | ETH | $3,000 | touch | ❌ No orderbook (404) |
+| Will BTC hit $50,000 in February? | BTC | $50,000 | touch | ❌ No orderbook (404) |
+| Will ETH hit $2,500 in February? | ETH | $2,500 | touch | ❌ No orderbook (404) |
+| Will ETH hit $3,000 in February? | ETH | $3,000 | touch | ❌ No orderbook (404) |
+| Will BTC hit $55,000 in February? | BTC | $55,000 | touch | ❌ No orderbook (404) |
+
+### Scoring Results (--mode live)
+
+**Passers: 0 / 100** ✅ **VALID conservative outcome**
+
+**Top Veto Reasons:**
+```
+parse_veto: no_resolution_type: 54   (93% event markets without price levels)
+parse_veto: no_strike_level: 28      (crypto markets without specific prices)
+book_veto: no_book: 7                (threshold markets with ZERO liquidity)
+parse_veto: ambiguous_question: 6
+parse_veto: unsupported_underlying: 5
+```
+
+### System Validation
+
+**✅ Bot Behavior is Correct:**
+1. Discovery pipeline works (100 markets found, discovery_ok)
+2. Parser correctly identifies 7 threshold markets
+3. Fail-closed gates correctly veto all with `book_veto: no_book`
+4. Zero passers is the **intended outcome** when no edge exists
+
+**❌ Polymarket Crypto Surface Not Tradable:**
+1. Zero liquidity on all threshold markets (no CLOB orderbooks)
+2. 93% of crypto tag is event-driven (requires different estimators)
+3. Zero intraday directional markets (planned Loop 6.2 doesn't exist)
+
+### Implications
+
+**Current State:**
+- Bot is **production-ready** and **fail-closed correct**
+- Polymarket crypto tag has **zero tradable surface** for threshold category
+- Conservative gates working as designed (refuse to trade without edge)
+
+**Roadmap Options:**
+
+1. **Wait for Market Evolution** (Recommended)
+   - Polymarket may add liquid crypto threshold markets later
+   - Bot will automatically discover and trade them when available
+   - Current state is stable and safe
+
+2. **Expand Discovery Beyond "cryptocurrency" Tag**
+   - Search all 100 Gamma tags for crypto price markets
+   - May find threshold markets with liquidity elsewhere
+   - Effort: 1-2 hours
+
+3. **Build Event-Driven Category**
+   - Add new category for ETF/regulatory markets (93% of surface)
+   - Requires new estimator (not lognormal)
+   - Effort: 5-10 hours
+
+**Decision:** Documenting current state and pausing active development. Bot remains production-ready for when tradable crypto threshold markets emerge.
 
 ---
 
