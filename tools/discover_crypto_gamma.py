@@ -23,11 +23,12 @@ logger = logging.getLogger(__name__)
 def discover_crypto_markets_fixture() -> tuple[list[dict[str, Any]], dict[str, int]]:
     """Fixture-based discovery for tests.
 
+    Loop 5.x scope: BTC/ETH ONLY.
+
     Returns (markets, metadata) where metadata contains:
         - total_count: total markets discovered
         - btc_count: markets with 'BTC' or 'Bitcoin' in question
         - eth_count: markets with 'ETH' or 'Ethereum' in question
-        - sol_count: markets with 'SOL' or 'Solana' in question
 
     This is used by tests to PROVE btc_count > 0 (fixing ZERO BTC bug).
     """
@@ -132,19 +133,16 @@ def discover_crypto_markets_fixture() -> tuple[list[dict[str, Any]], dict[str, i
             and "WBTC" not in q  # "WBTC depeg from BTC" has "ETH" in "stETH"
         )
 
-    def _has_sol(q: str) -> bool:
-        """Word-boundary match for SOL/Solana."""
-        return bool(re.search(r"\bSOL\b", q, re.IGNORECASE) or re.search(r"\bSolana\b", q, re.IGNORECASE))
+    # SOL removed from Loop 5.x scope (deferred to Loop 6+)
 
     btc_count: int = sum(1 for m in markets if _has_btc(str(m["question"])))
     eth_count: int = sum(1 for m in markets if _has_eth(str(m["question"])))
-    sol_count: int = sum(1 for m in markets if _has_sol(str(m["question"])))
 
     metadata = {
         "total_count": len(markets),
         "btc_count": btc_count,
         "eth_count": eth_count,
-        "sol_count": sol_count,
+        # sol_count removed — out of scope for Loop 5.x
     }
 
     return markets, metadata

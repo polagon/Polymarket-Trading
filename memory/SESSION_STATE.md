@@ -1,18 +1,19 @@
-# Astra Session State — Last Updated 2026-02-14
+# Astra Session State — Last Updated 2026-02-15
 
 ## Current Status
-- **All 4 loops implemented on main** (Loops 1-3 merged at 64fc823; Loop 4 uncommitted)
-- **456 tests passing, 2 skipped** | pre-commit (ruff + mypy) green
-- **PR #1 merged**: https://github.com/polagon/Polymarket-Trading/pull/1
+- **Loops 1-4 merged to main** (PR #2, commit 849dbd1)
+- **Loop 5 + Loop 5.1 in PR #3** (branch: loop5-clob-estimator-generator)
+- **575 tests passing, 2 skipped** | pre-commit (ruff + mypy) green
 - **Repo**: github.com/polagon/Polymarket-Trading
-- **Branch**: main (Loop 4 files uncommitted, ready for commit)
+- **PR #3 open**: Loop 5 (CLOB + estimator) + Loop 5.1 (tag-based discovery + strict parsing)
 
 ## What Was Just Completed
-1. **Loop 4: Allocator-Grade Trading Machine** — full implementation
-   - 128 new tests (456 total), 0 regressions
-   - 16 new production files, 7 new test files, 2 modified files
-   - Pre-commit (ruff + mypy) green
-   - paper_trader.py wired with all Loop 4 components
+1. **Loop 5.1: Tag-based Discovery + Strict Word-Boundary Parsing** — full implementation
+   - 47 new tests (575 total), 0 regressions
+   - 3 new production files, 2 new test files, 1 modified file
+   - Fixes ZERO BTC bug from keyword-based discovery (proves btc_count > 0 in fixtures)
+   - Eliminates Ethena/WBTC/stETH false positives with \bBTC\b, \bETH\b regex
+   - Extended summary.json with counts_by_underlying and discovery_metadata
 
 ## Loop 4 Architecture (Invariants)
 1. **No DefinitionContract = no trade** (fail-closed with named missing semantics)
@@ -89,26 +90,39 @@
 - CryptoThresholdStrategy (primary category, emits artifacts for every eval)
 - CI workflow (GitHub Actions: pytest + pre-commit)
 
+### Loop 5: Real CLOB Market Data + Crypto Estimator
+- CLOBBookFetcher (REST-based best_bid/ask/depth from Polymarket CLOB API)
+- Lognormal crypto estimator (touch/close probability, p_hat/p_low/p_high bounds)
+- Fixture-based CoinGecko price fetcher (BTC/ETH/SOL spot prices)
+- Definition loader (load contracts from JSON at startup)
+- Universe scorer/generator (discovers + scores + outputs passers)
+- Paper Run #3: Real book data + estimator working, 0 passers (no edge on live markets)
+- 53 new tests (528 total): clob_book (14), crypto_estimator (25), loader (14)
+
+### Loop 5.1: Tag-based Discovery + Strict Word-Boundary Parsing
+- **Fixes ZERO BTC bug**: Tag-based discovery (fixture-based, live API in Loop 6)
+- **Eliminates false positives**: \bBTC\b, \bETH\b regex (rejects Ethena/WBTC/stETH/sUSDe)
+- **Extended artifacts**: summary.json now includes counts_by_underlying + discovery_metadata
+- discover_crypto_gamma.py: 10-market fixture proving btc_count > 0
+- parse_crypto_threshold.py: Strict word-boundary parser with false-positive rejection list
+- 47 new tests (575 total): discovery (8), parser (39)
+- Loop 5.1 generator output: 10 discovered, counts_by_underlying {BTC: 3, ETH: 2}
+
 ## What's Next
-- **Commit + PR** for Loop 4
-- **Runtime sanity check**: `ASTRA_PAPER_MODE=1 BURN_IN_MONITOR_CYCLES=3 .venv/bin/python paper_trader.py`
-- **Loop 5**: Multi-category expansion (rates_event, event_ops, weather_exceedance)
-- **Loop 5**: Maker-then-taker escalation, cross-venue arb logging, volume-bucketed VPIN
+- **Merge PR #3** (Loop 5 + Loop 5.1)
+- **Loop 6**: Live tag-based discovery via Gamma /tags + /events endpoints
+- **Loop 6**: Multi-category expansion (rates_event, event_ops, weather_exceedance)
+- **Loop 6**: Maker-then-taker escalation, cross-venue arb logging, volume-bucketed VPIN
 
-## Key Files (Updated)
-- `models/definition_contract.py` — DefinitionContract frozen dataclass + canonical hash
-- `models/reasons.py` — Centralized reason enums
-- `definitions/lint.py` — Category-aware semantic validation
-- `definitions/registry.py` — Lint-gated definition storage
-- `gates/definition_gate.py` — Fail-closed definition check
-- `gates/ev_gate.py` — Lower-bound EV_net + friction model
-- `signals/flow_toxicity.py` — Per-market toxicity composite
-- `risk/risk_engine.py` — Hard risk halts + cooldown
-- `execution/order_manager.py` — Maker-only order management
-- `telemetry/trade_telemetry.py` — Schema-stable artifacts
-- `strategies/crypto_threshold.py` — Primary category strategy
-- `paper_trader.py` — Main trading loop (now wired with Loop 4 components)
-- `config.py` — All constants including Loop 4 additions
-- `.github/workflows/ci.yml` — CI gate
+## Key Files (Loop 5 + Loop 5.1)
+- `feeds/clob_book.py` — CLOB orderbook fetcher (NEW)
+- `signals/crypto_estimator.py` — Lognormal probability model (NEW)
+- `definitions/loader.py` — Load contracts from JSON (NEW)
+- `tools/discover_crypto_gamma.py` — Tag-based fixture discovery (NEW Loop 5.1)
+- `tools/parse_crypto_threshold.py` — Strict word-boundary parser (NEW Loop 5.1)
+- `tools/generate_crypto_threshold_contracts.py` — Universe scorer (MODIFIED Loop 5.1)
+- `strategies/crypto_threshold.py` — Reads price_data from context (MODIFIED)
+- `paper_trader.py` — Wired with CLOB + estimator (MODIFIED)
+- `config.py` — CLOB_API_URL + lognormal params (MODIFIED)
 
-## Test Count: 456 passed, 2 skipped
+## Test Count: 575 passed, 2 skipped

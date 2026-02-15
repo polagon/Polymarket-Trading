@@ -20,7 +20,12 @@ from generate_crypto_threshold_contracts import (
     VETO_LINT_FAILED,
     VETO_MAKER_CANNOT_POST,
     VETO_NO_BOOK,
-    VETO_PARSE_FAILED,
+    VETO_PARSE_AMBIGUOUS,
+    VETO_PARSE_FALSE_POSITIVE,
+    VETO_PARSE_MISSING_FIELDS,
+    VETO_PARSE_NO_RESOLUTION_TYPE,
+    VETO_PARSE_NO_STRIKE,
+    VETO_PARSE_UNSUPPORTED_UNDERLYING,
     VETO_THIN_DEPTH,
     VETO_TIME_OOB,
     VETO_WIDE_SPREAD,
@@ -219,8 +224,15 @@ class TestDeterministicOutputs:
     """Test stable sorting and schema versioning."""
 
     def test_veto_reasons_are_stable_strings(self):
-        # All veto reasons must be stable enums
-        assert VETO_PARSE_FAILED == "parse_veto: failed_to_parse"
+        # All veto reasons must be stable enums (specific, not generic)
+        # Parse vetoes (specific reasons)
+        assert VETO_PARSE_FALSE_POSITIVE == "parse_veto: false_positive_token"
+        assert VETO_PARSE_UNSUPPORTED_UNDERLYING == "parse_veto: unsupported_underlying"
+        assert VETO_PARSE_NO_STRIKE == "parse_veto: no_strike_level"
+        assert VETO_PARSE_NO_RESOLUTION_TYPE == "parse_veto: no_resolution_type"
+        assert VETO_PARSE_MISSING_FIELDS == "parse_veto: missing_required_fields"
+        assert VETO_PARSE_AMBIGUOUS == "parse_veto: ambiguous_question"
+        # Other vetoes
         assert VETO_LINT_FAILED == "lint_veto: validation_failed"
         assert VETO_NO_BOOK == "book_veto: no_book"
         assert VETO_WIDE_SPREAD == "book_veto: spread_too_wide"

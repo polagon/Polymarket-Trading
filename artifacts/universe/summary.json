@@ -7,15 +7,15 @@
   "discovery_metadata": {
     "btc_count": 3,
     "eth_count": 2,
-    "sol_count": 0,
     "total_count": 10
   },
-  "generated_at": "2026-02-15T08:10:16.852400Z",
+  "generated_at": "2026-02-15T08:24:31.429929Z",
   "passed_count": 0,
   "schema_version": "1.0",
   "scored_count": 10,
   "top_veto_reasons": {
     "book_veto: no_book": 5,
-    "parse_veto: failed_to_parse": 5
+    "parse_veto: false_positive_token": 4,
+    "parse_veto: no_resolution_type": 1
   }
 }

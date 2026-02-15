@@ -70,16 +70,33 @@ logger = logging.getLogger(__name__)
 
 SCHEMA_VERSION = "1.0"
 
-# Veto reason enums (stable)
-VETO_PARSE_AMBIGUOUS = "parse_veto: ambiguous_title"
-VETO_PARSE_FAILED = "parse_veto: failed_to_parse"
+# Veto reason enums (stable) — single source of truth for universe scoring
+# Parse vetoes (specific)
+VETO_PARSE_FALSE_POSITIVE = "parse_veto: false_positive_token"  # Ethena, WBTC, stETH, etc.
+VETO_PARSE_UNSUPPORTED_UNDERLYING = "parse_veto: unsupported_underlying"  # SOL, LINK, etc. (not BTC/ETH)
+VETO_PARSE_NO_STRIKE = "parse_veto: no_strike_level"  # Cannot extract strike price
+VETO_PARSE_NO_RESOLUTION_TYPE = "parse_veto: no_resolution_type"  # Cannot detect touch/close
+VETO_PARSE_MISSING_FIELDS = "parse_veto: missing_required_fields"  # No question or end_date_iso
+VETO_PARSE_AMBIGUOUS = "parse_veto: ambiguous_question"  # Generic fallback
+
+# Lint vetoes
 VETO_LINT_FAILED = "lint_veto: validation_failed"
+
+# Book quality vetoes
 VETO_NO_BOOK = "book_veto: no_book"
 VETO_WIDE_SPREAD = "book_veto: spread_too_wide"
 VETO_THIN_DEPTH = "book_veto: depth_too_thin"
+
+# Time vetoes
 VETO_TIME_OOB = "time_veto: cutoff_out_of_bounds"
+
+# Estimator vetoes
 VETO_ESTIMATOR_FAILED = "estimator_veto: failed"
+
+# Maker entry vetoes
 VETO_MAKER_CANNOT_POST = "maker_veto: cannot_post_without_crossing"
+
+# EV vetoes
 VETO_EV_FAILED = "ev_veto: net_lb_below_threshold"
 
 
@@ -120,10 +137,7 @@ async def discover_markets(underlyings: list[str]) -> tuple[list[dict], dict]:
     """
     # Loop 5.1: Use fixture-based discovery
     markets, metadata = discover_crypto_markets_fixture()
-    logger.info(
-        f"Discovered {len(markets)} markets (BTC: {metadata['btc_count']}, "
-        f"ETH: {metadata['eth_count']}, SOL: {metadata['sol_count']})"
-    )
+    logger.info(f"Discovered {len(markets)} markets (BTC: {metadata['btc_count']}, ETH: {metadata['eth_count']})")
     return markets, metadata
 
 
@@ -238,6 +252,39 @@ async def score_market(
     # Parse
     parsed = parse_threshold_market(market)
     if not parsed:
+        # Infer specific parse veto reason
+        veto_reason = VETO_PARSE_AMBIGUOUS  # Default fallback
+        q = market.get("question", "").lower()
+
+        # Check for false positives first
+        if any(
+            token in q
+            for token in [
+                "ethena",
+                "susde",
+                "usde",
+                "wbtc",
+                "renbtc",
+                "steth",
+                "seth",
+                "reth",
+                "cbeth",
+            ]
+        ):
+            veto_reason = VETO_PARSE_FALSE_POSITIVE
+        # Check for missing fields
+        elif not market.get("question") or not market.get("end_date_iso"):
+            veto_reason = VETO_PARSE_MISSING_FIELDS
+        # Check for unsupported underlying (SOL, LINK, etc.)
+        elif any(token in q for token in ["sol", "solana", "link", "ada", "dot"]):
+            veto_reason = VETO_PARSE_UNSUPPORTED_UNDERLYING
+        # Check for no strike
+        elif not any(char in q for char in ["$", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]):
+            veto_reason = VETO_PARSE_NO_STRIKE
+        # Check for no resolution type keywords
+        elif not any(kw in q for kw in ["hit", "reach", "touch", "above", "below", "close"]):
+            veto_reason = VETO_PARSE_NO_RESOLUTION_TYPE
+
         return ScoredMarket(
             market_id=market_id,
             condition_id=condition_id,
@@ -258,7 +305,7 @@ async def score_market(
             entry_price=0.0,
             ev_net_lb=0.0,
             passed=False,
-            veto_reason=VETO_PARSE_FAILED,
+            veto_reason=veto_reason,
         )
 
     # Build definition

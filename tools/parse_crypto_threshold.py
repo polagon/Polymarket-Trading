@@ -45,17 +45,20 @@ def _is_false_positive(question: str) -> bool:
 def detect_underlying(question: str) -> Optional[str]:
     """Detect underlying asset using strict word-boundary regex.
 
-    Returns "BTC", "ETH", "SOL", or None.
+    Loop 5.x scope: BTC/ETH ONLY. SOL is out of scope and rejected.
+
+    Returns "BTC", "ETH", or None.
 
     Rules:
     - \bBTC\b or \bBitcoin\b → "BTC"
     - \bETH\b or \bEthereum\b → "ETH"
-    - \bSOL\b or \bSolana\b → "SOL"
+    - \bSOL\b or \bSolana\b → None (unsupported_underlying for Loop 5.x)
     - FALSE_POSITIVE_TOKENS present → None (reject)
 
     Examples:
         "Will BTC hit $100K?" → "BTC"
         "Will Bitcoin reach $1M?" → "BTC"
+        "Will SOL reach $500?" → None (unsupported, deferred to Loop 6+)
         "Will WBTC depeg?" → None (false positive)
         "Will Ethena TVL exceed $10B?" → None (false positive)
         "Will stETH maintain peg?" → None (false positive)
@@ -65,14 +68,15 @@ def detect_underlying(question: str) -> Optional[str]:
         return None
 
     # Word-boundary patterns (case-insensitive)
+    # Loop 5.x: BTC/ETH ONLY
     if re.search(r"\bBTC\b", question, re.IGNORECASE) or re.search(r"\bBitcoin\b", question, re.IGNORECASE):
         return "BTC"
 
     if re.search(r"\bETH\b", question, re.IGNORECASE) or re.search(r"\bEthereum\b", question, re.IGNORECASE):
         return "ETH"
 
-    if re.search(r"\bSOL\b", question, re.IGNORECASE) or re.search(r"\bSolana\b", question, re.IGNORECASE):
-        return "SOL"
+    # SOL detection removed — out of scope for Loop 5.x
+    # If SOL is present, return None (will be rejected as unsupported_underlying)
 
     return None
 

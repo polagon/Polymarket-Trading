@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-02-15T08:10:16.851212Z",
+  "generated_at": "2026-02-15T08:24:31.428890Z",
   "markets": [
     {
       "best_ask": 0.0,
@@ -137,7 +137,7 @@
       "strike": 0.0,
       "time_to_cutoff_years": 0.0,
       "underlying": "",
-      "veto_reason": "parse_veto: failed_to_parse"
+      "veto_reason": "parse_veto: false_positive_token"
     },
     {
       "best_ask": 0.0,
@@ -160,7 +160,7 @@
       "strike": 0.0,
       "time_to_cutoff_years": 0.0,
       "underlying": "",
-      "veto_reason": "parse_veto: failed_to_parse"
+      "veto_reason": "parse_veto: false_positive_token"
     },
     {
       "best_ask": 0.0,
@@ -183,7 +183,7 @@
       "strike": 0.0,
       "time_to_cutoff_years": 0.0,
       "underlying": "",
-      "veto_reason": "parse_veto: failed_to_parse"
+      "veto_reason": "parse_veto: false_positive_token"
     },
     {
       "best_ask": 0.0,
@@ -206,7 +206,7 @@
       "strike": 0.0,
       "time_to_cutoff_years": 0.0,
       "underlying": "",
-      "veto_reason": "parse_veto: failed_to_parse"
+      "veto_reason": "parse_veto: false_positive_token"
     },
     {
       "best_ask": 0.0,
@@ -229,7 +229,7 @@
       "strike": 0.0,
       "time_to_cutoff_years": 0.0,
       "underlying": "",
-      "veto_reason": "parse_veto: failed_to_parse"
+      "veto_reason": "parse_veto: no_resolution_type"
     }
   ],
   "passers": 0,

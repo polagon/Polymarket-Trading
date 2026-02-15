@@ -34,11 +34,13 @@ class TestDetectUnderlying:
     def test_ethereum_full_word_match(self):
         assert detect_underlying("Will Ethereum reach $5K?") == "ETH"
 
-    def test_sol_word_boundary_match(self):
-        assert detect_underlying("Will SOL reach $500?") == "SOL"
+    def test_sol_rejected_out_of_scope(self):
+        """SOL is out of scope for Loop 5.x (BTC/ETH only)."""
+        assert detect_underlying("Will SOL reach $500?") is None
 
-    def test_solana_full_word_match(self):
-        assert detect_underlying("Will Solana hit $1000?") == "SOL"
+    def test_solana_rejected_out_of_scope(self):
+        """Solana is out of scope for Loop 5.x (BTC/ETH only)."""
+        assert detect_underlying("Will Solana hit $1000?") is None
 
     def test_wbtc_rejected_as_false_positive(self):
         """WBTC should be rejected (not BTC)."""

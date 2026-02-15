@@ -25,7 +25,7 @@ class TestFixtureDiscovery:
         assert "total_count" in metadata
         assert "btc_count" in metadata
         assert "eth_count" in metadata
-        assert "sol_count" in metadata
+        # sol_count removed — out of scope for Loop 5.x
 
     def test_fixture_btc_count_greater_than_zero(self):
         """CRITICAL: Proves btc_count > 0, fixing ZERO BTC discovery bug."""
