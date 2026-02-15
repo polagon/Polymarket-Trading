@@ -1,12 +1,21 @@
 {
-  "discovered_count": 135,
-  "generated_at": "2026-02-15T07:31:09.222434Z",
+  "counts_by_underlying": {
+    "BTC": 3,
+    "ETH": 2
+  },
+  "discovered_count": 10,
+  "discovery_metadata": {
+    "btc_count": 3,
+    "eth_count": 2,
+    "sol_count": 0,
+    "total_count": 10
+  },
+  "generated_at": "2026-02-15T08:10:16.852400Z",
   "passed_count": 0,
   "schema_version": "1.0",
-  "scored_count": 135,
+  "scored_count": 10,
   "top_veto_reasons": {
-    "book_veto: depth_too_thin": 3,
-    "book_veto: spread_too_wide": 8,
-    "parse_veto: failed_to_parse": 124
+    "book_veto: no_book": 5,
+    "parse_veto: failed_to_parse": 5
   }
 }

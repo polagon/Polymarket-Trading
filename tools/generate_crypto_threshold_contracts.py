@@ -2,22 +2,29 @@
 """
 Crypto Threshold Universe Scorer + Contract Generator
 
+Loop 5.1: Tag-based discovery + strict word-boundary parsing.
+
 Discovers all crypto threshold markets, scores them with conservative
 maker-entry EV gate, and outputs:
 - artifacts/universe/crypto_threshold_scored.json (full scored universe)
-- artifacts/universe/summary.json (veto reason counts)
+- artifacts/universe/summary.json (veto reason counts + counts_by_underlying)
 - definitions/contracts.crypto_threshold.json (only passers)
 
 Fail-closed: parsing/lint/book failures → veto with named reason.
 Maker-only: scoring uses entry price we can actually post without crossing.
 Conservative: uses EV gate lower-bound (p_low/p_high) exactly like trading.
+
+Loop 5.1 improvements:
+- Tag-based discovery (fixture-based for now, live API in Loop 6)
+- Strict word-boundary parsing (\\bBTC\\b, \\bETH\\b)
+- Explicit Ethena/WBTC/stETH rejection
+- Extended summary with counts_by_underlying
 """
 
 import argparse
 import asyncio
 import json
 import logging
-import re
 import sys
 from collections import Counter
 from dataclasses import asdict, dataclass
@@ -27,6 +34,15 @@ from typing import Optional
 
 # Add parent to path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+# Add tools to path for new L5.1 modules
+tools_path = Path(__file__).resolve().parent
+if str(tools_path) not in sys.path:
+    sys.path.insert(0, str(tools_path))
+
+# Loop 5.1: Import new discovery and parser
+from discover_crypto_gamma import discover_crypto_markets_fixture
+from parse_crypto_threshold import parse_threshold_market as parse_strict
 
 from config import (
     CLOB_API_URL,
@@ -94,111 +110,34 @@ class ScoredMarket:
     definition_hash: Optional[str] = None
 
 
-async def discover_markets(underlyings: list[str]) -> list[dict]:
-    """Discover all crypto threshold markets from Gamma API.
+async def discover_markets(underlyings: list[str]) -> tuple[list[dict], dict]:
+    """Discover all crypto threshold markets using Loop 5.1 tag-based discovery.
 
-    Returns list of market dicts with id, condition_id, question, etc.
+    Loop 5.1: Uses fixture-based discovery (live API in Loop 6).
+    Returns (markets, metadata) where metadata includes counts_by_underlying.
+
+    underlyings parameter is IGNORED in Loop 5.1 (fixture returns all).
     """
-    import aiohttp
-
-    all_markets = []
-    for underlying in underlyings:
-        offset = 0
-        limit = 100
-        while True:
-            url = f"{GAMMA_API_URL}/markets"
-            params = {"limit": limit, "offset": offset, "closed": "false"}
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url, params=params) as resp:
-                    if resp.status != 200:
-                        logger.warning(f"Gamma API error {resp.status}")
-                        break
-                    data = await resp.json()
-                    if not data:
-                        break
-                    # Filter for crypto threshold markets
-                    for m in data:
-                        q = m.get("question", "").lower()
-                        if underlying.lower() in q and ("hit" in q or "reach" in q or "above" in q or "below" in q):
-                            all_markets.append(m)
-                    if len(data) < limit:
-                        break
-                    offset += limit
-    return all_markets
+    # Loop 5.1: Use fixture-based discovery
+    markets, metadata = discover_crypto_markets_fixture()
+    logger.info(
+        f"Discovered {len(markets)} markets (BTC: {metadata['btc_count']}, "
+        f"ETH: {metadata['eth_count']}, SOL: {metadata['sol_count']})"
+    )
+    return markets, metadata
 
 
 def parse_threshold_market(market: dict) -> Optional[dict]:
-    """Parse a crypto threshold market question into components.
+    """Parse a crypto threshold market using Loop 5.1 strict parser.
+
+    Loop 5.1: Delegates to parse_crypto_threshold.parse_threshold_market
+    which implements word-boundary regex and false-positive rejection.
 
     Returns dict with {underlying, strike, cutoff_ts_utc, resolution_type, op}
-    or None if parsing fails or is ambiguous.
+    or None if parsing fails, is ambiguous, or is a false positive.
     """
-    q = market.get("question", "")
-
-    # TOUCH pattern: "Will BTC hit $X by DATE?"
-    touch_pattern = r"Will\s+(BTC|ETH|Bitcoin|Ethereum)\s+(?:hit|reach)\s+\$?([\d,]+(?:\.\d+)?[KkMm]?)\s+by\s+(.+)\?"
-    match = re.search(touch_pattern, q, re.IGNORECASE)
-    if match:
-        underlying = match.group(1).upper()
-        if underlying == "BITCOIN":
-            underlying = "BTC"
-        elif underlying == "ETHEREUM":
-            underlying = "ETH"
-
-        strike_str = match.group(2).replace(",", "")
-        if strike_str.upper().endswith("K"):
-            strike = float(strike_str[:-1]) * 1000
-        elif strike_str.upper().endswith("M"):
-            strike = float(strike_str[:-1]) * 1000000
-        else:
-            strike = float(strike_str)
-
-        cutoff_str = match.group(3).strip()
-        # Parse cutoff - use market.endDateIso or endDate
-        cutoff_ts_utc = market.get("endDateIso") or market.get("endDate") or cutoff_str
-
-        return {
-            "underlying": underlying,
-            "strike": strike,
-            "cutoff_ts_utc": cutoff_ts_utc,
-            "resolution_type": "touch",
-            "op": ">=",
-            "window": "any_time",
-        }
-
-    # CLOSE pattern: "Will BTC be above $X at DATE close?"
-    close_pattern = r"Will\s+(BTC|ETH|Bitcoin|Ethereum)\s+(?:be\s+)?(?:above|below)\s+\$?([\d,]+(?:\.\d+)?[KkMm]?)\s+(?:at|by)\s+(.+)\s+close\?"
-    match = re.search(close_pattern, q, re.IGNORECASE)
-    if match:
-        underlying = match.group(1).upper()
-        if underlying == "BITCOIN":
-            underlying = "BTC"
-        elif underlying == "ETHEREUM":
-            underlying = "ETH"
-
-        strike_str = match.group(2).replace(",", "")
-        if strike_str.upper().endswith("K"):
-            strike = float(strike_str[:-1]) * 1000
-        elif strike_str.upper().endswith("M"):
-            strike = float(strike_str[:-1]) * 1000000
-        else:
-            strike = float(strike_str)
-
-        op = ">=" if "above" in q.lower() else "<="
-        cutoff_str = match.group(3).strip()
-        cutoff_ts_utc = market.get("endDateIso") or market.get("endDate") or cutoff_str
-
-        return {
-            "underlying": underlying,
-            "strike": strike,
-            "cutoff_ts_utc": cutoff_ts_utc,
-            "resolution_type": "close",
-            "op": op,
-            "window": "at_close",
-            "measurement_time": cutoff_ts_utc,
-        }
-
-    return None
+    # Loop 5.1: Use strict word-boundary parser
+    return parse_strict(market)
 
 
 def build_definition_contract(market: dict, parsed: dict) -> Optional[DefinitionContract]:
@@ -694,9 +633,10 @@ async def main():
     underlyings = [u.strip().upper() for u in args.underlyings.split(",")]
     logger.info(f"Discovering markets for underlyings: {underlyings}")
 
-    # Discover markets
-    markets = await discover_markets(underlyings)
+    # Discover markets (Loop 5.1: returns metadata with counts_by_underlying)
+    markets, discovery_metadata = await discover_markets(underlyings)
     logger.info(f"Discovered {len(markets)} candidate markets")
+    logger.info(f"Discovery metadata: {discovery_metadata}")
 
     # Fetch price data
     coin_ids = [u.lower() for u in underlyings]  # BTC → btc, ETH → eth
@@ -747,8 +687,12 @@ async def main():
         )
     logger.info(f"Wrote {universe_path}")
 
-    # Write summary
+    # Write summary (Loop 5.1: extended with counts_by_underlying)
     summary_path = Path("artifacts/universe/summary.json")
+
+    # Compute counts_by_underlying from scored markets
+    counts_by_underlying = Counter(s.underlying for s in scored if s.underlying)
+
     with open(summary_path, "w") as f:
         json.dump(
             {
@@ -758,6 +702,8 @@ async def main():
                 "scored_count": len(scored),
                 "passed_count": len(passers),
                 "top_veto_reasons": dict(veto_counts.most_common(10)),
+                "counts_by_underlying": dict(counts_by_underlying),  # Loop 5.1
+                "discovery_metadata": discovery_metadata,  # Loop 5.1
             },
             f,
             indent=2,
